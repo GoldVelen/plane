@@ -17,15 +17,15 @@ Tags live on this repository: `studio-phase-N`.
 | `studio-phase-4` | Cadence: Metric definitions/snapshots, Timeline on StudioEvent, Weekly Review write-back                                                                          |
 | `studio-phase-5` | GitHub read-only facts (PR/CI/release/last commit), webhook verify+dedup, `PENDING_EXTERNAL_CREDENTIAL`                                                           |
 | `studio-phase-6` | Legacy Studio OS operating-record import (fixture/dry-run/apply, no Plane rewrite)                                                                                |
+| `studio-phase-7` | Hardening: extra permission tests, isolated backup drill, loopback runbook                                                                                        |
 
 ## Remaining
 
 Each phase must land a user-visible formal capability on the isolated runtime, with tests, then a commit and tag. Do not re-implement Plane auth, projects, or work items.
 
-| Tag              | Formal capability                                                           | In                            | Out                                                                     |
-| ---------------- | --------------------------------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------- |
-| `studio-phase-7` | Hardening: extra API/UI tests, runbooks, backup drill on the isolated stack | docs + tests                  | Public internet                                                         |
-| `studio-phase-8` | Production deploy                                                           | Only after legal-risk answers | Must not ship a public AI/user-data service without the legal checklist |
+| Tag              | Formal capability | In                            | Out                                                                     |
+| ---------------- | ----------------- | ----------------------------- | ----------------------------------------------------------------------- |
+| `studio-phase-8` | Production deploy | Only after legal-risk answers | Must not ship a public AI/user-data service without the legal checklist |
 
 ## Hard stops
 
