@@ -686,3 +686,21 @@ class StudioGithubDelivery(WorkspaceBaseModel):
                 name="studio_github_delivery_unique_active_id",
             )
         ]
+
+
+class StudioImportMap(WorkspaceBaseModel):
+    source_table = models.CharField(max_length=64)
+    source_id = models.CharField(max_length=80)
+    entity_type = models.CharField(max_length=32)
+    entity_id = models.UUIDField()
+
+    class Meta:
+        db_table = "studio_import_maps"
+        ordering = ("source_table", "source_id")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["workspace", "source_table", "source_id"],
+                condition=Q(deleted_at__isnull=True),
+                name="studio_import_map_unique_active_source",
+            )
+        ]

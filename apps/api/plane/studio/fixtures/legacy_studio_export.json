@@ -1,0 +1,48 @@
+{
+  "workspace_slug": "studio-workspace",
+  "feedback": [
+    {
+      "source_id": "legacy-feedback-1",
+      "project_identifier": "STUDIO",
+      "title": "Legacy store review lag",
+      "body": "Imported from Studio OS.",
+      "source": "APP_STORE",
+      "sentiment": "NEGATIVE",
+      "priority": "P1",
+      "status": "INBOX"
+    }
+  ],
+  "experiments": [
+    {
+      "source_id": "legacy-experiment-1",
+      "project_identifier": "STUDIO",
+      "title": "Legacy pricing copy",
+      "hypothesis": "Shorter copy converts more.",
+      "status": "DRAFT"
+    }
+  ],
+  "content_items": [
+    {
+      "source_id": "legacy-content-1",
+      "project_identifier": "STUDIO",
+      "title": "Legacy launch note",
+      "channel": "BLOG",
+      "status": "IDEA"
+    }
+  ],
+  "routines": [
+    {
+      "source_id": "legacy-routine-1",
+      "project_identifier": "STUDIO",
+      "name": "Legacy weekly store reply",
+      "cadence": "FREQ=WEEKLY",
+      "active": true
+    }
+  ],
+  "plane_projects": [
+    {
+      "identifier": "STUDIO",
+      "name": "Should never overwrite"
+    }
+  ]
+}
