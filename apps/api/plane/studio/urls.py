@@ -16,6 +16,16 @@ from plane.studio.views import (
     StudioRiskListEndpoint,
     StudioTodayEndpoint,
 )
+from plane.studio.views_governance import (
+    StudioDecisionAcknowledgementListEndpoint,
+    StudioDecisionAcknowledgementSelfEndpoint,
+    StudioDecisionOptionDetailEndpoint,
+    StudioDecisionOptionListEndpoint,
+    StudioMilestoneDetailEndpoint,
+    StudioMilestoneListEndpoint,
+    StudioProjectEventListEndpoint,
+    StudioReleaseChecklistItemEndpoint,
+)
 
 app_name = "studio"
 
@@ -61,5 +71,45 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/risks/<uuid:pk>/",
         StudioRiskDetailEndpoint.as_view(),
         name="risk-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/decisions/<uuid:pk>/options/",
+        StudioDecisionOptionListEndpoint.as_view(),
+        name="decision-option-list",
+    ),
+    path(
+        "workspaces/<str:slug>/decisions/<uuid:pk>/options/<uuid:option_id>/",
+        StudioDecisionOptionDetailEndpoint.as_view(),
+        name="decision-option-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/decisions/<uuid:pk>/acknowledgements/",
+        StudioDecisionAcknowledgementListEndpoint.as_view(),
+        name="decision-acknowledgement-list",
+    ),
+    path(
+        "workspaces/<str:slug>/decisions/<uuid:pk>/acknowledgements/me/",
+        StudioDecisionAcknowledgementSelfEndpoint.as_view(),
+        name="decision-acknowledgement-self",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/milestones/",
+        StudioMilestoneListEndpoint.as_view(),
+        name="milestone-list",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/milestones/<uuid:pk>/",
+        StudioMilestoneDetailEndpoint.as_view(),
+        name="milestone-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/releases/<uuid:pk>/checklist/<uuid:item_id>/",
+        StudioReleaseChecklistItemEndpoint.as_view(),
+        name="release-checklist-item",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/events/",
+        StudioProjectEventListEndpoint.as_view(),
+        name="project-event-list",
     ),
 ]

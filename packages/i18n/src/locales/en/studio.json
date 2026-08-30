@@ -16,7 +16,8 @@
       "record": "record",
       "term_release": "Release",
       "term_decision": "Decision",
-      "term_risk": "Risk"
+      "term_risk": "Risk",
+      "term_milestone": "Milestone"
     },
     "navigation": {
       "studio": "Studio",
@@ -116,7 +117,20 @@
       "delete_confirm": "“{name}” will be removed from Studio. This does not delete the Plane project, module, or work items.",
       "delete_success_title": "{kind} deleted",
       "delete_success_message": "The Studio record was removed. Plane project execution data was not changed.",
-      "delete_failed_title": "Delete failed"
+      "delete_failed_title": "Delete failed",
+      "milestones_title": "Milestones",
+      "milestones_description": "Dated outcomes attached to this project or a release.",
+      "add_milestone": "Add milestone",
+      "milestones_empty_title": "No milestones",
+      "milestones_empty_description": "Create a milestone when a date-bound outcome needs an owner.",
+      "events_title": "Studio activity",
+      "events_description": "Append-only governance events for this project.",
+      "events_empty_title": "No Studio events yet",
+      "events_empty_description": "Creating or updating releases, decisions, risks, and milestones writes an event.",
+      "checklist_title": "Release checklist",
+      "acknowledge": "Approve",
+      "object": "Object",
+      "term_milestone": "milestone"
     },
     "forms": {
       "profile_title_edit": "Edit Studio project profile",
@@ -181,7 +195,15 @@
       "risk_saved_message": "The durable risk record is now live.",
       "action_created": "created",
       "action_updated": "updated",
-      "update_failed_title": "Studio update failed"
+      "update_failed_title": "Studio update failed",
+      "label_decision_mode": "Decision mode",
+      "label_rationale": "Rationale",
+      "milestone_title_create": "Create milestone",
+      "save_milestone": "Save milestone",
+      "create_milestone": "Create milestone",
+      "label_milestone_type": "Milestone type",
+      "milestone_saved_title": "Milestone {action}",
+      "milestone_saved_message": "The durable milestone record is now live."
     },
     "error": {
       "load_title": "Studio data could not be loaded",
@@ -197,7 +219,10 @@
       "duplicate_version": "An active release with this version already exists in the project.",
       "project_workspace_mismatch": "Project must belong to this workspace.",
       "owner_not_member": "Owner must be an active member of this workspace.",
-      "permission_denied": "You do not have permission to perform this action."
+      "permission_denied": "You do not have permission to perform this action.",
+      "final_decision_required": "A decided outcome requires a final decision.",
+      "acknowledgements_required": "This decision still needs required acknowledgements.",
+      "decision_objected": "An objection is blocking this decision."
     },
     "enums": {
       "bucket": {
@@ -285,6 +310,29 @@
         "MONITORING": "Monitoring",
         "ACCEPTED": "Accepted",
         "CLOSED": "Closed"
+      },
+      "decision_mode": {
+        "SINGLE": "Single owner",
+        "ACK_REQUIRED": "Acknowledgement required",
+        "BOTH_REQUIRED": "Both required",
+        "RECORD_ONLY": "Record only"
+      },
+      "ack_state": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "OBJECTED": "Objected"
+      },
+      "milestone_type": {
+        "PRODUCT": "Product",
+        "OPERATING": "Operating",
+        "GOVERNANCE": "Governance"
+      },
+      "milestone_status": {
+        "PLANNED": "Planned",
+        "IN_PROGRESS": "In progress",
+        "DONE": "Done",
+        "MISSED": "Missed",
+        "CANCELLED": "Cancelled"
       }
     },
     "health": {

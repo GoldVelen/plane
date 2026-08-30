@@ -141,11 +141,11 @@ def test_release_decision_and_risk_basic_crud_persist_studio_rows(studio_client,
 
     release_update = studio_client.patch(
         project_url(studio_context, f"releases/{release_id}/"),
-        {"status": "QA"},
+        {"status": "SCOPING"},
         format="json",
     )
     assert release_update.status_code == 200
-    assert release_update.data["status"] == "QA"
+    assert release_update.data["status"] == "SCOPING"
 
     decision_response = studio_client.post(
         f"/api/studio/workspaces/{studio_context.workspace.slug}/decisions/",

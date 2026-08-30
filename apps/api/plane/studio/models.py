@@ -105,6 +105,33 @@ class RiskStatus(models.TextChoices):
     CLOSED = "CLOSED", "Closed"
 
 
+class DecisionMode(models.TextChoices):
+    SINGLE = "SINGLE", "Single"
+    ACK_REQUIRED = "ACK_REQUIRED", "Acknowledgement required"
+    BOTH_REQUIRED = "BOTH_REQUIRED", "Both required"
+    RECORD_ONLY = "RECORD_ONLY", "Record only"
+
+
+class AcknowledgementState(models.TextChoices):
+    PENDING = "PENDING", "Pending"
+    APPROVED = "APPROVED", "Approved"
+    OBJECTED = "OBJECTED", "Objected"
+
+
+class MilestoneType(models.TextChoices):
+    PRODUCT = "PRODUCT", "Product"
+    OPERATING = "OPERATING", "Operating"
+    GOVERNANCE = "GOVERNANCE", "Governance"
+
+
+class MilestoneStatus(models.TextChoices):
+    PLANNED = "PLANNED", "Planned"
+    IN_PROGRESS = "IN_PROGRESS", "In progress"
+    DONE = "DONE", "Done"
+    MISSED = "MISSED", "Missed"
+    CANCELLED = "CANCELLED", "Cancelled"
+
+
 class StudioProjectProfile(ProjectBaseModel):
     product_type = models.CharField(max_length=32, choices=ProductType.choices, default=ProductType.OTHER)
     portfolio_bucket = models.CharField(
@@ -184,9 +211,17 @@ class StudioDecision(WorkspaceBaseModel):
     context = models.TextField(max_length=5000, blank=True, default="")
     recommendation = models.TextField(max_length=5000, blank=True, default="")
     final_decision = models.TextField(max_length=5000, blank=True, default="")
+    rationale = models.TextField(max_length=5000, blank=True, default="")
     status = models.CharField(max_length=24, choices=DecisionStatus.choices, default=DecisionStatus.DRAFT)
+    decision_mode = models.CharField(
+        max_length=24,
+        choices=DecisionMode.choices,
+        default=DecisionMode.RECORD_ONLY,
+    )
     due_at = models.DateTimeField(null=True, blank=True, db_index=True)
     decided_at = models.DateTimeField(null=True, blank=True)
+    revisit_condition = models.CharField(max_length=500, blank=True, default="")
+    revisit_at = models.DateTimeField(null=True, blank=True)
     proposer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
@@ -224,3 +259,114 @@ class StudioRisk(ProjectBaseModel):
     class Meta:
         db_table = "studio_risks"
         ordering = ("-score", "due_at", "-created_at")
+
+
+class StudioDecisionOption(WorkspaceBaseModel):
+    decision = models.ForeignKey(
+        StudioDecision,
+        on_delete=models.CASCADE,
+        related_name="options",
+    )
+    title = models.CharField(max_length=160)
+    description = models.TextField(max_length=2000, blank=True, default="")
+    benefits = models.TextField(max_length=2000, blank=True, default="")
+    costs = models.TextField(max_length=2000, blank=True, default="")
+    risks = models.TextField(max_length=2000, blank=True, default="")
+    sort_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        db_table = "studio_decision_options"
+        ordering = ("sort_order", "created_at")
+
+
+class StudioDecisionAcknowledgement(WorkspaceBaseModel):
+    decision = models.ForeignKey(
+        StudioDecision,
+        on_delete=models.CASCADE,
+        related_name="acknowledgements",
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="studio_decision_acknowledgements",
+    )
+    state = models.CharField(
+        max_length=16,
+        choices=AcknowledgementState.choices,
+        default=AcknowledgementState.PENDING,
+    )
+    note = models.CharField(max_length=500, blank=True, default="")
+    acted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "studio_decision_acknowledgements"
+        ordering = ("created_at",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["decision", "user"],
+                condition=Q(deleted_at__isnull=True),
+                name="studio_decision_ack_unique_active_user",
+            )
+        ]
+
+
+class StudioMilestone(ProjectBaseModel):
+    release = models.ForeignKey(
+        StudioRelease,
+        on_delete=models.SET_NULL,
+        related_name="milestones",
+        null=True,
+        blank=True,
+    )
+    type = models.CharField(max_length=16, choices=MilestoneType.choices, default=MilestoneType.PRODUCT)
+    title = models.CharField(max_length=160)
+    description = models.TextField(max_length=2000, blank=True, default="")
+    target_at = models.DateTimeField(db_index=True)
+    status = models.CharField(max_length=16, choices=MilestoneStatus.choices, default=MilestoneStatus.PLANNED)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="owned_studio_milestones",
+        null=True,
+        blank=True,
+    )
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "studio_milestones"
+        ordering = ("target_at", "created_at")
+
+
+class StudioReleaseChecklistItem(ProjectBaseModel):
+    release = models.ForeignKey(
+        StudioRelease,
+        on_delete=models.CASCADE,
+        related_name="checklist_items",
+    )
+    key = models.CharField(max_length=64)
+    title = models.CharField(max_length=160)
+    is_done = models.BooleanField(default=False)
+    done_at = models.DateTimeField(null=True, blank=True)
+    sort_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        db_table = "studio_release_checklist_items"
+        ordering = ("sort_order", "created_at")
+
+
+class StudioEvent(WorkspaceBaseModel):
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="studio_events",
+        null=True,
+        blank=True,
+    )
+    entity_type = models.CharField(max_length=32, db_index=True)
+    entity_id = models.UUIDField(db_index=True)
+    action = models.CharField(max_length=64)
+    payload = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        db_table = "studio_events"
+        ordering = ("-created_at",)

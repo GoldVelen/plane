@@ -16,7 +16,8 @@
       "record": "记录",
       "term_release": "发布",
       "term_decision": "决策",
-      "term_risk": "风险"
+      "term_risk": "风险",
+      "term_milestone": "里程碑"
     },
     "navigation": {
       "studio": "Studio",
@@ -116,7 +117,20 @@
       "delete_confirm": "“{name}”将从 Studio 中移除。这不会删除 Plane 项目、模块或工作项。",
       "delete_success_title": "{kind}已删除",
       "delete_success_message": "该 Studio 记录已移除。Plane 项目执行数据未受影响。",
-      "delete_failed_title": "删除失败"
+      "delete_failed_title": "删除失败",
+      "milestones_title": "里程碑",
+      "milestones_description": "绑定到本项目或某次发布的日期结果。",
+      "add_milestone": "添加里程碑",
+      "milestones_empty_title": "暂无里程碑",
+      "milestones_empty_description": "当某个有日期的结果需要负责人时，创建里程碑。",
+      "events_title": "Studio 活动",
+      "events_description": "本项目的只追加治理事件。",
+      "events_empty_title": "暂无 Studio 事件",
+      "events_empty_description": "创建或更新发布、决策、风险和里程碑会写入事件。",
+      "checklist_title": "发布检查单",
+      "acknowledge": "同意",
+      "object": "异议",
+      "term_milestone": "里程碑"
     },
     "forms": {
       "profile_title_edit": "编辑 Studio 项目画像",
@@ -181,7 +195,15 @@
       "risk_saved_message": "持久风险记录已生效。",
       "action_created": "创建",
       "action_updated": "更新",
-      "update_failed_title": "Studio 更新失败"
+      "update_failed_title": "Studio 更新失败",
+      "label_decision_mode": "决策模式",
+      "label_rationale": "理由",
+      "milestone_title_create": "创建里程碑",
+      "save_milestone": "保存里程碑",
+      "create_milestone": "创建里程碑",
+      "label_milestone_type": "里程碑类型",
+      "milestone_saved_title": "里程碑已{action}",
+      "milestone_saved_message": "持久里程碑记录已生效。"
     },
     "error": {
       "load_title": "无法加载 Studio 数据",
@@ -197,7 +219,10 @@
       "duplicate_version": "该项目已存在使用此版本号的有效发布。",
       "project_workspace_mismatch": "项目必须属于当前工作区。",
       "owner_not_member": "负责人必须是本工作区的有效成员。",
-      "permission_denied": "你没有执行该操作的权限。"
+      "permission_denied": "你没有执行该操作的权限。",
+      "final_decision_required": "定稿必须填写最终决策。",
+      "acknowledgements_required": "该决策仍需完成必要确认。",
+      "decision_objected": "存在异议，无法定稿。"
     },
     "enums": {
       "bucket": {
@@ -285,6 +310,29 @@
         "MONITORING": "监控中",
         "ACCEPTED": "已接受",
         "CLOSED": "已关闭"
+      },
+      "decision_mode": {
+        "SINGLE": "单人决策",
+        "ACK_REQUIRED": "需要确认",
+        "BOTH_REQUIRED": "双方确认",
+        "RECORD_ONLY": "仅记录"
+      },
+      "ack_state": {
+        "PENDING": "待确认",
+        "APPROVED": "已同意",
+        "OBJECTED": "有异议"
+      },
+      "milestone_type": {
+        "PRODUCT": "产品",
+        "OPERATING": "运营",
+        "GOVERNANCE": "治理"
+      },
+      "milestone_status": {
+        "PLANNED": "已计划",
+        "IN_PROGRESS": "进行中",
+        "DONE": "已完成",
+        "MISSED": "已逾期",
+        "CANCELLED": "已取消"
       }
     },
     "health": {

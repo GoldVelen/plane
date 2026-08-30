@@ -7,12 +7,21 @@ from rest_framework import serializers
 
 from plane.db.models import Module, Project, User, WorkspaceMember
 from plane.studio.models import (
+    AcknowledgementState,
+    DecisionMode,
+    DecisionStatus,
     StudioDecision,
+    StudioDecisionAcknowledgement,
+    StudioDecisionOption,
+    StudioEvent,
+    StudioMilestone,
     StudioProjectProfile,
     StudioRelease,
+    StudioReleaseChecklistItem,
     StudioRisk,
 )
 from plane.studio.services.health import advancement_expectation, evaluate_project_health
+from plane.studio.services.transitions import allowed_statuses, assert_transition
 
 
 class StudioProjectProfileSerializer(serializers.ModelSerializer):
@@ -185,6 +194,8 @@ class StudioReleaseSerializer(serializers.ModelSerializer):
     )
     created_by_id = serializers.UUIDField(read_only=True)
     updated_by_id = serializers.UUIDField(read_only=True)
+    checklist_items = serializers.SerializerMethodField()
+    allowed_next_statuses = serializers.SerializerMethodField()
 
     class Meta:
         model = StudioRelease
@@ -200,6 +211,8 @@ class StudioReleaseSerializer(serializers.ModelSerializer):
             "target_at",
             "released_at",
             "scope_summary",
+            "checklist_items",
+            "allowed_next_statuses",
             "created_at",
             "updated_at",
             "created_by_id",
@@ -214,9 +227,24 @@ class StudioReleaseSerializer(serializers.ModelSerializer):
             "created_by_id",
             "updated_by_id",
         )
+        extra_kwargs = {
+            "checklist_items": {"read_only": True},
+            "allowed_next_statuses": {"read_only": True},
+        }
+
+    def get_checklist_items(self, instance):
+        items = instance.checklist_items.all() if instance.pk else []
+        return StudioReleaseChecklistItemSerializer(items, many=True).data
+
+    def get_allowed_next_statuses(self, instance):
+        if not instance.pk:
+            return list(allowed_statuses("release", instance.status if instance else "PLANNED"))
+        return list(allowed_statuses("release", instance.status))
 
     def validate(self, attrs):
         project = self.context["project"]
+        if self.instance and "status" in attrs:
+            assert_transition("release", self.instance.status, attrs["status"])
         module = attrs.get("module", self.instance.module if self.instance else None)
         if module and module.project_id != project.id:
             raise serializers.ValidationError({"module_id": "Module must belong to the release project."})
@@ -243,6 +271,9 @@ class StudioDecisionSerializer(serializers.ModelSerializer):
     proposer_id = serializers.UUIDField(read_only=True)
     created_by_id = serializers.UUIDField(read_only=True)
     updated_by_id = serializers.UUIDField(read_only=True)
+    options = serializers.SerializerMethodField()
+    acknowledgements = serializers.SerializerMethodField()
+    allowed_next_statuses = serializers.SerializerMethodField()
 
     class Meta:
         model = StudioDecision
@@ -255,10 +286,17 @@ class StudioDecisionSerializer(serializers.ModelSerializer):
             "context",
             "recommendation",
             "final_decision",
+            "rationale",
             "status",
+            "decision_mode",
             "due_at",
             "decided_at",
+            "revisit_condition",
+            "revisit_at",
             "proposer_id",
+            "options",
+            "acknowledgements",
+            "allowed_next_statuses",
             "created_at",
             "updated_at",
             "created_by_id",
@@ -274,11 +312,49 @@ class StudioDecisionSerializer(serializers.ModelSerializer):
             "updated_by_id",
         )
 
+    def get_options(self, instance):
+        if not instance.pk:
+            return []
+        return StudioDecisionOptionSerializer(instance.options.all(), many=True).data
+
+    def get_acknowledgements(self, instance):
+        if not instance.pk:
+            return []
+        return StudioDecisionAcknowledgementSerializer(instance.acknowledgements.select_related("user"), many=True).data
+
+    def get_allowed_next_statuses(self, instance):
+        current = instance.status if instance and instance.pk else DecisionStatus.DRAFT
+        return list(allowed_statuses("decision", current))
+
     def validate_project_id(self, project):
         workspace = self.context["workspace"]
         if project is not None and project.workspace_id != workspace.id:
             raise serializers.ValidationError("Project must belong to this workspace.")
         return project
+
+    def validate(self, attrs):
+        instance = self.instance
+        if instance and "status" in attrs:
+            assert_transition("decision", instance.status, attrs["status"])
+            if attrs["status"] == DecisionStatus.DECIDED:
+                final_decision = attrs.get("final_decision", instance.final_decision)
+                if not (final_decision or "").strip():
+                    raise serializers.ValidationError(
+                        {"final_decision": "A decided outcome requires a final decision."}
+                    )
+                mode = attrs.get("decision_mode", instance.decision_mode)
+                if mode in (DecisionMode.ACK_REQUIRED, DecisionMode.BOTH_REQUIRED):
+                    acks = list(instance.acknowledgements.all())
+                    if any(ack.state == AcknowledgementState.OBJECTED for ack in acks):
+                        raise serializers.ValidationError({"status": "An objection is blocking this decision."})
+                    approved = sum(1 for ack in acks if ack.state == AcknowledgementState.APPROVED)
+                    required = 2 if mode == DecisionMode.BOTH_REQUIRED else 1
+                    if approved < required:
+                        raise serializers.ValidationError(
+                            {"status": "This decision still needs required acknowledgements."}
+                        )
+                attrs.setdefault("decided_at", timezone.now())
+        return attrs
 
 
 class StudioRiskSerializer(serializers.ModelSerializer):
@@ -292,6 +368,7 @@ class StudioRiskSerializer(serializers.ModelSerializer):
     )
     created_by_id = serializers.UUIDField(read_only=True)
     updated_by_id = serializers.UUIDField(read_only=True)
+    allowed_next_statuses = serializers.SerializerMethodField()
 
     class Meta:
         model = StudioRisk
@@ -310,6 +387,7 @@ class StudioRiskSerializer(serializers.ModelSerializer):
             "mitigation",
             "owner_id",
             "due_at",
+            "allowed_next_statuses",
             "created_at",
             "updated_at",
             "created_by_id",
@@ -326,6 +404,15 @@ class StudioRiskSerializer(serializers.ModelSerializer):
             "updated_by_id",
         )
 
+    def get_allowed_next_statuses(self, instance):
+        current = instance.status if instance and instance.pk else "OPEN"
+        return list(allowed_statuses("risk", current))
+
+    def validate(self, attrs):
+        if self.instance and "status" in attrs:
+            assert_transition("risk", self.instance.status, attrs["status"])
+        return attrs
+
     def validate_owner_id(self, owner):
         if owner is None:
             return owner
@@ -337,3 +424,98 @@ class StudioRiskSerializer(serializers.ModelSerializer):
         ).exists():
             raise serializers.ValidationError("Owner must be an active member of this workspace.")
         return owner
+
+
+class StudioReleaseChecklistItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudioReleaseChecklistItem
+        fields = ("id", "release_id", "key", "title", "is_done", "done_at", "sort_order")
+        read_only_fields = ("id", "release_id", "key", "title", "sort_order")
+
+
+class StudioDecisionOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudioDecisionOption
+        fields = ("id", "decision_id", "title", "description", "benefits", "costs", "risks", "sort_order")
+        read_only_fields = ("id", "decision_id")
+
+
+class StudioDecisionAcknowledgementSerializer(serializers.ModelSerializer):
+    user_id = serializers.UUIDField(read_only=True)
+
+    class Meta:
+        model = StudioDecisionAcknowledgement
+        fields = ("id", "decision_id", "user_id", "state", "note", "acted_at")
+        read_only_fields = ("id", "decision_id", "user_id", "acted_at")
+
+
+class StudioMilestoneSerializer(serializers.ModelSerializer):
+    workspace_id = serializers.UUIDField(read_only=True)
+    project_id = serializers.UUIDField(read_only=True)
+    release_id = serializers.PrimaryKeyRelatedField(
+        source="release",
+        queryset=StudioRelease.objects.all(),
+        allow_null=True,
+        required=False,
+    )
+    owner_id = serializers.PrimaryKeyRelatedField(
+        source="owner",
+        queryset=User.objects.all(),
+        allow_null=True,
+        required=False,
+    )
+    allowed_next_statuses = serializers.SerializerMethodField()
+
+    class Meta:
+        model = StudioMilestone
+        fields = (
+            "id",
+            "workspace_id",
+            "project_id",
+            "release_id",
+            "type",
+            "title",
+            "description",
+            "target_at",
+            "status",
+            "owner_id",
+            "completed_at",
+            "allowed_next_statuses",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("id", "workspace_id", "project_id", "created_at", "updated_at")
+
+    def get_allowed_next_statuses(self, instance):
+        current = instance.status if instance and instance.pk else "PLANNED"
+        return list(allowed_statuses("milestone", current))
+
+    def validate(self, attrs):
+        project = self.context["project"]
+        if self.instance and "status" in attrs:
+            assert_transition("milestone", self.instance.status, attrs["status"])
+        release = attrs.get("release", self.instance.release if self.instance else None)
+        if release and release.project_id != project.id:
+            raise serializers.ValidationError({"release_id": "Release must belong to this project."})
+        return attrs
+
+
+class StudioEventSerializer(serializers.ModelSerializer):
+    actor_id = serializers.UUIDField(read_only=True)
+    project_id = serializers.UUIDField(read_only=True)
+    workspace_id = serializers.UUIDField(read_only=True)
+
+    class Meta:
+        model = StudioEvent
+        fields = (
+            "id",
+            "workspace_id",
+            "project_id",
+            "actor_id",
+            "entity_type",
+            "entity_id",
+            "action",
+            "payload",
+            "created_at",
+        )
+        read_only_fields = fields

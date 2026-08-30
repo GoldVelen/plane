@@ -17,6 +17,7 @@ import type {
   IStudioToday,
   TStudioDecisionInput,
   TStudioProjectProfileInput,
+  TStudioMilestoneInput,
   TStudioReleaseInput,
   TStudioRiskInput,
 } from "./types";
@@ -152,5 +153,65 @@ export class StudioService extends APIService {
 
   async deleteRisk(workspaceSlug: string, projectId: string, riskId: string): Promise<void> {
     await this.delete(`${studioProjectUrl(workspaceSlug, projectId)}/risks/${riskId}/`).catch(throwResponseError);
+  }
+
+  async createDecisionOption(
+    workspaceSlug: string,
+    decisionId: string,
+    payload: { title: string; description?: string; sort_order?: number }
+  ) {
+    return this.post(`${studioWorkspaceUrl(workspaceSlug)}/decisions/${decisionId}/options/`, payload)
+      .then((response) => response.data)
+      .catch(throwResponseError);
+  }
+
+  async requestDecisionAcknowledgement(workspaceSlug: string, decisionId: string, userId: string) {
+    return this.post(`${studioWorkspaceUrl(workspaceSlug)}/decisions/${decisionId}/acknowledgements/`, {
+      user_id: userId,
+    })
+      .then((response) => response.data)
+      .catch(throwResponseError);
+  }
+
+  async acknowledgeDecision(
+    workspaceSlug: string,
+    decisionId: string,
+    payload: { state: "APPROVED" | "OBJECTED"; note?: string }
+  ) {
+    return this.patch(`${studioWorkspaceUrl(workspaceSlug)}/decisions/${decisionId}/acknowledgements/me/`, payload)
+      .then((response) => response.data)
+      .catch(throwResponseError);
+  }
+
+  async createMilestone(workspaceSlug: string, projectId: string, payload: TStudioMilestoneInput) {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/milestones/`, payload)
+      .then((response) => response.data)
+      .catch(throwResponseError);
+  }
+
+  async updateMilestone(workspaceSlug: string, projectId: string, milestoneId: string, payload: TStudioMilestoneInput) {
+    return this.patch(`${studioProjectUrl(workspaceSlug, projectId)}/milestones/${milestoneId}/`, payload)
+      .then((response) => response.data)
+      .catch(throwResponseError);
+  }
+
+  async deleteMilestone(workspaceSlug: string, projectId: string, milestoneId: string): Promise<void> {
+    await this.delete(`${studioProjectUrl(workspaceSlug, projectId)}/milestones/${milestoneId}/`).catch(
+      throwResponseError
+    );
+  }
+
+  async updateChecklistItem(
+    workspaceSlug: string,
+    projectId: string,
+    releaseId: string,
+    itemId: string,
+    isDone: boolean
+  ) {
+    return this.patch(`${studioProjectUrl(workspaceSlug, projectId)}/releases/${releaseId}/checklist/${itemId}/`, {
+      is_done: isDone,
+    })
+      .then((response) => response.data)
+      .catch(throwResponseError);
   }
 }

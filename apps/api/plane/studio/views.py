@@ -29,6 +29,8 @@ from plane.studio.serializers import (
     StudioReleaseSerializer,
     StudioRiskSerializer,
 )
+from plane.studio.services.checklists import instantiate_release_checklist
+from plane.studio.services.events import record_studio_event
 from plane.studio.services.health import build_health_context, evaluate_project_health
 from plane.studio.services.projections import (
     portfolio_projection,
@@ -109,6 +111,17 @@ class StudioReleaseListEndpoint(BaseAPIView):
         )
         serializer.is_valid(raise_exception=True)
         release = serializer.save(project=project)
+        profile = StudioProjectProfile.objects.filter(project=project).first()
+        instantiate_release_checklist(release, profile.product_type if profile else "OTHER")
+        record_studio_event(
+            workspace=project.workspace,
+            project=project,
+            actor=request.user,
+            entity_type="release",
+            entity_id=release.id,
+            action="created",
+            payload={"version": release.version, "status": release.status},
+        )
         return Response(
             StudioReleaseSerializer(release).data,
             status=status.HTTP_201_CREATED,
@@ -141,6 +154,15 @@ class StudioReleaseDetailEndpoint(BaseAPIView):
         )
         serializer.is_valid(raise_exception=True)
         release = serializer.save()
+        record_studio_event(
+            workspace=project.workspace,
+            project=project,
+            actor=request.user,
+            entity_type="release",
+            entity_id=release.id,
+            action="updated",
+            payload={"status": release.status},
+        )
         return Response(StudioReleaseSerializer(release).data)
 
     def delete(self, request, slug, project_id, pk):
@@ -188,6 +210,15 @@ class StudioDecisionListEndpoint(BaseAPIView):
         if project and not can_write_project(request.user, slug, project.id):
             raise PermissionDenied("You do not have permission to write to this project.")
         decision = serializer.save(workspace=workspace, proposer=request.user)
+        record_studio_event(
+            workspace=workspace,
+            project=decision.project,
+            actor=request.user,
+            entity_type="decision",
+            entity_id=decision.id,
+            action="created",
+            payload={"status": decision.status, "decision_mode": decision.decision_mode},
+        )
         return Response(
             StudioDecisionSerializer(decision).data,
             status=status.HTTP_201_CREATED,
@@ -228,6 +259,15 @@ class StudioDecisionDetailEndpoint(BaseAPIView):
         if project and not can_write_project(request.user, slug, project.id):
             raise PermissionDenied("You do not have permission to write to this project.")
         decision = serializer.save()
+        record_studio_event(
+            workspace=decision.workspace,
+            project=decision.project,
+            actor=request.user,
+            entity_type="decision",
+            entity_id=decision.id,
+            action="updated",
+            payload={"status": decision.status},
+        )
         return Response(StudioDecisionSerializer(decision).data)
 
     def delete(self, request, slug, pk):
@@ -258,6 +298,15 @@ class StudioRiskListEndpoint(BaseAPIView):
         )
         serializer.is_valid(raise_exception=True)
         risk = serializer.save(project=project)
+        record_studio_event(
+            workspace=project.workspace,
+            project=project,
+            actor=request.user,
+            entity_type="risk",
+            entity_id=risk.id,
+            action="created",
+            payload={"status": risk.status, "is_blocker": risk.is_blocker},
+        )
         return Response(
             StudioRiskSerializer(risk).data,
             status=status.HTTP_201_CREATED,
@@ -290,6 +339,15 @@ class StudioRiskDetailEndpoint(BaseAPIView):
         )
         serializer.is_valid(raise_exception=True)
         risk = serializer.save()
+        record_studio_event(
+            workspace=project.workspace,
+            project=project,
+            actor=request.user,
+            entity_type="risk",
+            entity_id=risk.id,
+            action="updated",
+            payload={"status": risk.status},
+        )
         return Response(StudioRiskSerializer(risk).data)
 
     def delete(self, request, slug, project_id, pk):

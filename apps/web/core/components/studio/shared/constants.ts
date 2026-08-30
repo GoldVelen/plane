@@ -73,6 +73,9 @@ export const STUDIO_DECISION_STATUSES: TStudioDecisionStatus[] = [
   "CANCELLED",
 ];
 export const STUDIO_RISK_STATUSES: TStudioRiskStatus[] = ["OPEN", "MITIGATING", "MONITORING", "ACCEPTED", "CLOSED"];
+export const STUDIO_DECISION_MODES = ["RECORD_ONLY", "SINGLE", "ACK_REQUIRED", "BOTH_REQUIRED"] as const;
+export const STUDIO_MILESTONE_TYPES = ["PRODUCT", "OPERATING", "GOVERNANCE"] as const;
+export const STUDIO_MILESTONE_STATUSES = ["PLANNED", "IN_PROGRESS", "DONE", "MISSED", "CANCELLED"] as const;
 export const STUDIO_RISK_TYPES: TStudioRiskType[] = [
   "PRODUCT",
   "TECHNICAL",
@@ -93,8 +96,12 @@ export type TStudioEnumDomain =
   | "release_channel"
   | "release_status"
   | "decision_status"
+  | "decision_mode"
+  | "ack_state"
   | "risk_type"
-  | "risk_status";
+  | "risk_status"
+  | "milestone_type"
+  | "milestone_status";
 
 /**
  * Stable translation-key mapping for Studio domain values. Enum codes stay English
@@ -129,6 +136,9 @@ const STUDIO_API_ERROR_MESSAGE_KEYS: Record<string, string> = {
   "Project must belong to this workspace.": "studio.api_error.project_workspace_mismatch",
   "Owner must be an active member of this workspace.": "studio.api_error.owner_not_member",
   "You do not have permission to perform this action.": "studio.api_error.permission_denied",
+  "A decided outcome requires a final decision.": "studio.api_error.final_decision_required",
+  "This decision still needs required acknowledgements.": "studio.api_error.acknowledgements_required",
+  "An objection is blocking this decision.": "studio.api_error.decision_objected",
 };
 
 const extractStudioErrorMessage = (error: unknown, fallback: string): string => {

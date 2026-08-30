@@ -13,11 +13,14 @@ import { EditIcon, PlusIcon, TrashIcon } from "@plane/propel/icons";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import { AlertModalCore } from "@plane/ui";
 import { StudioService } from "@/services/studio";
+import { useUser } from "@/hooks/store/user";
 import type {
   IStudioDecision,
+  IStudioMilestone,
   IStudioRelease,
   IStudioRisk,
   TStudioDecisionInput,
+  TStudioMilestoneInput,
   TStudioProjectProfileInput,
   TStudioReleaseInput,
   TStudioRiskInput,
@@ -34,7 +37,7 @@ import {
   useStudioDateFormatter,
   useStudioHealthReasonText,
 } from "../shared";
-import { DecisionModal, ProjectProfileModal, ReleaseModal, RiskModal } from "./forms";
+import { DecisionModal, MilestoneModal, ProjectProfileModal, ReleaseModal, RiskModal } from "./forms";
 
 const studioService = new StudioService();
 
@@ -42,7 +45,8 @@ type TEditState<T> = T | null | undefined;
 type TDeleteTarget =
   | { kind: "release"; id: string; name: string }
   | { kind: "decision"; id: string; name: string }
-  | { kind: "risk"; id: string; name: string };
+  | { kind: "risk"; id: string; name: string }
+  | { kind: "milestone"; id: string; name: string };
 
 function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
   return (
@@ -77,6 +81,8 @@ export function StudioProjectOverviewView({ workspaceSlug, projectId }: { worksp
   const [releaseModal, setReleaseModal] = useState<TEditState<IStudioRelease>>(undefined);
   const [decisionModal, setDecisionModal] = useState<TEditState<IStudioDecision>>(undefined);
   const [riskModal, setRiskModal] = useState<TEditState<IStudioRisk>>(undefined);
+  const [isMilestoneModalOpen, setIsMilestoneModalOpen] = useState(false);
+  const { data: currentUser } = useUser();
   const [deleteTarget, setDeleteTarget] = useState<TDeleteTarget | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const { data, error, isLoading, mutate } = useSWR(
@@ -113,6 +119,11 @@ export function StudioProjectOverviewView({ workspaceSlug, projectId }: { worksp
     await mutate();
   };
 
+  const saveMilestone = async (payload: TStudioMilestoneInput) => {
+    await studioService.createMilestone(workspaceSlug, projectId, payload);
+    await mutate();
+  };
+
   const confirmDelete = async () => {
     if (!deleteTarget) return;
     const kindLabel = t(`studio.common.term_${deleteTarget.kind}`);
@@ -121,6 +132,8 @@ export function StudioProjectOverviewView({ workspaceSlug, projectId }: { worksp
       if (deleteTarget.kind === "release") await studioService.deleteRelease(workspaceSlug, projectId, deleteTarget.id);
       if (deleteTarget.kind === "decision") await studioService.deleteDecision(workspaceSlug, deleteTarget.id);
       if (deleteTarget.kind === "risk") await studioService.deleteRisk(workspaceSlug, projectId, deleteTarget.id);
+      if (deleteTarget.kind === "milestone")
+        await studioService.deleteMilestone(workspaceSlug, projectId, deleteTarget.id);
       await mutate();
       setToast({
         type: TOAST_TYPE.SUCCESS,
@@ -158,6 +171,7 @@ export function StudioProjectOverviewView({ workspaceSlug, projectId }: { worksp
       {riskModal !== undefined && (
         <RiskModal risk={riskModal} onClose={() => setRiskModal(undefined)} onSave={saveRisk} />
       )}
+      {isMilestoneModalOpen && <MilestoneModal onClose={() => setIsMilestoneModalOpen(false)} onSave={saveMilestone} />}
       <AlertModalCore
         isOpen={deleteTarget !== null}
         isSubmitting={isDeleting}
@@ -332,6 +346,13 @@ export function StudioProjectOverviewView({ workspaceSlug, projectId }: { worksp
                           .filter(Boolean)
                           .join(" · ")}
                       </p>
+                      {release.checklist_items && release.checklist_items.length > 0 && (
+                        <p className="mt-1 text-11 text-placeholder">
+                          {t("studio.overview.checklist_title")}{" "}
+                          {release.checklist_items.filter((item) => item.is_done).length}/
+                          {release.checklist_items.length}
+                        </p>
+                      )}
                     </div>
                     {canWrite && (
                       <RowActions
@@ -436,12 +457,49 @@ export function StudioProjectOverviewView({ workspaceSlug, projectId }: { worksp
                         {t("studio.overview.due_date", { date: formatDate(decision.due_at) })}
                       </p>
                     )}
+                    {decision.acknowledgements && decision.acknowledgements.length > 0 && (
+                      <p className="mt-1 text-11 text-placeholder">
+                        {studioEnumLabel(t, "decision_mode", decision.decision_mode)} ·{" "}
+                        {decision.acknowledgements.filter((ack) => ack.state === "APPROVED").length}/
+                        {decision.acknowledgements.length}
+                      </p>
+                    )}
                   </div>
                   {canWrite && (
-                    <RowActions
-                      onEdit={() => setDecisionModal(decision)}
-                      onDelete={() => setDeleteTarget({ kind: "decision", id: decision.id, name: decision.title })}
-                    />
+                    <div className="flex items-center gap-1">
+                      {decision.acknowledgements?.some(
+                        (ack) => ack.user_id === currentUser?.id && ack.state === "PENDING"
+                      ) && (
+                        <>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() =>
+                              void studioService
+                                .acknowledgeDecision(workspaceSlug, decision.id, { state: "APPROVED" })
+                                .then(() => mutate())
+                            }
+                          >
+                            {t("studio.overview.acknowledge")}
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() =>
+                              void studioService
+                                .acknowledgeDecision(workspaceSlug, decision.id, { state: "OBJECTED" })
+                                .then(() => mutate())
+                            }
+                          >
+                            {t("studio.overview.object")}
+                          </Button>
+                        </>
+                      )}
+                      <RowActions
+                        onEdit={() => setDecisionModal(decision)}
+                        onDelete={() => setDeleteTarget({ kind: "decision", id: decision.id, name: decision.title })}
+                      />
+                    </div>
                   )}
                 </div>
               ))}
@@ -455,6 +513,86 @@ export function StudioProjectOverviewView({ workspaceSlug, projectId }: { worksp
                   <AddButton label={t("studio.overview.add_decision")} onClick={() => setDecisionModal(null)} />
                 ) : undefined
               }
+            />
+          )}
+        </StudioSection>
+
+        <StudioSection
+          title={t("studio.overview.milestones_title")}
+          description={t("studio.overview.milestones_description")}
+          count={(data.milestones ?? []).length}
+          action={
+            canWrite ? (
+              <AddButton label={t("studio.overview.add_milestone")} onClick={() => setIsMilestoneModalOpen(true)} />
+            ) : undefined
+          }
+        >
+          {(data.milestones ?? []).length > 0 ? (
+            <div className="border-y border-subtle">
+              {(data.milestones ?? []).map((milestone: IStudioMilestone) => (
+                <div
+                  key={milestone.id}
+                  className="group flex min-w-0 items-center gap-3 border-b border-subtle px-2 py-3 last:border-b-0"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <p className="truncate text-13 font-medium text-primary">{milestone.title}</p>
+                      <StudioStatusBadge status={milestone.status} domain="milestone_status" />
+                    </div>
+                    <p className="mt-1 text-11 text-placeholder">
+                      {[studioEnumLabel(t, "milestone_type", milestone.type), formatDate(milestone.target_at)]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </p>
+                  </div>
+                  {canWrite && (
+                    <IconButton
+                      variant="ghost"
+                      size="sm"
+                      icon={TrashIcon}
+                      aria-label={t("studio.common.delete")}
+                      onClick={() => setDeleteTarget({ kind: "milestone", id: milestone.id, name: milestone.title })}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <StudioEmptyState
+              title={t("studio.overview.milestones_empty_title")}
+              description={t("studio.overview.milestones_empty_description")}
+              action={
+                canWrite ? (
+                  <AddButton label={t("studio.overview.add_milestone")} onClick={() => setIsMilestoneModalOpen(true)} />
+                ) : undefined
+              }
+            />
+          )}
+        </StudioSection>
+
+        <StudioSection
+          title={t("studio.overview.events_title")}
+          description={t("studio.overview.events_description")}
+          count={(data.events ?? []).length}
+        >
+          {(data.events ?? []).length > 0 ? (
+            <div className="border-y border-subtle">
+              {(data.events ?? []).map((event) => (
+                <div
+                  key={event.id}
+                  className="flex min-w-0 items-center gap-3 border-b border-subtle px-2 py-3 last:border-b-0"
+                >
+                  <p className="truncate text-13 text-primary">
+                    {event.entity_type} · {event.action}
+                  </p>
+                  <p className="ml-auto shrink-0 text-11 text-placeholder">{formatDate(event.created_at)}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <StudioEmptyState
+              title={t("studio.overview.events_empty_title")}
+              description={t("studio.overview.events_empty_description")}
             />
           )}
         </StudioSection>

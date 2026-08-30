@@ -53,6 +53,10 @@ export type TStudioRiskType =
   | "MARKET"
   | "OPERATIONS"
   | "SECURITY";
+export type TStudioDecisionMode = "SINGLE" | "ACK_REQUIRED" | "BOTH_REQUIRED" | "RECORD_ONLY";
+export type TStudioAckState = "PENDING" | "APPROVED" | "OBJECTED";
+export type TStudioMilestoneType = "PRODUCT" | "OPERATING" | "GOVERNANCE";
+export type TStudioMilestoneStatus = "PLANNED" | "IN_PROGRESS" | "DONE" | "MISSED" | "CANCELLED";
 
 export interface IStudioPermissions {
   can_write_workspace: boolean;
@@ -133,6 +137,16 @@ export type TStudioProjectProfileInput = Partial<
   >
 >;
 
+export interface IStudioChecklistItem {
+  id: string;
+  release_id: string;
+  key: string;
+  title: string;
+  is_done: boolean;
+  done_at: string | null;
+  sort_order: number;
+}
+
 export interface IStudioRelease {
   id: string;
   workspace_id: string;
@@ -145,6 +159,8 @@ export interface IStudioRelease {
   target_at: string | null;
   released_at: string | null;
   scope_summary: string;
+  checklist_items?: IStudioChecklistItem[];
+  allowed_next_statuses?: TStudioReleaseStatus[];
   created_at: string;
   updated_at: string;
 }
@@ -156,6 +172,26 @@ export type TStudioReleaseInput = Partial<
   >
 >;
 
+export interface IStudioDecisionOption {
+  id: string;
+  decision_id: string;
+  title: string;
+  description: string;
+  benefits: string;
+  costs: string;
+  risks: string;
+  sort_order: number;
+}
+
+export interface IStudioDecisionAcknowledgement {
+  id: string;
+  decision_id: string;
+  user_id: string;
+  state: TStudioAckState;
+  note: string;
+  acted_at: string | null;
+}
+
 export interface IStudioDecision {
   id: string;
   workspace_id: string;
@@ -166,9 +202,16 @@ export interface IStudioDecision {
   context: string;
   recommendation: string;
   final_decision: string;
+  rationale: string;
   status: TStudioDecisionStatus;
+  decision_mode: TStudioDecisionMode;
   due_at: string | null;
   decided_at: string | null;
+  revisit_condition: string;
+  revisit_at: string | null;
+  options?: IStudioDecisionOption[];
+  acknowledgements?: IStudioDecisionAcknowledgement[];
+  allowed_next_statuses?: TStudioDecisionStatus[];
   created_at: string;
   updated_at: string;
 }
@@ -182,11 +225,46 @@ export type TStudioDecisionInput = Partial<
     | "context"
     | "recommendation"
     | "final_decision"
+    | "rationale"
     | "status"
+    | "decision_mode"
     | "due_at"
     | "decided_at"
   >
 >;
+
+export interface IStudioMilestone {
+  id: string;
+  workspace_id: string;
+  project_id: string;
+  release_id: string | null;
+  type: TStudioMilestoneType;
+  title: string;
+  description: string;
+  target_at: string;
+  status: TStudioMilestoneStatus;
+  owner_id: string | null;
+  completed_at: string | null;
+  allowed_next_statuses?: TStudioMilestoneStatus[];
+  created_at: string;
+  updated_at: string;
+}
+
+export type TStudioMilestoneInput = Partial<
+  Pick<IStudioMilestone, "release_id" | "type" | "title" | "description" | "target_at" | "status" | "owner_id">
+>;
+
+export interface IStudioEvent {
+  id: string;
+  workspace_id: string;
+  project_id: string | null;
+  actor_id: string | null;
+  entity_type: string;
+  entity_id: string;
+  action: string;
+  payload: Record<string, unknown>;
+  created_at: string;
+}
 
 export interface IStudioRisk {
   id: string;
@@ -203,6 +281,7 @@ export interface IStudioRisk {
   status: TStudioRiskStatus;
   mitigation: string;
   due_at: string | null;
+  allowed_next_statuses?: TStudioRiskStatus[];
   created_at: string;
   updated_at: string;
 }
@@ -302,6 +381,8 @@ export interface IStudioProjectOverview {
   releases: IStudioRelease[];
   decisions: IStudioDecision[];
   risks: IStudioRisk[];
+  milestones: IStudioMilestone[];
+  events: IStudioEvent[];
   permissions: IStudioPermissions & { can_write_project: boolean };
   generated_at: string;
 }

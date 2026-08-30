@@ -16,6 +16,8 @@ from plane.studio.models import (
     ProductType,
     ReleaseStatus,
     StudioDecision,
+    StudioEvent,
+    StudioMilestone,
     StudioProjectProfile,
     StudioRelease,
     StudioRisk,
@@ -23,6 +25,8 @@ from plane.studio.models import (
 from plane.studio.permissions import permission_summary, visible_projects_for
 from plane.studio.serializers import (
     StudioDecisionSerializer,
+    StudioEventSerializer,
+    StudioMilestoneSerializer,
     StudioProjectProfileSerializer,
     StudioReleaseSerializer,
     StudioRiskSerializer,
@@ -359,9 +363,15 @@ def project_overview_projection(user, slug, project, now=None):
     if profile:
         context = build_health_context([project.id], now=now)
         health = evaluate_project_health(project, profile, context=context, now=now)
-    releases = StudioRelease.objects.filter(project=project).select_related("module")
-    decisions = StudioDecision.objects.filter(project=project).select_related("proposer")
+    releases = StudioRelease.objects.filter(project=project).select_related("module").prefetch_related("checklist_items")
+    decisions = (
+        StudioDecision.objects.filter(project=project)
+        .select_related("proposer")
+        .prefetch_related("options", "acknowledgements")
+    )
     risks = StudioRisk.objects.filter(project=project).select_related("owner")
+    milestones = StudioMilestone.objects.filter(project=project).select_related("release", "owner")
+    events = StudioEvent.objects.filter(project=project).select_related("actor")[:20]
     return {
         "project": project_payload(project),
         "profile": _profile_payload(project, profile, health),
@@ -370,6 +380,8 @@ def project_overview_projection(user, slug, project, now=None):
         "releases": StudioReleaseSerializer(releases, many=True).data,
         "decisions": StudioDecisionSerializer(decisions, many=True).data,
         "risks": StudioRiskSerializer(risks, many=True).data,
+        "milestones": StudioMilestoneSerializer(milestones, many=True, context={"project": project}).data,
+        "events": StudioEventSerializer(events, many=True).data,
         "permissions": permission_summary(user, slug, project_id=project.id),
         "generated_at": now.isoformat(),
     }

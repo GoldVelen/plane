@@ -16,7 +16,10 @@ import type {
   IStudioRelease,
   IStudioRisk,
   TStudioDecisionInput,
+  TStudioDecisionMode,
   TStudioDecisionStatus,
+  TStudioMilestoneInput,
+  TStudioMilestoneType,
   TStudioHealthStatus,
   TStudioLifecycleStage,
   TStudioPortfolioBucket,
@@ -33,15 +36,14 @@ import type {
 import {
   fromDateTimeLocalValue,
   getStudioErrorMessage,
-  STUDIO_DECISION_STATUSES,
+  STUDIO_DECISION_MODES,
   STUDIO_HEALTH_STATUSES,
+  STUDIO_MILESTONE_TYPES,
   STUDIO_LIFECYCLE_STAGES,
   STUDIO_PORTFOLIO_BUCKETS,
   STUDIO_PRIORITIES,
   STUDIO_PRODUCT_TYPES,
   STUDIO_RELEASE_CHANNELS,
-  STUDIO_RELEASE_STATUSES,
-  STUDIO_RISK_STATUSES,
   STUDIO_RISK_TYPES,
   studioEnumLabel,
   toDateTimeLocalValue,
@@ -366,7 +368,16 @@ export function ReleaseModal({
           />
         </Field>
         <Field label={t("studio.forms.label_status")}>
-          <SelectField value={status} options={STUDIO_RELEASE_STATUSES} domain="release_status" onChange={setStatus} />
+          <SelectField
+            value={status}
+            options={
+              release
+                ? ([release.status, ...(release.allowed_next_statuses ?? [])] as TStudioReleaseStatus[])
+                : (["PLANNED"] as TStudioReleaseStatus[])
+            }
+            domain="release_status"
+            onChange={setStatus}
+          />
         </Field>
         <Field label={t("studio.forms.label_target_date")}>
           <Input
@@ -415,6 +426,7 @@ export function DecisionModal({
   const [recommendation, setRecommendation] = useState(decision?.recommendation ?? "");
   const [finalDecision, setFinalDecision] = useState(decision?.final_decision ?? "");
   const [status, setStatus] = useState<TStudioDecisionStatus>(decision?.status ?? "DRAFT");
+  const [decisionMode, setDecisionMode] = useState<TStudioDecisionMode>(decision?.decision_mode ?? "RECORD_ONLY");
   const [dueAt, setDueAt] = useState(toDateTimeLocalValue(decision?.due_at ?? null));
   const [decidedAt, setDecidedAt] = useState(toDateTimeLocalValue(decision?.decided_at ?? null));
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -431,6 +443,7 @@ export function DecisionModal({
         recommendation: recommendation.trim(),
         final_decision: finalDecision.trim(),
         status,
+        decision_mode: decisionMode,
         due_at: fromDateTimeLocalValue(dueAt),
         decided_at: fromDateTimeLocalValue(decidedAt),
       });
@@ -467,9 +480,21 @@ export function DecisionModal({
         <Field label={t("studio.forms.label_status")}>
           <SelectField
             value={status}
-            options={STUDIO_DECISION_STATUSES}
+            options={
+              decision
+                ? ([decision.status, ...(decision.allowed_next_statuses ?? [])] as TStudioDecisionStatus[])
+                : (["DRAFT"] as TStudioDecisionStatus[])
+            }
             domain="decision_status"
             onChange={setStatus}
+          />
+        </Field>
+        <Field label={t("studio.forms.label_decision_mode")}>
+          <SelectField
+            value={decisionMode}
+            options={[...STUDIO_DECISION_MODES]}
+            domain="decision_mode"
+            onChange={setDecisionMode}
           />
         </Field>
         <Field label={t("studio.forms.label_due_at")}>
@@ -584,7 +609,16 @@ export function RiskModal({
           <SelectField value={type} options={STUDIO_RISK_TYPES} domain="risk_type" onChange={setType} />
         </Field>
         <Field label={t("studio.forms.label_status")}>
-          <SelectField value={status} options={STUDIO_RISK_STATUSES} domain="risk_status" onChange={setStatus} />
+          <SelectField
+            value={status}
+            options={
+              risk
+                ? ([risk.status, ...(risk.allowed_next_statuses ?? [])] as TStudioRiskStatus[])
+                : (["OPEN"] as TStudioRiskStatus[])
+            }
+            domain="risk_status"
+            onChange={setStatus}
+          />
         </Field>
         <Field label={t("studio.forms.label_probability")}>
           <Input
@@ -633,6 +667,69 @@ export function RiskModal({
           type="datetime-local"
           value={dueAt}
           onChange={(event) => setDueAt(event.target.value)}
+        />
+      </Field>
+    </ModalShell>
+  );
+}
+
+export function MilestoneModal({
+  onClose,
+  onSave,
+}: {
+  onClose: () => void;
+  onSave: (payload: TStudioMilestoneInput) => Promise<void>;
+}) {
+  const { t } = useTranslation();
+  const showRequestError = useShowRequestError();
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState<TStudioMilestoneType>("PRODUCT");
+  const [targetAt, setTargetAt] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await onSave({
+        title: title.trim(),
+        type,
+        target_at: fromDateTimeLocalValue(targetAt) ?? undefined,
+      });
+      setToast({
+        type: TOAST_TYPE.SUCCESS,
+        title: t("studio.forms.milestone_saved_title", { action: t("studio.forms.action_created") }),
+        message: t("studio.forms.milestone_saved_message"),
+      });
+      onClose();
+    } catch (error) {
+      showRequestError(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <ModalShell
+      title={t("studio.forms.milestone_title_create")}
+      isSubmitting={isSubmitting}
+      submitLabel={t("studio.forms.create_milestone")}
+      onClose={onClose}
+      onSubmit={(event) => void handleSubmit(event)}
+    >
+      <Field label={t("studio.forms.label_title")}>
+        <Input className="w-full" value={title} onChange={(event) => setTitle(event.target.value)} required />
+      </Field>
+      <Field label={t("studio.forms.label_milestone_type")}>
+        <SelectField value={type} options={[...STUDIO_MILESTONE_TYPES]} domain="milestone_type" onChange={setType} />
+      </Field>
+      <Field label={t("studio.forms.label_target_date")}>
+        <Input
+          className="w-full"
+          type="datetime-local"
+          value={targetAt}
+          onChange={(event) => setTargetAt(event.target.value)}
+          required
         />
       </Field>
     </ModalShell>
