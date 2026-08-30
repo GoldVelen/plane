@@ -39,6 +39,7 @@ import {
   useStudioHealthReasonText,
 } from "../shared";
 import { StudioMetricsSection } from "../cadence";
+import { StudioGithubPanel } from "../github-panel";
 import { DecisionModal, MilestoneModal, ProjectProfileModal, ReleaseModal, RiskModal } from "./forms";
 
 const studioService = new StudioService();
@@ -353,6 +354,8 @@ export function StudioProjectOverviewView({ workspaceSlug, projectId }: { worksp
           canWrite={canWrite}
           onMutate={() => mutate()}
         />
+
+        <StudioGithubPanel github={data.github} />
 
         <div className="grid min-w-0 grid-cols-1 gap-x-8 xl:grid-cols-2">
           <StudioSection

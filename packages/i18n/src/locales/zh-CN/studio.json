@@ -499,6 +499,25 @@
         "WEEKLY": "每周",
         "MONTHLY": "每月",
         "AD_HOC": "按需"
+      },
+      "github_kind": {
+        "PULL_REQUEST": "Pull request",
+        "CI": "CI",
+        "RELEASE": "Release",
+        "LAST_COMMIT": "最近提交"
+      }
+    },
+    "github": {
+      "title": "GitHub 事实",
+      "description": "只读的 PR、CI、Release 与最近提交投影。Studio 不会写入或合并代码。",
+      "repository": "仓库",
+      "pending": "PENDING_EXTERNAL_CREDENTIAL：尚未配置 GitHub App 凭据。本地 harness 与 webhook 验签仍可运行。",
+      "empty_title": "暂无 GitHub 事实",
+      "empty_description": "绑定仓库并发送已验签 webhook，或等待采集凭据。",
+      "status": {
+        "PENDING_EXTERNAL_CREDENTIAL": "等待外部凭据",
+        "CONNECTED": "已连接",
+        "DEGRADED": "降级"
       }
     },
     "health": {

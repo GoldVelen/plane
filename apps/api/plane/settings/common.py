@@ -358,6 +358,12 @@ UNSPLASH_ACCESS_KEY = os.environ.get("UNSPLASH_ACCESS_KEY")
 # Github Access Token
 GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", False)
 
+# Studio OS read-only GitHub collector (never write/merge). Empty means PENDING_EXTERNAL_CREDENTIAL.
+STUDIO_GITHUB_APP_ID = os.environ.get("STUDIO_GITHUB_APP_ID", "")
+STUDIO_GITHUB_APP_PRIVATE_KEY = os.environ.get("STUDIO_GITHUB_APP_PRIVATE_KEY", "")
+STUDIO_GITHUB_WEBHOOK_SECRET = os.environ.get("STUDIO_GITHUB_WEBHOOK_SECRET", "")
+STUDIO_GITHUB_READ_TOKEN = os.environ.get("STUDIO_GITHUB_READ_TOKEN", "")
+
 # Analytics
 ANALYTICS_SECRET_KEY = os.environ.get("ANALYTICS_SECRET_KEY", False)
 ANALYTICS_BASE_API = os.environ.get("ANALYTICS_BASE_API", False)

@@ -613,3 +613,76 @@ class StudioWeeklyReview(WorkspaceBaseModel):
                 name="studio_weekly_review_unique_active_week",
             )
         ]
+
+
+class GithubBindingStatus(models.TextChoices):
+    PENDING_EXTERNAL_CREDENTIAL = "PENDING_EXTERNAL_CREDENTIAL", "Pending external credential"
+    CONNECTED = "CONNECTED", "Connected"
+    DEGRADED = "DEGRADED", "Degraded"
+
+
+class GithubKind(models.TextChoices):
+    PULL_REQUEST = "PULL_REQUEST", "Pull request"
+    CI = "CI", "CI"
+    RELEASE = "RELEASE", "Release"
+    LAST_COMMIT = "LAST_COMMIT", "Last commit"
+
+
+class StudioGithubBinding(ProjectBaseModel):
+    repository = models.CharField(max_length=200, blank=True, default="")
+    status = models.CharField(
+        max_length=32,
+        choices=GithubBindingStatus.choices,
+        default=GithubBindingStatus.PENDING_EXTERNAL_CREDENTIAL,
+        db_index=True,
+    )
+    last_captured_at = models.DateTimeField(null=True, blank=True)
+    degraded_reason = models.CharField(max_length=500, blank=True, default="")
+
+    class Meta:
+        db_table = "studio_github_bindings"
+        ordering = ("-updated_at",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["project"],
+                condition=Q(deleted_at__isnull=True),
+                name="studio_github_binding_unique_active_project",
+            )
+        ]
+
+
+class StudioGithubProjection(ProjectBaseModel):
+    kind = models.CharField(max_length=16, choices=GithubKind.choices, db_index=True)
+    external_id = models.CharField(max_length=80, db_index=True)
+    captured_at = models.DateTimeField(db_index=True)
+    title = models.CharField(max_length=300, blank=True, default="")
+    url = models.CharField(max_length=500, blank=True, default="")
+    payload = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        db_table = "studio_github_projections"
+        ordering = ("-captured_at",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["project", "kind", "external_id"],
+                condition=Q(deleted_at__isnull=True),
+                name="studio_github_projection_unique_active_fact",
+            )
+        ]
+
+
+class StudioGithubDelivery(WorkspaceBaseModel):
+    delivery_id = models.CharField(max_length=80, db_index=True)
+    event = models.CharField(max_length=64)
+    processed_at = models.DateTimeField()
+
+    class Meta:
+        db_table = "studio_github_deliveries"
+        ordering = ("-processed_at",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["delivery_id"],
+                condition=Q(deleted_at__isnull=True),
+                name="studio_github_delivery_unique_active_id",
+            )
+        ]

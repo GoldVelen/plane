@@ -34,6 +34,7 @@ from plane.studio.views_cadence import (
     StudioWeeklyReviewCurrentEndpoint,
     StudioWeeklyReviewListEndpoint,
 )
+from plane.studio.views_github import StudioGithubEndpoint, StudioGithubWebhookEndpoint
 from plane.studio.views_operations import (
     StudioContentConvertEndpoint,
     StudioContentDetailEndpoint,
@@ -229,5 +230,15 @@ urlpatterns = [
         "workspaces/<str:slug>/weekly-reviews/current/",
         StudioWeeklyReviewCurrentEndpoint.as_view(),
         name="weekly-review-current",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/github/",
+        StudioGithubEndpoint.as_view(),
+        name="github",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/github/webhook/",
+        StudioGithubWebhookEndpoint.as_view(),
+        name="github-webhook",
     ),
 ]

@@ -499,6 +499,25 @@
         "WEEKLY": "Weekly",
         "MONTHLY": "Monthly",
         "AD_HOC": "Ad hoc"
+      },
+      "github_kind": {
+        "PULL_REQUEST": "Pull request",
+        "CI": "CI",
+        "RELEASE": "Release",
+        "LAST_COMMIT": "Last commit"
+      }
+    },
+    "github": {
+      "title": "GitHub facts",
+      "description": "Read-only PR, CI, release, and last-commit projections. Studio never writes or merges.",
+      "repository": "Repository",
+      "pending": "PENDING_EXTERNAL_CREDENTIAL — GitHub App credentials are not configured. Local harness and webhook verification still run.",
+      "empty_title": "No GitHub facts yet",
+      "empty_description": "Bind a repository and send a signed webhook, or wait for collector credentials.",
+      "status": {
+        "PENDING_EXTERNAL_CREDENTIAL": "Pending external credential",
+        "CONNECTED": "Connected",
+        "DEGRADED": "Degraded"
       }
     },
     "health": {

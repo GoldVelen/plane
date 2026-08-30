@@ -20,6 +20,7 @@ from plane.studio.models import (
     StudioEvent,
     StudioExperiment,
     StudioFeedback,
+    StudioGithubProjection,
     StudioMetricDefinition,
     StudioMilestone,
     StudioProjectProfile,
@@ -44,6 +45,7 @@ from plane.studio.serializers_operations import (
     StudioFeedbackSerializer,
     StudioRoutineSerializer,
 )
+from plane.studio.services.github import binding_status_for, credential_status, get_or_create_binding
 from plane.studio.services.weeks import monday_of
 from plane.studio.services.health import build_health_context, evaluate_project_health
 
@@ -384,6 +386,31 @@ def _work_summary(project, now):
     }
 
 
+def _github_payload(project):
+    binding = get_or_create_binding(project)
+    status_value = binding_status_for(binding)
+    projections = StudioGithubProjection.objects.filter(project=project)[:8]
+    return {
+        "repository": binding.repository,
+        "status": status_value,
+        "credential_status": credential_status(),
+        "connected": status_value == "CONNECTED",
+        "last_captured_at": binding.last_captured_at.isoformat() if binding.last_captured_at else None,
+        "degraded_reason": binding.degraded_reason or None,
+        "projections": [
+            {
+                "id": str(item.id),
+                "kind": item.kind,
+                "external_id": item.external_id,
+                "captured_at": item.captured_at.isoformat(),
+                "title": item.title,
+                "url": item.url,
+            }
+            for item in projections
+        ],
+    }
+
+
 def project_overview_projection(user, slug, project, now=None):
     now = now or timezone.now()
     profile = StudioProjectProfile.objects.filter(project=project).select_related("operator", "project").first()
@@ -422,6 +449,7 @@ def project_overview_projection(user, slug, project, now=None):
             StudioMetricDefinition.objects.filter(project=project).prefetch_related("snapshots"),
             many=True,
         ).data,
+        "github": _github_payload(project),
         "events": StudioEventSerializer(events, many=True).data,
         "permissions": permission_summary(user, slug, project_id=project.id),
         "generated_at": now.isoformat(),

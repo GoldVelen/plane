@@ -411,6 +411,28 @@ export interface IStudioCadence {
   weekly_review: IStudioWeeklyReview | null;
 }
 
+export type TStudioGithubStatus = "PENDING_EXTERNAL_CREDENTIAL" | "CONNECTED" | "DEGRADED";
+export type TStudioGithubKind = "PULL_REQUEST" | "CI" | "RELEASE" | "LAST_COMMIT";
+
+export interface IStudioGithubProjection {
+  id: string;
+  kind: TStudioGithubKind;
+  external_id: string;
+  captured_at: string;
+  title: string;
+  url: string;
+}
+
+export interface IStudioGithubStatus {
+  repository: string;
+  status: TStudioGithubStatus;
+  credential_status: TStudioGithubStatus;
+  connected: boolean;
+  last_captured_at: string | null;
+  degraded_reason: string | null;
+  projections: IStudioGithubProjection[];
+}
+
 export interface IStudioTimeline {
   events: IStudioEvent[];
   permissions: IStudioPermissions;
@@ -583,6 +605,7 @@ export interface IStudioProjectOverview {
   routines: IStudioRoutine[];
   experiments: IStudioExperiment[];
   metrics: IStudioMetricDefinition[];
+  github: IStudioGithubStatus;
   events: IStudioEvent[];
   permissions: IStudioPermissions & { can_write_project: boolean };
   generated_at: string;

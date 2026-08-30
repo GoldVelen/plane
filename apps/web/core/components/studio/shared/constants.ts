@@ -145,7 +145,8 @@ export type TStudioEnumDomain =
   | "content_status"
   | "content_channel"
   | "experiment_status"
-  | "routine_cadence";
+  | "routine_cadence"
+  | "github_kind";
 
 /**
  * Stable translation-key mapping for Studio domain values. Enum codes stay English

@@ -15,6 +15,7 @@ Tags live on this repository: `studio-phase-N`.
 | `studio-phase-2` | Governance: Release/Risk/Decision transition graphs, Decision options + acknowledgements, Milestone, Release checklist, append-only StudioEvent                   |
 | `studio-phase-3` | Operating loop: Feedback inbox, Operations, Experiments, content/routines, convert to Plane Work Item                                                             |
 | `studio-phase-4` | Cadence: Metric definitions/snapshots, Timeline on StudioEvent, Weekly Review write-back                                                                          |
+| `studio-phase-5` | GitHub read-only facts (PR/CI/release/last commit), webhook verify+dedup, `PENDING_EXTERNAL_CREDENTIAL`                                                           |
 
 ## Remaining
 
@@ -22,7 +23,6 @@ Each phase must land a user-visible formal capability on the isolated runtime, w
 
 | Tag              | Formal capability                                                           | In                            | Out                                                                     |
 | ---------------- | --------------------------------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------- |
-| `studio-phase-5` | GitHub read-only facts (PR/CI/release projection)                           | Project Overview + Operations | Write access to GitHub                                                  |
 | `studio-phase-6` | Import durable records from the legacy Studio OS database                   | Management command + evidence | Rewriting Plane projects                                                |
 | `studio-phase-7` | Hardening: extra API/UI tests, runbooks, backup drill on the isolated stack | docs + tests                  | Public internet                                                         |
 | `studio-phase-8` | Production deploy                                                           | Only after legal-risk answers | Must not ship a public AI/user-data service without the legal checklist |
