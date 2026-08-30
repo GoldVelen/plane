@@ -26,6 +26,14 @@ from plane.studio.views_governance import (
     StudioProjectEventListEndpoint,
     StudioReleaseChecklistItemEndpoint,
 )
+from plane.studio.views_cadence import (
+    StudioMetricDetailEndpoint,
+    StudioMetricListEndpoint,
+    StudioMetricSnapshotListEndpoint,
+    StudioTimelineEndpoint,
+    StudioWeeklyReviewCurrentEndpoint,
+    StudioWeeklyReviewListEndpoint,
+)
 from plane.studio.views_operations import (
     StudioContentConvertEndpoint,
     StudioContentDetailEndpoint,
@@ -191,5 +199,35 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/experiments/<uuid:pk>/convert/",
         StudioExperimentConvertEndpoint.as_view(),
         name="experiment-convert",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/metrics/",
+        StudioMetricListEndpoint.as_view(),
+        name="metric-list",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/metrics/<uuid:pk>/",
+        StudioMetricDetailEndpoint.as_view(),
+        name="metric-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/metrics/<uuid:pk>/snapshots/",
+        StudioMetricSnapshotListEndpoint.as_view(),
+        name="metric-snapshot-list",
+    ),
+    path(
+        "workspaces/<str:slug>/timeline/",
+        StudioTimelineEndpoint.as_view(),
+        name="timeline",
+    ),
+    path(
+        "workspaces/<str:slug>/weekly-reviews/",
+        StudioWeeklyReviewListEndpoint.as_view(),
+        name="weekly-review-list",
+    ),
+    path(
+        "workspaces/<str:slug>/weekly-reviews/current/",
+        StudioWeeklyReviewCurrentEndpoint.as_view(),
+        name="weekly-review-current",
     ),
 ]

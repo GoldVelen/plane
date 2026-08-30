@@ -90,6 +90,23 @@ export function StudioTodayView() {
         </Button>
       </div>
 
+      {data.cadence && (
+        <div className="grid grid-cols-1 gap-3 border-b border-subtle py-5 sm:grid-cols-3">
+          <div>
+            <p className="text-11 text-placeholder">{t("studio.review.label_focus")}</p>
+            <p className="mt-1 text-13 text-secondary">{data.cadence.focus || t("studio.common.not_set")}</p>
+          </div>
+          <div>
+            <p className="text-11 text-placeholder">{t("studio.review.label_risks")}</p>
+            <p className="mt-1 text-13 text-secondary">{data.cadence.risks || t("studio.common.not_set")}</p>
+          </div>
+          <div>
+            <p className="text-11 text-placeholder">{t("studio.review.label_next_steps")}</p>
+            <p className="mt-1 text-13 text-secondary">{data.cadence.next_steps || t("studio.common.not_set")}</p>
+          </div>
+        </div>
+      )}
+
       {data.focus_warning && (
         <div className="border-b border-warning-subtle bg-warning-subtle px-3 py-2 text-12 text-warning-primary">
           {data.focus_warning_code

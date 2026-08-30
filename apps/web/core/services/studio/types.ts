@@ -333,10 +333,87 @@ export interface IStudioToday {
   upcoming_releases: Array<IStudioRelease & { project: IStudioProjectReference | null }>;
   pending_decisions: Array<IStudioDecision & { project: IStudioProjectReference | null }>;
   cross_project_work: IStudioCrossProjectWork[];
+  cadence: IStudioCadence;
   permissions: IStudioPermissions;
   focus_warning: string | null;
   focus_warning_code: string | null;
   focus_warning_params: Record<string, unknown> | null;
+  generated_at: string;
+}
+
+export type TStudioMetricUnit = "COUNT" | "PERCENT" | "CURRENCY" | "DURATION" | "SCORE" | "OTHER";
+export type TStudioMetricDirection = "UP_IS_GOOD" | "DOWN_IS_GOOD" | "TARGET_RANGE" | "NEUTRAL";
+export type TStudioMetricFrequency = "DAILY" | "WEEKLY" | "MONTHLY" | "AD_HOC";
+export type TStudioMetricSourceType = "MANUAL" | "GITHUB" | "CUSTOM";
+
+export interface IStudioMetricPoint {
+  id: string;
+  captured_at: string | null;
+  numeric_value: number | null;
+  text_value: string;
+  note: string;
+}
+
+export interface IStudioMetricSeries {
+  point_count: number;
+  draws_line: boolean;
+  min_line_points: number;
+  points: IStudioMetricPoint[];
+}
+
+export interface IStudioMetricDefinition {
+  id: string;
+  workspace_id: string;
+  project_id: string;
+  name: string;
+  key: string;
+  unit: TStudioMetricUnit;
+  direction: TStudioMetricDirection;
+  target_value: number | null;
+  frequency: TStudioMetricFrequency;
+  source_type: TStudioMetricSourceType;
+  is_core: boolean;
+  is_active: boolean;
+  series: IStudioMetricSeries;
+  created_at: string;
+  updated_at: string;
+}
+
+export type TStudioMetricInput = Partial<
+  Pick<
+    IStudioMetricDefinition,
+    "name" | "key" | "unit" | "direction" | "target_value" | "frequency" | "source_type" | "is_core" | "is_active"
+  >
+>;
+
+export interface IStudioWeeklyReview {
+  id: string;
+  workspace_id: string;
+  week_start: string;
+  retrospective: string;
+  health_summary: string;
+  focus: string;
+  risks: string;
+  next_steps: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type TStudioWeeklyReviewInput = Partial<
+  Pick<IStudioWeeklyReview, "week_start" | "retrospective" | "health_summary" | "focus" | "risks" | "next_steps">
+>;
+
+export interface IStudioCadence {
+  week_start: string;
+  focus: string;
+  risks: string;
+  next_steps: string;
+  weekly_review: IStudioWeeklyReview | null;
+}
+
+export interface IStudioTimeline {
+  events: IStudioEvent[];
+  permissions: IStudioPermissions;
   generated_at: string;
 }
 
@@ -505,6 +582,7 @@ export interface IStudioProjectOverview {
   content_items: IStudioContentItem[];
   routines: IStudioRoutine[];
   experiments: IStudioExperiment[];
+  metrics: IStudioMetricDefinition[];
   events: IStudioEvent[];
   permissions: IStudioPermissions & { can_write_project: boolean };
   generated_at: string;

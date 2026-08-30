@@ -524,3 +524,92 @@ class StudioExperiment(ProjectBaseModel):
     class Meta:
         db_table = "studio_experiments"
         ordering = ("-created_at",)
+
+
+class MetricUnit(models.TextChoices):
+    COUNT = "COUNT", "Count"
+    PERCENT = "PERCENT", "Percent"
+    CURRENCY = "CURRENCY", "Currency"
+    DURATION = "DURATION", "Duration"
+    SCORE = "SCORE", "Score"
+    OTHER = "OTHER", "Other"
+
+
+class MetricDirection(models.TextChoices):
+    UP_IS_GOOD = "UP_IS_GOOD", "Up is good"
+    DOWN_IS_GOOD = "DOWN_IS_GOOD", "Down is good"
+    TARGET_RANGE = "TARGET_RANGE", "Target range"
+    NEUTRAL = "NEUTRAL", "Neutral"
+
+
+class MetricFrequency(models.TextChoices):
+    DAILY = "DAILY", "Daily"
+    WEEKLY = "WEEKLY", "Weekly"
+    MONTHLY = "MONTHLY", "Monthly"
+    AD_HOC = "AD_HOC", "Ad hoc"
+
+
+class MetricSourceType(models.TextChoices):
+    MANUAL = "MANUAL", "Manual"
+    GITHUB = "GITHUB", "GitHub"
+    CUSTOM = "CUSTOM", "Custom"
+
+
+class StudioMetricDefinition(ProjectBaseModel):
+    name = models.CharField(max_length=160)
+    key = models.CharField(max_length=64)
+    unit = models.CharField(max_length=16, choices=MetricUnit.choices, default=MetricUnit.COUNT)
+    direction = models.CharField(max_length=16, choices=MetricDirection.choices, default=MetricDirection.NEUTRAL)
+    target_value = models.FloatField(null=True, blank=True)
+    frequency = models.CharField(max_length=16, choices=MetricFrequency.choices, default=MetricFrequency.WEEKLY)
+    source_type = models.CharField(max_length=16, choices=MetricSourceType.choices, default=MetricSourceType.MANUAL)
+    is_core = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "studio_metric_definitions"
+        ordering = ("name",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["project", "key"],
+                condition=Q(deleted_at__isnull=True),
+                name="studio_metric_unique_active_project_key",
+            )
+        ]
+
+
+class StudioMetricSnapshot(ProjectBaseModel):
+    metric_definition = models.ForeignKey(
+        StudioMetricDefinition,
+        on_delete=models.CASCADE,
+        related_name="snapshots",
+    )
+    captured_at = models.DateTimeField(db_index=True)
+    numeric_value = models.FloatField(null=True, blank=True)
+    text_value = models.CharField(max_length=160, blank=True, default="")
+    source = models.CharField(max_length=16, default="MANUAL")
+    note = models.CharField(max_length=500, blank=True, default="")
+
+    class Meta:
+        db_table = "studio_metric_snapshots"
+        ordering = ("captured_at",)
+
+
+class StudioWeeklyReview(WorkspaceBaseModel):
+    week_start = models.DateField(db_index=True)
+    retrospective = models.TextField(max_length=5000, blank=True, default="")
+    health_summary = models.TextField(max_length=5000, blank=True, default="")
+    focus = models.TextField(max_length=2000, blank=True, default="")
+    risks = models.TextField(max_length=2000, blank=True, default="")
+    next_steps = models.TextField(max_length=2000, blank=True, default="")
+
+    class Meta:
+        db_table = "studio_weekly_reviews"
+        ordering = ("-week_start",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["workspace", "week_start"],
+                condition=Q(deleted_at__isnull=True),
+                name="studio_weekly_review_unique_active_week",
+            )
+        ]

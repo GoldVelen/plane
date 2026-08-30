@@ -38,6 +38,7 @@ import {
   useStudioDateFormatter,
   useStudioHealthReasonText,
 } from "../shared";
+import { StudioMetricsSection } from "../cadence";
 import { DecisionModal, MilestoneModal, ProjectProfileModal, ReleaseModal, RiskModal } from "./forms";
 
 const studioService = new StudioService();
@@ -344,6 +345,14 @@ export function StudioProjectOverviewView({ workspaceSlug, projectId }: { worksp
             </div>
           ))}
         </StudioSection>
+
+        <StudioMetricsSection
+          workspaceSlug={workspaceSlug}
+          projectId={projectId}
+          metrics={data.metrics ?? []}
+          canWrite={canWrite}
+          onMutate={() => mutate()}
+        />
 
         <div className="grid min-w-0 grid-cols-1 gap-x-8 xl:grid-cols-2">
           <StudioSection

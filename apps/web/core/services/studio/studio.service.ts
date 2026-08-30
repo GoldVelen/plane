@@ -12,6 +12,7 @@ import type {
   IStudioDecision,
   IStudioExperiment,
   IStudioFeedback,
+  IStudioMetricDefinition,
   IStudioOperations,
   IStudioPortfolio,
   IStudioProjectOverview,
@@ -19,11 +20,15 @@ import type {
   IStudioRelease,
   IStudioRisk,
   IStudioRoutine,
+  IStudioTimeline,
   IStudioToday,
+  IStudioWeeklyReview,
   TStudioContentInput,
   TStudioDecisionInput,
   TStudioExperimentInput,
   TStudioFeedbackInput,
+  TStudioMetricInput,
+  TStudioWeeklyReviewInput,
   TStudioProjectProfileInput,
   TStudioMilestoneInput,
   TStudioReleaseInput,
@@ -357,6 +362,51 @@ export class StudioService extends APIService {
   async convertExperiment(workspaceSlug: string, projectId: string, experimentId: string): Promise<IStudioExperiment> {
     return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/experiments/${experimentId}/convert/`, {})
       .then((response) => response.data as IStudioExperiment)
+      .catch(throwResponseError);
+  }
+
+  async getMetrics(workspaceSlug: string, projectId: string): Promise<IStudioMetricDefinition[]> {
+    return this.get(`${studioProjectUrl(workspaceSlug, projectId)}/metrics/`)
+      .then((response) => response.data as IStudioMetricDefinition[])
+      .catch(throwResponseError);
+  }
+
+  async createMetric(
+    workspaceSlug: string,
+    projectId: string,
+    payload: TStudioMetricInput
+  ): Promise<IStudioMetricDefinition> {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/metrics/`, payload)
+      .then((response) => response.data as IStudioMetricDefinition)
+      .catch(throwResponseError);
+  }
+
+  async createMetricSnapshot(
+    workspaceSlug: string,
+    projectId: string,
+    metricId: string,
+    payload: { numeric_value: number; captured_at?: string; note?: string }
+  ) {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/metrics/${metricId}/snapshots/`, payload)
+      .then((response) => response.data)
+      .catch(throwResponseError);
+  }
+
+  async getTimeline(workspaceSlug: string): Promise<IStudioTimeline> {
+    return this.get(`${studioWorkspaceUrl(workspaceSlug)}/timeline/`)
+      .then((response) => response.data as IStudioTimeline)
+      .catch(throwResponseError);
+  }
+
+  async getCurrentWeeklyReview(workspaceSlug: string): Promise<IStudioWeeklyReview | null> {
+    return this.get(`${studioWorkspaceUrl(workspaceSlug)}/weekly-reviews/current/`)
+      .then((response) => (response.data as IStudioWeeklyReview | null) ?? null)
+      .catch(throwResponseError);
+  }
+
+  async saveWeeklyReview(workspaceSlug: string, payload: TStudioWeeklyReviewInput): Promise<IStudioWeeklyReview> {
+    return this.post(`${studioWorkspaceUrl(workspaceSlug)}/weekly-reviews/`, payload)
+      .then((response) => response.data as IStudioWeeklyReview)
       .catch(throwResponseError);
   }
 }

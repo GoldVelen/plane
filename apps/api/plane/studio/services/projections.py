@@ -20,11 +20,13 @@ from plane.studio.models import (
     StudioEvent,
     StudioExperiment,
     StudioFeedback,
+    StudioMetricDefinition,
     StudioMilestone,
     StudioProjectProfile,
     StudioRelease,
     StudioRisk,
     StudioRoutine,
+    StudioWeeklyReview,
 )
 from plane.studio.permissions import permission_summary, visible_projects_for
 from plane.studio.serializers import (
@@ -35,12 +37,14 @@ from plane.studio.serializers import (
     StudioReleaseSerializer,
     StudioRiskSerializer,
 )
+from plane.studio.serializers_cadence import StudioMetricDefinitionSerializer, StudioWeeklyReviewSerializer
 from plane.studio.serializers_operations import (
     StudioContentItemSerializer,
     StudioExperimentSerializer,
     StudioFeedbackSerializer,
     StudioRoutineSerializer,
 )
+from plane.studio.services.weeks import monday_of
 from plane.studio.services.health import build_health_context, evaluate_project_health
 
 BUCKET_ORDER = {
@@ -280,6 +284,19 @@ def today_projection(user, slug, now=None):
     )
 
     focus_warning_code = "focus_limit" if len(focus_projects) > 3 else None
+    week_start = monday_of(now.date())
+    review = StudioWeeklyReview.objects.filter(workspace__slug=slug, week_start=week_start).first()
+    blocker_titles = [
+        risk.title
+        for risk in StudioRisk.objects.filter(project_id__in=project_ids, is_blocker=True).exclude(status="CLOSED")[:5]
+    ]
+    cadence = {
+        "week_start": week_start.isoformat(),
+        "focus": (review.focus if review and review.focus else ", ".join(row["project"]["name"] for row in focus_projects[:3])),
+        "risks": (review.risks if review and review.risks else "; ".join(blocker_titles)),
+        "next_steps": review.next_steps if review else "",
+        "weekly_review": StudioWeeklyReviewSerializer(review).data if review else None,
+    }
     return {
         "focus_projects": focus_projects,
         "focus_warning": (
@@ -300,6 +317,7 @@ def today_projection(user, slug, now=None):
             for decision in decisions
         ],
         "cross_project_work": _cross_project_work(user, project_ids),
+        "cadence": cadence,
         "permissions": permission_summary(user, slug),
         "generated_at": now.isoformat(),
     }
@@ -400,6 +418,10 @@ def project_overview_projection(user, slug, project, now=None):
         "content_items": StudioContentItemSerializer(content_items, many=True, context={"project": project}).data,
         "routines": StudioRoutineSerializer(routines, many=True, context={"project": project}).data,
         "experiments": StudioExperimentSerializer(experiments, many=True, context={"project": project}).data,
+        "metrics": StudioMetricDefinitionSerializer(
+            StudioMetricDefinition.objects.filter(project=project).prefetch_related("snapshots"),
+            many=True,
+        ).data,
         "events": StudioEventSerializer(events, many=True).data,
         "permissions": permission_summary(user, slug, project_id=project.id),
         "generated_at": now.isoformat(),

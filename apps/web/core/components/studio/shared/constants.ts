@@ -184,6 +184,8 @@ const STUDIO_API_ERROR_MESSAGE_KEYS: Record<string, string> = {
   "This decision still needs required acknowledgements.": "studio.api_error.acknowledgements_required",
   "An objection is blocking this decision.": "studio.api_error.decision_objected",
   "Could not create a Plane work item from this record.": "studio.api_error.convert_failed",
+  "A snapshot needs a numeric or text value.": "studio.api_error.snapshot_value_required",
+  "Metric key is required.": "studio.api_error.metric_key_required",
 };
 
 const extractStudioErrorMessage = (error: unknown, fallback: string): string => {

@@ -31,7 +31,9 @@
       "portfolio": "Portfolio",
       "collapse_aria": "Collapse Studio navigation",
       "expand_aria": "Expand Studio navigation",
-      "operations": "Operations"
+      "operations": "Operations",
+      "timeline": "Timeline",
+      "review": "Weekly review"
     },
     "today": {
       "title": "Today",
@@ -265,7 +267,9 @@
       "final_decision_required": "A decided outcome requires a final decision.",
       "acknowledgements_required": "This decision still needs required acknowledgements.",
       "decision_objected": "An objection is blocking this decision.",
-      "convert_failed": "Could not create a Plane work item from this record."
+      "convert_failed": "Could not create a Plane work item from this record.",
+      "snapshot_value_required": "A snapshot needs a numeric or text value.",
+      "metric_key_required": "Metric key is required."
     },
     "enums": {
       "bucket": {
@@ -480,6 +484,37 @@
       "routines_empty_description": "Create a routine when operating work repeats on a cadence.",
       "experiments_empty_title": "No experiments",
       "experiments_empty_description": "Create an experiment when a hypothesis needs a start and stop."
+    },
+    "timeline": {
+      "title": "Timeline",
+      "subtitle": "Cross-project operating events from StudioEvent. This is not a second activity-stream engine.",
+      "events_title": "Operating events",
+      "empty_title": "No operating events yet",
+      "empty_description": "Creating feedback, experiments, metrics, or a weekly review writes an event here."
+    },
+    "review": {
+      "title": "Weekly review",
+      "subtitle": "Write back 复盘, health, focus, risks, and next steps. Plane Cycles are not weekly reviews.",
+      "label_retrospective": "Retrospective",
+      "label_health": "Health",
+      "label_focus": "Focus",
+      "label_risks": "Risks",
+      "label_next_steps": "Next steps",
+      "save": "Save weekly review",
+      "saved_title": "Weekly review saved",
+      "saved_message": "Today and Timeline now read this write-back."
+    },
+    "metrics": {
+      "title": "Metrics",
+      "description": "Manual metric definitions and snapshots. A line is drawn only after three numeric points.",
+      "name_placeholder": "Metric name",
+      "key_placeholder": "key",
+      "add": "Add metric",
+      "add_snapshot": "Add snapshot",
+      "snapshot_placeholder": "Value",
+      "need_three_points": "Need 3 points to draw a line",
+      "empty_title": "No metrics",
+      "empty_description": "Define a metric, then add manual snapshots. Fewer than three points stay as a list."
     }
   }
 }
