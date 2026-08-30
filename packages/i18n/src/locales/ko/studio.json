@@ -17,14 +17,21 @@
       "term_release": "Release",
       "term_decision": "Decision",
       "term_risk": "Risk",
-      "term_milestone": "Milestone"
+      "term_milestone": "Milestone",
+      "term_feedback": "Feedback",
+      "term_content": "Content",
+      "term_routine": "Routine",
+      "term_experiment": "Experiment",
+      "convert": "Convert to work item",
+      "converting": "Converting"
     },
     "navigation": {
       "studio": "Studio",
       "today": "Today",
       "portfolio": "Portfolio",
       "collapse_aria": "Collapse Studio navigation",
-      "expand_aria": "Expand Studio navigation"
+      "expand_aria": "Expand Studio navigation",
+      "operations": "Operations"
     },
     "today": {
       "title": "Today",
@@ -203,7 +210,42 @@
       "create_milestone": "Create milestone",
       "label_milestone_type": "Milestone type",
       "milestone_saved_title": "Milestone {action}",
-      "milestone_saved_message": "The durable milestone record is now live."
+      "milestone_saved_message": "The durable milestone record is now live.",
+      "feedback_title_edit": "Edit feedback",
+      "feedback_title_create": "Create feedback",
+      "save_feedback": "Save feedback",
+      "create_feedback": "Create feedback",
+      "feedback_saved_title": "Feedback {action}",
+      "feedback_saved_message": "The operating feedback record is now live.",
+      "label_source": "Source",
+      "label_sentiment": "Sentiment",
+      "label_reporter": "Reporter",
+      "content_title_edit": "Edit content",
+      "content_title_create": "Create content",
+      "save_content": "Save content",
+      "create_content": "Create content",
+      "content_saved_title": "Content {action}",
+      "content_saved_message": "The content record is now live.",
+      "label_brief": "Brief",
+      "label_planned_at": "Planned at",
+      "routine_title_edit": "Edit routine",
+      "routine_title_create": "Create routine",
+      "save_routine": "Save routine",
+      "create_routine": "Create routine",
+      "routine_saved_title": "Routine {action}",
+      "routine_saved_message": "The routine record is now live.",
+      "label_routine_active": "This routine is active",
+      "label_notes": "Notes",
+      "label_next_due_at": "Next due at",
+      "label_hypothesis": "Hypothesis",
+      "label_result": "Result",
+      "experiment_title_edit": "Edit experiment",
+      "experiment_title_create": "Create experiment",
+      "save_experiment": "Save experiment",
+      "create_experiment": "Create experiment",
+      "experiment_saved_title": "Experiment {action}",
+      "experiment_saved_message": "The experiment record is now live.",
+      "label_routine_cadence": "Cadence"
     },
     "error": {
       "load_title": "Studio data could not be loaded",
@@ -222,7 +264,8 @@
       "permission_denied": "You do not have permission to perform this action.",
       "final_decision_required": "A decided outcome requires a final decision.",
       "acknowledgements_required": "This decision still needs required acknowledgements.",
-      "decision_objected": "An objection is blocking this decision."
+      "decision_objected": "An objection is blocking this decision.",
+      "convert_failed": "Could not create a Plane work item from this record."
     },
     "enums": {
       "bucket": {
@@ -333,6 +376,58 @@
         "DONE": "Done",
         "MISSED": "Missed",
         "CANCELLED": "Cancelled"
+      },
+      "feedback_status": {
+        "INBOX": "Inbox",
+        "TRIAGED": "Triaged",
+        "PLANNED": "Planned",
+        "RESOLVED": "Resolved",
+        "WONT_DO": "Won't do",
+        "DUPLICATE": "Duplicate"
+      },
+      "feedback_source": {
+        "MANUAL": "Manual",
+        "EMAIL": "Email",
+        "APP_STORE": "App Store",
+        "WECHAT": "WeChat",
+        "SOCIAL": "Social",
+        "SUPPORT": "Support",
+        "OTHER": "Other"
+      },
+      "sentiment": {
+        "POSITIVE": "Positive",
+        "NEUTRAL": "Neutral",
+        "NEGATIVE": "Negative",
+        "UNKNOWN": "Unknown"
+      },
+      "content_status": {
+        "IDEA": "Idea",
+        "DRAFT": "Draft",
+        "REVIEW": "Review",
+        "APPROVED": "Approved",
+        "SCHEDULED": "Scheduled",
+        "PUBLISHED": "Published",
+        "CANCELLED": "Cancelled"
+      },
+      "content_channel": {
+        "WECHAT": "WeChat",
+        "X": "X",
+        "BLOG": "Blog",
+        "EMAIL": "Email",
+        "VIDEO": "Video",
+        "OTHER": "Other"
+      },
+      "experiment_status": {
+        "DRAFT": "Draft",
+        "RUNNING": "Running",
+        "COMPLETED": "Completed",
+        "STOPPED": "Stopped"
+      },
+      "routine_cadence": {
+        "DAILY": "Daily",
+        "WEEKLY": "Weekly",
+        "MONTHLY": "Monthly",
+        "AD_HOC": "Ad hoc"
       }
     },
     "health": {
@@ -349,6 +444,42 @@
         "stale_beyond_cadence": "Expected to advance in the {lifecycle_stage} stage, but there has been no meaningful activity for over {cadence_days} days",
         "on_track_cadence_normal": "Progress cadence is on track"
       }
+    },
+    "operations": {
+      "title": "Operations",
+      "subtitle": "Feedback inbox, content, routines, and experiments across this workspace.",
+      "project_subtitle": "Operating records for this Plane project.",
+      "overview_description": "The same persisted operating records shown on the Operations tab.",
+      "open_operations": "Open operations",
+      "choose_project": "Choose a project",
+      "linked_work_item": "Work item {identifier}",
+      "convert_success_title": "Converted to a work item",
+      "convert_success_message": "A Plane work item was created and linked. The Studio record is still the operating source.",
+      "convert_failed_title": "Convert failed",
+      "feedback_description": "Operating feedback is a Studio record. Convert it to a Plane work item only when execution is needed.",
+      "content_description": "Content calendar items for this project.",
+      "routines_description": "Recurring operating work. This is not a second task board.",
+      "experiments_description": "Draft, running, completed, or stopped experiments.",
+      "add_feedback": "Add feedback",
+      "add_content": "Add content",
+      "add_routine": "Add routine",
+      "add_experiment": "Add experiment",
+      "routine_active": "Active",
+      "routine_paused": "Paused",
+      "views": {
+        "feedback": "Feedback",
+        "content": "Content",
+        "routines": "Routines",
+        "experiments": "Experiments"
+      },
+      "feedback_empty_title": "No feedback yet",
+      "feedback_empty_description": "Capture operating feedback here. Use Intake only for task capture.",
+      "content_empty_title": "No content items",
+      "content_empty_description": "Create a content record when there is a real publish target.",
+      "routines_empty_title": "No routines",
+      "routines_empty_description": "Create a routine when operating work repeats on a cadence.",
+      "experiments_empty_title": "No experiments",
+      "experiments_empty_description": "Create an experiment when a hypothesis needs a start and stop."
     }
   }
 }

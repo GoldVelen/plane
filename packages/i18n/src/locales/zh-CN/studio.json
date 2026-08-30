@@ -17,12 +17,19 @@
       "term_release": "发布",
       "term_decision": "决策",
       "term_risk": "风险",
-      "term_milestone": "里程碑"
+      "term_milestone": "里程碑",
+      "term_feedback": "反馈",
+      "term_content": "内容",
+      "term_routine": "例行",
+      "term_experiment": "实验",
+      "convert": "转为工作项",
+      "converting": "正在转换"
     },
     "navigation": {
       "studio": "Studio",
       "today": "今日",
       "portfolio": "项目组合",
+      "operations": "运营",
       "collapse_aria": "收起 Studio 导航",
       "expand_aria": "展开 Studio 导航"
     },
@@ -203,7 +210,78 @@
       "create_milestone": "创建里程碑",
       "label_milestone_type": "里程碑类型",
       "milestone_saved_title": "里程碑已{action}",
-      "milestone_saved_message": "持久里程碑记录已生效。"
+      "milestone_saved_message": "持久里程碑记录已生效。",
+      "feedback_title_edit": "编辑反馈",
+      "feedback_title_create": "创建反馈",
+      "save_feedback": "保存反馈",
+      "create_feedback": "创建反馈",
+      "feedback_saved_title": "反馈已{action}",
+      "feedback_saved_message": "经营反馈记录已生效。",
+      "label_source": "来源",
+      "label_sentiment": "情绪",
+      "label_reporter": "反馈人",
+      "content_title_edit": "编辑内容",
+      "content_title_create": "创建内容",
+      "save_content": "保存内容",
+      "create_content": "创建内容",
+      "content_saved_title": "内容已{action}",
+      "content_saved_message": "内容记录已生效。",
+      "label_brief": "摘要",
+      "label_planned_at": "计划时间",
+      "routine_title_edit": "编辑例行",
+      "routine_title_create": "创建例行",
+      "save_routine": "保存例行",
+      "create_routine": "创建例行",
+      "routine_saved_title": "例行已{action}",
+      "routine_saved_message": "例行记录已生效。",
+      "label_routine_cadence": "节奏",
+      "label_routine_active": "该例行当前有效",
+      "label_notes": "备注",
+      "label_next_due_at": "下次到期",
+      "label_hypothesis": "假设",
+      "label_result": "结果",
+      "experiment_title_edit": "编辑实验",
+      "experiment_title_create": "创建实验",
+      "save_experiment": "保存实验",
+      "create_experiment": "创建实验",
+      "experiment_saved_title": "实验已{action}",
+      "experiment_saved_message": "实验记录已生效。"
+    },
+    "operations": {
+      "title": "运营",
+      "subtitle": "汇总本工作区的反馈收件箱、内容、例行与实验。",
+      "project_subtitle": "该 Plane 项目的经营记录。",
+      "overview_description": "与运营页相同的已持久化经营记录。",
+      "open_operations": "打开运营",
+      "choose_project": "选择项目",
+      "linked_work_item": "工作项 {identifier}",
+      "convert_success_title": "已转为工作项",
+      "convert_success_message": "已创建并关联 Plane 工作项。Studio 记录仍是经营真源。",
+      "convert_failed_title": "转换失败",
+      "feedback_description": "经营型反馈是 Studio 实体。只有需要执行时，才转为 Plane 工作项。",
+      "content_description": "该项目的内容日历。",
+      "routines_description": "重复的经营工作。这不是第二套任务板。",
+      "experiments_description": "草稿、进行中、已完成或已中止的实验。",
+      "add_feedback": "添加反馈",
+      "add_content": "添加内容",
+      "add_routine": "添加例行",
+      "add_experiment": "添加实验",
+      "routine_active": "有效",
+      "routine_paused": "已暂停",
+      "views": {
+        "feedback": "反馈",
+        "content": "内容",
+        "routines": "例行",
+        "experiments": "实验"
+      },
+      "feedback_empty_title": "暂无反馈",
+      "feedback_empty_description": "在此记录经营反馈。任务捕获请使用 Intake。",
+      "content_empty_title": "暂无内容项",
+      "content_empty_description": "有真实发布目标时再创建内容记录。",
+      "routines_empty_title": "暂无例行",
+      "routines_empty_description": "经营工作按节奏重复时再创建例行。",
+      "experiments_empty_title": "暂无实验",
+      "experiments_empty_description": "有需要开始和结束的假设时再创建实验。"
     },
     "error": {
       "load_title": "无法加载 Studio 数据",
@@ -222,7 +300,8 @@
       "permission_denied": "你没有执行该操作的权限。",
       "final_decision_required": "定稿必须填写最终决策。",
       "acknowledgements_required": "该决策仍需完成必要确认。",
-      "decision_objected": "存在异议，无法定稿。"
+      "decision_objected": "存在异议，无法定稿。",
+      "convert_failed": "无法从该记录创建 Plane 工作项。"
     },
     "enums": {
       "bucket": {
@@ -333,6 +412,58 @@
         "DONE": "已完成",
         "MISSED": "已逾期",
         "CANCELLED": "已取消"
+      },
+      "feedback_status": {
+        "INBOX": "待分类",
+        "TRIAGED": "已分类",
+        "PLANNED": "已排期",
+        "RESOLVED": "已解决",
+        "WONT_DO": "不处理",
+        "DUPLICATE": "重复"
+      },
+      "feedback_source": {
+        "MANUAL": "手动",
+        "EMAIL": "邮件",
+        "APP_STORE": "App Store",
+        "WECHAT": "微信",
+        "SOCIAL": "社交",
+        "SUPPORT": "支持",
+        "OTHER": "其他"
+      },
+      "sentiment": {
+        "POSITIVE": "正向",
+        "NEUTRAL": "中性",
+        "NEGATIVE": "负向",
+        "UNKNOWN": "未知"
+      },
+      "content_status": {
+        "IDEA": "想法",
+        "DRAFT": "草稿",
+        "REVIEW": "审核中",
+        "APPROVED": "已批准",
+        "SCHEDULED": "已排期",
+        "PUBLISHED": "已发布",
+        "CANCELLED": "已取消"
+      },
+      "content_channel": {
+        "WECHAT": "微信",
+        "X": "X",
+        "BLOG": "博客",
+        "EMAIL": "邮件",
+        "VIDEO": "视频",
+        "OTHER": "其他"
+      },
+      "experiment_status": {
+        "DRAFT": "草稿",
+        "RUNNING": "进行中",
+        "COMPLETED": "已完成",
+        "STOPPED": "已中止"
+      },
+      "routine_cadence": {
+        "DAILY": "每日",
+        "WEEKLY": "每周",
+        "MONTHLY": "每月",
+        "AD_HOC": "按需"
       }
     },
     "health": {

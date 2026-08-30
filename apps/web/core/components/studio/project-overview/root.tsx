@@ -5,6 +5,7 @@
  */
 
 import { useState } from "react";
+import Link from "next/link";
 import { useTranslation } from "@plane/i18n";
 import useSWR from "swr";
 import { Button } from "@plane/propel/button";
@@ -312,6 +313,36 @@ export function StudioProjectOverviewView({ workspaceSlug, projectId }: { worksp
               </p>
             </div>
           </div>
+        </StudioSection>
+
+        <StudioSection
+          title={t("studio.operations.title")}
+          description={t("studio.operations.overview_description")}
+          action={
+            <Link href={`/${workspaceSlug}/projects/${projectId}/operations`} className="text-13 text-accent-primary">
+              {t("studio.operations.open_operations")}
+            </Link>
+          }
+        >
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              { key: "feedback", count: (data.feedback ?? []).length },
+              { key: "content", count: (data.content_items ?? []).length },
+              { key: "routines", count: (data.routines ?? []).length },
+              { key: "experiments", count: (data.experiments ?? []).length },
+            ].map((item) => (
+              <div key={item.key} className="rounded-md border border-subtle px-3 py-3">
+                <p className="text-11 text-placeholder">{t(`studio.operations.views.${item.key}`)}</p>
+                <p className="mt-1 text-18 font-semibold text-primary">{item.count}</p>
+              </div>
+            ))}
+          </div>
+          {(data.feedback ?? []).slice(0, 3).map((item) => (
+            <div key={item.id} className="mt-2 flex min-w-0 items-center gap-2 px-1">
+              <p className="truncate text-13 text-primary">{item.title}</p>
+              <StudioStatusBadge status={item.status} domain="feedback_status" />
+            </div>
+          ))}
         </StudioSection>
 
         <div className="grid min-w-0 grid-cols-1 gap-x-8 xl:grid-cols-2">

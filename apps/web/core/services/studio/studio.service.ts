@@ -8,18 +8,27 @@ import { isAxiosError } from "axios";
 import { API_BASE_URL } from "@plane/constants";
 import { APIService } from "@/services/api.service";
 import type {
+  IStudioContentItem,
   IStudioDecision,
+  IStudioExperiment,
+  IStudioFeedback,
+  IStudioOperations,
   IStudioPortfolio,
   IStudioProjectOverview,
   IStudioProjectProfile,
   IStudioRelease,
   IStudioRisk,
+  IStudioRoutine,
   IStudioToday,
+  TStudioContentInput,
   TStudioDecisionInput,
+  TStudioExperimentInput,
+  TStudioFeedbackInput,
   TStudioProjectProfileInput,
   TStudioMilestoneInput,
   TStudioReleaseInput,
   TStudioRiskInput,
+  TStudioRoutineInput,
 } from "./types";
 
 const studioWorkspaceUrl = (workspaceSlug: string) => `/api/studio/workspaces/${workspaceSlug}`;
@@ -212,6 +221,142 @@ export class StudioService extends APIService {
       is_done: isDone,
     })
       .then((response) => response.data)
+      .catch(throwResponseError);
+  }
+
+  async getOperations(workspaceSlug: string): Promise<IStudioOperations> {
+    return this.get(`${studioWorkspaceUrl(workspaceSlug)}/operations/`)
+      .then((response) => response.data as IStudioOperations)
+      .catch(throwResponseError);
+  }
+
+  async getFeedback(workspaceSlug: string, projectId: string): Promise<IStudioFeedback[]> {
+    return this.get(`${studioProjectUrl(workspaceSlug, projectId)}/feedback/`)
+      .then((response) => response.data as IStudioFeedback[])
+      .catch(throwResponseError);
+  }
+
+  async createFeedback(
+    workspaceSlug: string,
+    projectId: string,
+    payload: TStudioFeedbackInput
+  ): Promise<IStudioFeedback> {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/feedback/`, payload)
+      .then((response) => response.data as IStudioFeedback)
+      .catch(throwResponseError);
+  }
+
+  async updateFeedback(
+    workspaceSlug: string,
+    projectId: string,
+    feedbackId: string,
+    payload: TStudioFeedbackInput
+  ): Promise<IStudioFeedback> {
+    return this.patch(`${studioProjectUrl(workspaceSlug, projectId)}/feedback/${feedbackId}/`, payload)
+      .then((response) => response.data as IStudioFeedback)
+      .catch(throwResponseError);
+  }
+
+  async deleteFeedback(workspaceSlug: string, projectId: string, feedbackId: string): Promise<void> {
+    await this.delete(`${studioProjectUrl(workspaceSlug, projectId)}/feedback/${feedbackId}/`).catch(
+      throwResponseError
+    );
+  }
+
+  async convertFeedback(workspaceSlug: string, projectId: string, feedbackId: string): Promise<IStudioFeedback> {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/feedback/${feedbackId}/convert/`, {})
+      .then((response) => response.data as IStudioFeedback)
+      .catch(throwResponseError);
+  }
+
+  async createContentItem(
+    workspaceSlug: string,
+    projectId: string,
+    payload: TStudioContentInput
+  ): Promise<IStudioContentItem> {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/content/`, payload)
+      .then((response) => response.data as IStudioContentItem)
+      .catch(throwResponseError);
+  }
+
+  async updateContentItem(
+    workspaceSlug: string,
+    projectId: string,
+    contentId: string,
+    payload: TStudioContentInput
+  ): Promise<IStudioContentItem> {
+    return this.patch(`${studioProjectUrl(workspaceSlug, projectId)}/content/${contentId}/`, payload)
+      .then((response) => response.data as IStudioContentItem)
+      .catch(throwResponseError);
+  }
+
+  async deleteContentItem(workspaceSlug: string, projectId: string, contentId: string): Promise<void> {
+    await this.delete(`${studioProjectUrl(workspaceSlug, projectId)}/content/${contentId}/`).catch(throwResponseError);
+  }
+
+  async convertContentItem(workspaceSlug: string, projectId: string, contentId: string): Promise<IStudioContentItem> {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/content/${contentId}/convert/`, {})
+      .then((response) => response.data as IStudioContentItem)
+      .catch(throwResponseError);
+  }
+
+  async createRoutine(workspaceSlug: string, projectId: string, payload: TStudioRoutineInput): Promise<IStudioRoutine> {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/routines/`, payload)
+      .then((response) => response.data as IStudioRoutine)
+      .catch(throwResponseError);
+  }
+
+  async updateRoutine(
+    workspaceSlug: string,
+    projectId: string,
+    routineId: string,
+    payload: TStudioRoutineInput
+  ): Promise<IStudioRoutine> {
+    return this.patch(`${studioProjectUrl(workspaceSlug, projectId)}/routines/${routineId}/`, payload)
+      .then((response) => response.data as IStudioRoutine)
+      .catch(throwResponseError);
+  }
+
+  async deleteRoutine(workspaceSlug: string, projectId: string, routineId: string): Promise<void> {
+    await this.delete(`${studioProjectUrl(workspaceSlug, projectId)}/routines/${routineId}/`).catch(throwResponseError);
+  }
+
+  async convertRoutine(workspaceSlug: string, projectId: string, routineId: string): Promise<IStudioRoutine> {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/routines/${routineId}/convert/`, {})
+      .then((response) => response.data as IStudioRoutine)
+      .catch(throwResponseError);
+  }
+
+  async createExperiment(
+    workspaceSlug: string,
+    projectId: string,
+    payload: TStudioExperimentInput
+  ): Promise<IStudioExperiment> {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/experiments/`, payload)
+      .then((response) => response.data as IStudioExperiment)
+      .catch(throwResponseError);
+  }
+
+  async updateExperiment(
+    workspaceSlug: string,
+    projectId: string,
+    experimentId: string,
+    payload: TStudioExperimentInput
+  ): Promise<IStudioExperiment> {
+    return this.patch(`${studioProjectUrl(workspaceSlug, projectId)}/experiments/${experimentId}/`, payload)
+      .then((response) => response.data as IStudioExperiment)
+      .catch(throwResponseError);
+  }
+
+  async deleteExperiment(workspaceSlug: string, projectId: string, experimentId: string): Promise<void> {
+    await this.delete(`${studioProjectUrl(workspaceSlug, projectId)}/experiments/${experimentId}/`).catch(
+      throwResponseError
+    );
+  }
+
+  async convertExperiment(workspaceSlug: string, projectId: string, experimentId: string): Promise<IStudioExperiment> {
+    return this.post(`${studioProjectUrl(workspaceSlug, projectId)}/experiments/${experimentId}/convert/`, {})
+      .then((response) => response.data as IStudioExperiment)
       .catch(throwResponseError);
   }
 }

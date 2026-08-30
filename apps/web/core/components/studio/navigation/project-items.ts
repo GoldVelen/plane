@@ -5,7 +5,7 @@
  */
 
 import { EUserPermissions } from "@plane/constants";
-import { OverviewIcon } from "@plane/propel/icons";
+import { InboxIcon, OverviewIcon } from "@plane/propel/icons";
 import type { TNavigationItem } from "@/components/navigation/tab-navigation-root";
 
 export const getStudioProjectNavigationItems = (workspaceSlug: string, projectId: string): TNavigationItem[] => [
@@ -18,5 +18,15 @@ export const getStudioProjectNavigationItems = (workspaceSlug: string, projectId
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
     shouldRender: true,
     sortOrder: 0,
+  },
+  {
+    i18n_key: "studio.navigation.operations",
+    key: "operations",
+    name: "Operations",
+    href: `/${workspaceSlug}/projects/${projectId}/operations`,
+    icon: InboxIcon,
+    access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
+    shouldRender: true,
+    sortOrder: 0.5,
   },
 ];

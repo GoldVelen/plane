@@ -20,10 +20,16 @@ const healthVariants: Record<TStudioHealthStatus, TBadgeVariant> = {
 };
 
 const genericVariant = (status: string): TBadgeVariant => {
-  if (["RELEASED", "DECIDED", "CLOSED"].includes(status)) return "success";
-  if (["CANCELLED", "REVERSED", "ROLLED_BACK", "ACCEPTED"].includes(status)) return "neutral";
-  if (["READY", "BUILDING", "QA", "SUBMITTED", "REVIEW", "MITIGATING", "MONITORING"].includes(status)) return "brand";
-  if (["OPEN", "NEEDS_DECISION", "PLANNED", "REVISIT"].includes(status)) return "warning";
+  if (["RELEASED", "DECIDED", "CLOSED", "RESOLVED", "COMPLETED", "PUBLISHED"].includes(status)) return "success";
+  if (["CANCELLED", "REVERSED", "ROLLED_BACK", "ACCEPTED", "WONT_DO", "DUPLICATE", "STOPPED"].includes(status))
+    return "neutral";
+  if (
+    ["READY", "BUILDING", "QA", "SUBMITTED", "REVIEW", "MITIGATING", "MONITORING", "RUNNING", "TRIAGED"].includes(
+      status
+    )
+  )
+    return "brand";
+  if (["OPEN", "NEEDS_DECISION", "PLANNED", "REVISIT", "INBOX"].includes(status)) return "warning";
   return "neutral";
 };
 

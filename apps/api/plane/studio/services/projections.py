@@ -15,12 +15,16 @@ from plane.studio.models import (
     PortfolioBucket,
     ProductType,
     ReleaseStatus,
+    StudioContentItem,
     StudioDecision,
     StudioEvent,
+    StudioExperiment,
+    StudioFeedback,
     StudioMilestone,
     StudioProjectProfile,
     StudioRelease,
     StudioRisk,
+    StudioRoutine,
 )
 from plane.studio.permissions import permission_summary, visible_projects_for
 from plane.studio.serializers import (
@@ -30,6 +34,12 @@ from plane.studio.serializers import (
     StudioProjectProfileSerializer,
     StudioReleaseSerializer,
     StudioRiskSerializer,
+)
+from plane.studio.serializers_operations import (
+    StudioContentItemSerializer,
+    StudioExperimentSerializer,
+    StudioFeedbackSerializer,
+    StudioRoutineSerializer,
 )
 from plane.studio.services.health import build_health_context, evaluate_project_health
 
@@ -372,6 +382,11 @@ def project_overview_projection(user, slug, project, now=None):
     risks = StudioRisk.objects.filter(project=project).select_related("owner")
     milestones = StudioMilestone.objects.filter(project=project).select_related("release", "owner")
     events = StudioEvent.objects.filter(project=project).select_related("actor")[:20]
+    related_issue = ("linked_issue", "linked_issue__project")
+    feedback = StudioFeedback.objects.filter(project=project).select_related(*related_issue)
+    content_items = StudioContentItem.objects.filter(project=project).select_related(*related_issue)
+    routines = StudioRoutine.objects.filter(project=project).select_related(*related_issue)
+    experiments = StudioExperiment.objects.filter(project=project).select_related(*related_issue)
     return {
         "project": project_payload(project),
         "profile": _profile_payload(project, profile, health),
@@ -381,6 +396,10 @@ def project_overview_projection(user, slug, project, now=None):
         "decisions": StudioDecisionSerializer(decisions, many=True).data,
         "risks": StudioRiskSerializer(risks, many=True).data,
         "milestones": StudioMilestoneSerializer(milestones, many=True, context={"project": project}).data,
+        "feedback": StudioFeedbackSerializer(feedback, many=True, context={"project": project}).data,
+        "content_items": StudioContentItemSerializer(content_items, many=True, context={"project": project}).data,
+        "routines": StudioRoutineSerializer(routines, many=True, context={"project": project}).data,
+        "experiments": StudioExperimentSerializer(experiments, many=True, context={"project": project}).data,
         "events": StudioEventSerializer(events, many=True).data,
         "permissions": permission_summary(user, slug, project_id=project.id),
         "generated_at": now.isoformat(),

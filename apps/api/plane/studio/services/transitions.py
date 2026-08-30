@@ -4,7 +4,14 @@
 
 from rest_framework import serializers
 
-from plane.studio.models import DecisionStatus, MilestoneStatus, ReleaseStatus, RiskStatus
+from plane.studio.models import (
+    DecisionStatus,
+    ExperimentStatus,
+    FeedbackStatus,
+    MilestoneStatus,
+    ReleaseStatus,
+    RiskStatus,
+)
 
 RELEASE_TRANSITIONS = {
     ReleaseStatus.PLANNED: (ReleaseStatus.SCOPING, ReleaseStatus.CANCELLED),
@@ -34,6 +41,32 @@ DECISION_TRANSITIONS = {
     DecisionStatus.REVISIT: (DecisionStatus.NEEDS_DECISION, DecisionStatus.DECIDED, DecisionStatus.CANCELLED),
     DecisionStatus.REVERSED: (),
     DecisionStatus.CANCELLED: (),
+}
+
+FEEDBACK_TRANSITIONS = {
+    FeedbackStatus.INBOX: (FeedbackStatus.TRIAGED, FeedbackStatus.WONT_DO, FeedbackStatus.DUPLICATE),
+    FeedbackStatus.TRIAGED: (
+        FeedbackStatus.INBOX,
+        FeedbackStatus.PLANNED,
+        FeedbackStatus.WONT_DO,
+        FeedbackStatus.DUPLICATE,
+    ),
+    FeedbackStatus.PLANNED: (
+        FeedbackStatus.TRIAGED,
+        FeedbackStatus.RESOLVED,
+        FeedbackStatus.WONT_DO,
+        FeedbackStatus.DUPLICATE,
+    ),
+    FeedbackStatus.RESOLVED: (FeedbackStatus.TRIAGED,),
+    FeedbackStatus.WONT_DO: (FeedbackStatus.TRIAGED,),
+    FeedbackStatus.DUPLICATE: (FeedbackStatus.TRIAGED,),
+}
+
+EXPERIMENT_TRANSITIONS = {
+    ExperimentStatus.DRAFT: (ExperimentStatus.RUNNING, ExperimentStatus.STOPPED),
+    ExperimentStatus.RUNNING: (ExperimentStatus.COMPLETED, ExperimentStatus.STOPPED),
+    ExperimentStatus.COMPLETED: (),
+    ExperimentStatus.STOPPED: (),
 }
 
 MILESTONE_TRANSITIONS = {
@@ -66,6 +99,8 @@ def allowed_statuses(kind, current):
         "risk": RISK_TRANSITIONS,
         "decision": DECISION_TRANSITIONS,
         "milestone": MILESTONE_TRANSITIONS,
+        "feedback": FEEDBACK_TRANSITIONS,
+        "experiment": EXPERIMENT_TRANSITIONS,
     }
     return tables[kind][current]
 

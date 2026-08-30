@@ -26,6 +26,21 @@ from plane.studio.views_governance import (
     StudioProjectEventListEndpoint,
     StudioReleaseChecklistItemEndpoint,
 )
+from plane.studio.views_operations import (
+    StudioContentConvertEndpoint,
+    StudioContentDetailEndpoint,
+    StudioContentListEndpoint,
+    StudioExperimentConvertEndpoint,
+    StudioExperimentDetailEndpoint,
+    StudioExperimentListEndpoint,
+    StudioFeedbackConvertEndpoint,
+    StudioFeedbackDetailEndpoint,
+    StudioFeedbackListEndpoint,
+    StudioOperationsEndpoint,
+    StudioRoutineConvertEndpoint,
+    StudioRoutineDetailEndpoint,
+    StudioRoutineListEndpoint,
+)
 
 app_name = "studio"
 
@@ -111,5 +126,70 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/events/",
         StudioProjectEventListEndpoint.as_view(),
         name="project-event-list",
+    ),
+    path(
+        "workspaces/<str:slug>/operations/",
+        StudioOperationsEndpoint.as_view(),
+        name="operations",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/feedback/",
+        StudioFeedbackListEndpoint.as_view(),
+        name="feedback-list",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/feedback/<uuid:pk>/",
+        StudioFeedbackDetailEndpoint.as_view(),
+        name="feedback-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/feedback/<uuid:pk>/convert/",
+        StudioFeedbackConvertEndpoint.as_view(),
+        name="feedback-convert",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/content/",
+        StudioContentListEndpoint.as_view(),
+        name="content-list",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/content/<uuid:pk>/",
+        StudioContentDetailEndpoint.as_view(),
+        name="content-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/content/<uuid:pk>/convert/",
+        StudioContentConvertEndpoint.as_view(),
+        name="content-convert",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/routines/",
+        StudioRoutineListEndpoint.as_view(),
+        name="routine-list",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/routines/<uuid:pk>/",
+        StudioRoutineDetailEndpoint.as_view(),
+        name="routine-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/routines/<uuid:pk>/convert/",
+        StudioRoutineConvertEndpoint.as_view(),
+        name="routine-convert",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/experiments/",
+        StudioExperimentListEndpoint.as_view(),
+        name="experiment-list",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/experiments/<uuid:pk>/",
+        StudioExperimentDetailEndpoint.as_view(),
+        name="experiment-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/experiments/<uuid:pk>/convert/",
+        StudioExperimentConvertEndpoint.as_view(),
+        name="experiment-convert",
     ),
 ]

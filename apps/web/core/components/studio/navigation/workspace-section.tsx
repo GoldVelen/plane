@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
 import { useTranslation } from "@plane/i18n";
-import { ChevronRightIcon, HomeIcon, LayersIcon } from "@plane/propel/icons";
+import { ChevronRightIcon, HomeIcon, InboxIcon, LayersIcon } from "@plane/propel/icons";
 import { cn } from "@plane/utils";
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
 import { useAppTheme } from "@/hooks/store/use-app-theme";
@@ -17,6 +17,7 @@ import useLocalStorage from "@/hooks/use-local-storage";
 const studioItems = [
   { key: "today", i18nKey: "studio.navigation.today", href: "", icon: HomeIcon },
   { key: "portfolio", i18nKey: "studio.navigation.portfolio", href: "/studio/portfolio", icon: LayersIcon },
+  { key: "operations", i18nKey: "studio.navigation.operations", href: "/studio/operations", icon: InboxIcon },
 ] as const;
 
 export function StudioWorkspaceNavigation() {

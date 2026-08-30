@@ -373,6 +373,125 @@ export interface IStudioWorkSummary {
   last_work_item_activity_at: string | null;
 }
 
+export type TStudioFeedbackStatus = "INBOX" | "TRIAGED" | "PLANNED" | "RESOLVED" | "WONT_DO" | "DUPLICATE";
+export type TStudioFeedbackSource = "MANUAL" | "EMAIL" | "APP_STORE" | "WECHAT" | "SOCIAL" | "SUPPORT" | "OTHER";
+export type TStudioSentiment = "POSITIVE" | "NEUTRAL" | "NEGATIVE" | "UNKNOWN";
+export type TStudioContentStatus = "IDEA" | "DRAFT" | "REVIEW" | "APPROVED" | "SCHEDULED" | "PUBLISHED" | "CANCELLED";
+export type TStudioContentChannel = "WECHAT" | "X" | "BLOG" | "EMAIL" | "VIDEO" | "OTHER";
+export type TStudioExperimentStatus = "DRAFT" | "RUNNING" | "COMPLETED" | "STOPPED";
+export type TStudioRoutineCadence = "DAILY" | "WEEKLY" | "MONTHLY" | "AD_HOC";
+
+export interface IStudioLinkedIssue {
+  id: string;
+  name: string;
+  sequence_id: number;
+  project_id: string;
+  project_identifier: string | null;
+}
+
+export interface IStudioFeedback {
+  id: string;
+  workspace_id: string;
+  project_id: string;
+  title: string;
+  body: string;
+  source: TStudioFeedbackSource;
+  sentiment: TStudioSentiment;
+  priority: TStudioPriority;
+  status: TStudioFeedbackStatus;
+  category: string;
+  reporter_name: string;
+  source_url: string;
+  linked_issue_id: string | null;
+  linked_issue: IStudioLinkedIssue | null;
+  allowed_next_statuses?: TStudioFeedbackStatus[];
+  created_at: string;
+  updated_at: string;
+}
+
+export type TStudioFeedbackInput = Partial<
+  Pick<
+    IStudioFeedback,
+    "title" | "body" | "source" | "sentiment" | "priority" | "status" | "category" | "reporter_name" | "source_url"
+  >
+>;
+
+export interface IStudioContentItem {
+  id: string;
+  workspace_id: string;
+  project_id: string;
+  title: string;
+  brief: string;
+  channel: TStudioContentChannel;
+  status: TStudioContentStatus;
+  planned_at: string | null;
+  published_at: string | null;
+  published_url: string;
+  notes: string;
+  linked_issue_id: string | null;
+  linked_issue: IStudioLinkedIssue | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type TStudioContentInput = Partial<
+  Pick<
+    IStudioContentItem,
+    "title" | "brief" | "channel" | "status" | "planned_at" | "published_at" | "published_url" | "notes"
+  >
+>;
+
+export interface IStudioRoutine {
+  id: string;
+  workspace_id: string;
+  project_id: string;
+  name: string;
+  cadence: TStudioRoutineCadence;
+  is_active: boolean;
+  next_due_at: string | null;
+  notes: string;
+  linked_issue_id: string | null;
+  linked_issue: IStudioLinkedIssue | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type TStudioRoutineInput = Partial<
+  Pick<IStudioRoutine, "name" | "cadence" | "is_active" | "next_due_at" | "notes">
+>;
+
+export interface IStudioExperiment {
+  id: string;
+  workspace_id: string;
+  project_id: string;
+  title: string;
+  hypothesis: string;
+  status: TStudioExperimentStatus;
+  start_at: string | null;
+  end_at: string | null;
+  result: string;
+  conclusion: string;
+  linked_issue_id: string | null;
+  linked_issue: IStudioLinkedIssue | null;
+  allowed_next_statuses?: TStudioExperimentStatus[];
+  created_at: string;
+  updated_at: string;
+}
+
+export type TStudioExperimentInput = Partial<
+  Pick<IStudioExperiment, "title" | "hypothesis" | "status" | "start_at" | "end_at" | "result" | "conclusion">
+>;
+
+export interface IStudioOperations {
+  projects: Array<Pick<IStudioProjectReference, "id" | "name" | "identifier">>;
+  feedback: IStudioFeedback[];
+  content_items: IStudioContentItem[];
+  routines: IStudioRoutine[];
+  experiments: IStudioExperiment[];
+  permissions: IStudioPermissions;
+  generated_at: string;
+}
+
 export interface IStudioProjectOverview {
   project: IStudioProjectReference;
   profile: IStudioProjectProfile | null;
@@ -382,6 +501,10 @@ export interface IStudioProjectOverview {
   decisions: IStudioDecision[];
   risks: IStudioRisk[];
   milestones: IStudioMilestone[];
+  feedback: IStudioFeedback[];
+  content_items: IStudioContentItem[];
+  routines: IStudioRoutine[];
+  experiments: IStudioExperiment[];
   events: IStudioEvent[];
   permissions: IStudioPermissions & { can_write_project: boolean };
   generated_at: string;

@@ -370,3 +370,157 @@ class StudioEvent(WorkspaceBaseModel):
     class Meta:
         db_table = "studio_events"
         ordering = ("-created_at",)
+
+
+class FeedbackSource(models.TextChoices):
+    MANUAL = "MANUAL", "Manual"
+    EMAIL = "EMAIL", "Email"
+    APP_STORE = "APP_STORE", "App Store"
+    WECHAT = "WECHAT", "WeChat"
+    SOCIAL = "SOCIAL", "Social"
+    SUPPORT = "SUPPORT", "Support"
+    OTHER = "OTHER", "Other"
+
+
+class Sentiment(models.TextChoices):
+    POSITIVE = "POSITIVE", "Positive"
+    NEUTRAL = "NEUTRAL", "Neutral"
+    NEGATIVE = "NEGATIVE", "Negative"
+    UNKNOWN = "UNKNOWN", "Unknown"
+
+
+class FeedbackStatus(models.TextChoices):
+    INBOX = "INBOX", "Inbox"
+    TRIAGED = "TRIAGED", "Triaged"
+    PLANNED = "PLANNED", "Planned"
+    RESOLVED = "RESOLVED", "Resolved"
+    WONT_DO = "WONT_DO", "Won't do"
+    DUPLICATE = "DUPLICATE", "Duplicate"
+
+
+class ContentStatus(models.TextChoices):
+    IDEA = "IDEA", "Idea"
+    DRAFT = "DRAFT", "Draft"
+    REVIEW = "REVIEW", "Review"
+    APPROVED = "APPROVED", "Approved"
+    SCHEDULED = "SCHEDULED", "Scheduled"
+    PUBLISHED = "PUBLISHED", "Published"
+    CANCELLED = "CANCELLED", "Cancelled"
+
+
+class ContentChannel(models.TextChoices):
+    WECHAT = "WECHAT", "WeChat"
+    X = "X", "X"
+    BLOG = "BLOG", "Blog"
+    EMAIL = "EMAIL", "Email"
+    VIDEO = "VIDEO", "Video"
+    OTHER = "OTHER", "Other"
+
+
+class ExperimentStatus(models.TextChoices):
+    DRAFT = "DRAFT", "Draft"
+    RUNNING = "RUNNING", "Running"
+    COMPLETED = "COMPLETED", "Completed"
+    STOPPED = "STOPPED", "Stopped"
+
+
+class RoutineCadence(models.TextChoices):
+    DAILY = "DAILY", "Daily"
+    WEEKLY = "WEEKLY", "Weekly"
+    MONTHLY = "MONTHLY", "Monthly"
+    AD_HOC = "AD_HOC", "Ad hoc"
+
+
+class StudioFeedback(ProjectBaseModel):
+    title = models.CharField(max_length=160)
+    body = models.TextField(max_length=5000, blank=True, default="")
+    source = models.CharField(max_length=16, choices=FeedbackSource.choices, default=FeedbackSource.MANUAL)
+    sentiment = models.CharField(max_length=16, choices=Sentiment.choices, default=Sentiment.UNKNOWN)
+    priority = models.CharField(max_length=2, choices=OperatingPriority.choices, default=OperatingPriority.P2)
+    status = models.CharField(
+        max_length=16,
+        choices=FeedbackStatus.choices,
+        default=FeedbackStatus.INBOX,
+        db_index=True,
+    )
+    category = models.CharField(max_length=64, blank=True, default="")
+    reporter_name = models.CharField(max_length=120, blank=True, default="")
+    source_url = models.CharField(max_length=500, blank=True, default="")
+    linked_issue = models.ForeignKey(
+        "db.Issue",
+        on_delete=models.SET_NULL,
+        related_name="studio_feedback_links",
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        db_table = "studio_feedback"
+        ordering = ("-created_at",)
+
+
+class StudioContentItem(ProjectBaseModel):
+    title = models.CharField(max_length=160)
+    brief = models.TextField(max_length=2000, blank=True, default="")
+    channel = models.CharField(max_length=16, choices=ContentChannel.choices, default=ContentChannel.OTHER)
+    status = models.CharField(max_length=16, choices=ContentStatus.choices, default=ContentStatus.IDEA, db_index=True)
+    planned_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    published_at = models.DateTimeField(null=True, blank=True)
+    published_url = models.CharField(max_length=500, blank=True, default="")
+    notes = models.TextField(max_length=2000, blank=True, default="")
+    linked_issue = models.ForeignKey(
+        "db.Issue",
+        on_delete=models.SET_NULL,
+        related_name="studio_content_links",
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        db_table = "studio_content_items"
+        ordering = ("planned_at", "-created_at")
+
+
+class StudioRoutine(ProjectBaseModel):
+    name = models.CharField(max_length=160)
+    cadence = models.CharField(max_length=16, choices=RoutineCadence.choices, default=RoutineCadence.WEEKLY)
+    is_active = models.BooleanField(default=True, db_index=True)
+    next_due_at = models.DateTimeField(null=True, blank=True)
+    notes = models.TextField(max_length=2000, blank=True, default="")
+    linked_issue = models.ForeignKey(
+        "db.Issue",
+        on_delete=models.SET_NULL,
+        related_name="studio_routine_links",
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        db_table = "studio_routines"
+        ordering = ("name",)
+
+
+class StudioExperiment(ProjectBaseModel):
+    title = models.CharField(max_length=160)
+    hypothesis = models.TextField(max_length=2000, blank=True, default="")
+    status = models.CharField(
+        max_length=16,
+        choices=ExperimentStatus.choices,
+        default=ExperimentStatus.DRAFT,
+        db_index=True,
+    )
+    start_at = models.DateTimeField(null=True, blank=True)
+    end_at = models.DateTimeField(null=True, blank=True)
+    result = models.TextField(max_length=5000, blank=True, default="")
+    conclusion = models.TextField(max_length=5000, blank=True, default="")
+    linked_issue = models.ForeignKey(
+        "db.Issue",
+        on_delete=models.SET_NULL,
+        related_name="studio_experiment_links",
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        db_table = "studio_experiments"
+        ordering = ("-created_at",)

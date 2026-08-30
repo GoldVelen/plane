@@ -5,7 +5,12 @@
  */
 
 import type {
+  TStudioContentChannel,
+  TStudioContentStatus,
   TStudioDecisionStatus,
+  TStudioExperimentStatus,
+  TStudioFeedbackSource,
+  TStudioFeedbackStatus,
   TStudioHealthStatus,
   TStudioLifecycleStage,
   TStudioPortfolioBucket,
@@ -15,6 +20,8 @@ import type {
   TStudioReleaseStatus,
   TStudioRiskStatus,
   TStudioRiskType,
+  TStudioRoutineCadence,
+  TStudioSentiment,
 } from "@/services/studio";
 import type { TTranslationStore } from "@plane/i18n";
 
@@ -86,6 +93,36 @@ export const STUDIO_RISK_TYPES: TStudioRiskType[] = [
   "OPERATIONS",
   "SECURITY",
 ];
+export const STUDIO_FEEDBACK_STATUSES: TStudioFeedbackStatus[] = [
+  "INBOX",
+  "TRIAGED",
+  "PLANNED",
+  "RESOLVED",
+  "WONT_DO",
+  "DUPLICATE",
+];
+export const STUDIO_FEEDBACK_SOURCES: TStudioFeedbackSource[] = [
+  "MANUAL",
+  "EMAIL",
+  "APP_STORE",
+  "WECHAT",
+  "SOCIAL",
+  "SUPPORT",
+  "OTHER",
+];
+export const STUDIO_SENTIMENTS: TStudioSentiment[] = ["POSITIVE", "NEUTRAL", "NEGATIVE", "UNKNOWN"];
+export const STUDIO_CONTENT_STATUSES: TStudioContentStatus[] = [
+  "IDEA",
+  "DRAFT",
+  "REVIEW",
+  "APPROVED",
+  "SCHEDULED",
+  "PUBLISHED",
+  "CANCELLED",
+];
+export const STUDIO_CONTENT_CHANNELS: TStudioContentChannel[] = ["WECHAT", "X", "BLOG", "EMAIL", "VIDEO", "OTHER"];
+export const STUDIO_EXPERIMENT_STATUSES: TStudioExperimentStatus[] = ["DRAFT", "RUNNING", "COMPLETED", "STOPPED"];
+export const STUDIO_ROUTINE_CADENCES: TStudioRoutineCadence[] = ["DAILY", "WEEKLY", "MONTHLY", "AD_HOC"];
 
 export type TStudioEnumDomain =
   | "bucket"
@@ -101,7 +138,14 @@ export type TStudioEnumDomain =
   | "risk_type"
   | "risk_status"
   | "milestone_type"
-  | "milestone_status";
+  | "milestone_status"
+  | "feedback_status"
+  | "feedback_source"
+  | "sentiment"
+  | "content_status"
+  | "content_channel"
+  | "experiment_status"
+  | "routine_cadence";
 
 /**
  * Stable translation-key mapping for Studio domain values. Enum codes stay English
@@ -139,6 +183,7 @@ const STUDIO_API_ERROR_MESSAGE_KEYS: Record<string, string> = {
   "A decided outcome requires a final decision.": "studio.api_error.final_decision_required",
   "This decision still needs required acknowledgements.": "studio.api_error.acknowledgements_required",
   "An objection is blocking this decision.": "studio.api_error.decision_objected",
+  "Could not create a Plane work item from this record.": "studio.api_error.convert_failed",
 };
 
 const extractStudioErrorMessage = (error: unknown, fallback: string): string => {

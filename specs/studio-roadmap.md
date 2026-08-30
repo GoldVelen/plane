@@ -12,20 +12,20 @@ Tags live on this repository: `studio-phase-N`.
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `studio-phase-0` | Plane CE `v1.4.2` baseline `5f7d92784c403f76284f0f16718f320221dc7fec`                                                                                             |
 | `studio-phase-1` | `plane.studio` Profile / Release / Decision / Risk CRUD, contextual Health, Today / Portfolio / Project Overview, zh-CN localization including login first screen |
+| `studio-phase-2` | Governance: Release/Risk/Decision transition graphs, Decision options + acknowledgements, Milestone, Release checklist, append-only StudioEvent                   |
+| `studio-phase-3` | Operating loop: Feedback inbox, Operations, Experiments, content/routines, convert to Plane Work Item                                                             |
 
 ## Remaining
 
 Each phase must land a user-visible formal capability on the isolated runtime, with tests, then a commit and tag. Do not re-implement Plane auth, projects, or work items.
 
-| Tag              | Formal capability                                                                                                                               | In                                           | Out                                                                     |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ----------------------------------------------------------------------- |
-| `studio-phase-2` | Governance: Release/Risk/Decision transition graphs, Decision options + acknowledgements, Milestone, Release checklist, append-only StudioEvent | Overview + decision/release/risk write paths | Feedback, GitHub, production                                            |
-| `studio-phase-3` | Operating loop: Feedback inbox, Operations, Experiments, content/routines                                                                       | Workspace Studio + project tabs              | Metrics charts, GitHub                                                  |
-| `studio-phase-4` | Cadence: Metric definitions/snapshots, Timeline, Weekly Review                                                                                  | Workspace Studio                             | GitHub App, public deploy                                               |
-| `studio-phase-5` | GitHub read-only facts (PR/CI/release projection)                                                                                               | Project Overview + Operations                | Write access to GitHub                                                  |
-| `studio-phase-6` | Import durable records from the legacy Studio OS database                                                                                       | Management command + evidence                | Rewriting Plane projects                                                |
-| `studio-phase-7` | Hardening: extra API/UI tests, runbooks, backup drill on the isolated stack                                                                     | docs + tests                                 | Public internet                                                         |
-| `studio-phase-8` | Production deploy                                                                                                                               | Only after legal-risk answers                | Must not ship a public AI/user-data service without the legal checklist |
+| Tag              | Formal capability                                                           | In                            | Out                                                                     |
+| ---------------- | --------------------------------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------- |
+| `studio-phase-4` | Cadence: Metric definitions/snapshots, Timeline, Weekly Review              | Workspace Studio              | GitHub App, public deploy                                               |
+| `studio-phase-5` | GitHub read-only facts (PR/CI/release projection)                           | Project Overview + Operations | Write access to GitHub                                                  |
+| `studio-phase-6` | Import durable records from the legacy Studio OS database                   | Management command + evidence | Rewriting Plane projects                                                |
+| `studio-phase-7` | Hardening: extra API/UI tests, runbooks, backup drill on the isolated stack | docs + tests                  | Public internet                                                         |
+| `studio-phase-8` | Production deploy                                                           | Only after legal-risk answers | Must not ship a public AI/user-data service without the legal checklist |
 
 ## Hard stops
 
