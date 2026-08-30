@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "more": "更多",
+    "hide": "收起",
+    "show": "显示",
+    "set_as_default": "设为默认",
+    "clear_default": "取消默认"
   },
   "chart": {
     "x_axis": "X轴",

@@ -117,3 +117,6 @@ packages/i18n/src/types/keys.generated.ts
 
 # Local security notes (not for version control)
 /security/
+
+# Local audit credentials for the isolated Studio runtime (never commit).
+deployments/studio/local/.audit-credentials

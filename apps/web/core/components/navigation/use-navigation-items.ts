@@ -10,6 +10,7 @@ import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@plane/propel/icons";
 import type { EUserProjectRoles, IPartialProject } from "@plane/types";
 import type { TNavigationItem } from "@/components/navigation/tab-navigation-root";
+import { getStudioProjectNavigationItems } from "@/components/studio/navigation";
 
 type UseNavigationItemsProps = {
   workspaceSlug: string;
@@ -99,7 +100,10 @@ export const useNavigationItems = ({
 
   // Combine, filter, and sort navigation items
   const navigationItems = useMemo(() => {
-    const navItems = baseNavigation(workspaceSlug, projectId);
+    const navItems = [
+      ...getStudioProjectNavigationItems(workspaceSlug, projectId),
+      ...baseNavigation(workspaceSlug, projectId),
+    ];
 
     // Filter by permissions and shouldRender
     const filteredItems = navItems.filter((item) => {

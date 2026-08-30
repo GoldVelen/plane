@@ -20,6 +20,7 @@ import { ChevronRightIcon } from "@plane/propel/icons";
 import { cn } from "@plane/utils";
 // components
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
+import { StudioWorkspaceNavigation } from "@/components/studio/navigation";
 // store hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import useLocalStorage from "@/hooks/use-local-storage";
@@ -102,6 +103,7 @@ export const SidebarMenuItems = observer(function SidebarMenuItems() {
           <SidebarItemBase key={`static_${_index}`} item={item} />
         ))}
       </div>
+      <StudioWorkspaceNavigation />
       <Disclosure as="div" className="flex flex-col" defaultOpen={!!isWorkspaceMenuOpen}>
         <div className="group flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-placeholder hover:bg-layer-transparent-hover">
           <Disclosure.Button
@@ -170,7 +172,7 @@ export const SidebarMenuItems = observer(function SidebarMenuItems() {
                     )}
                   >
                     <Ellipsis className="size-4 flex-shrink-0" />
-                    <span>{isExtendedSidebarOpened ? "Hide" : "More"}</span>
+                    <span>{isExtendedSidebarOpened ? t("common.hide") : t("common.more")}</span>
                   </button>
                 </SidebarNavItem>
               </>

@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "more": "More",
+    "hide": "Hide",
+    "show": "Show",
+    "set_as_default": "Set as default",
+    "clear_default": "Clear default"
   },
   "chart": {
     "x_axis": "axa-X",

@@ -42,8 +42,11 @@ function StoreWrapper(props: TStoreWrapper) {
    */
   useEffect(() => {
     const localValue = localStorage && localStorage.getItem("app_sidebar_collapsed");
-    const localBoolValue = localValue ? (localValue === "true" ? true : false) : false;
-    if (localValue && sidebarCollapsed === undefined) toggleSidebar(localBoolValue);
+    const localBoolValue = localValue === "true";
+    if (sidebarCollapsed === undefined) {
+      // A persisted desktop preference must not leave the workspace squeezed on a narrow viewport.
+      toggleSidebar(window.innerWidth < 768 || localBoolValue);
+    }
   }, [sidebarCollapsed, setTheme, toggleSidebar]);
 
   /**
@@ -74,7 +77,7 @@ function StoreWrapper(props: TStoreWrapper) {
 
     // Mark as initialized - prevents future syncs from server
     hasInitializedThemeRef.current = true;
-  }, [userProfile?.theme?.theme, setTheme]);
+  }, [userProfile?.id, userProfile?.theme?.theme, setTheme]);
 
   /**
    * Effect 2: Custom theme CSS application (runs on every change)

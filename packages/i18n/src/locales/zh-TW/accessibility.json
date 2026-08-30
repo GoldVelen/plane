@@ -29,6 +29,12 @@
       "hide_password": "隱藏密碼",
       "close_alert": "關閉警告",
       "close_popover": "關閉彈出框"
+    },
+    "app_sidebar": {
+      "open_workspace_menu": "Open workspace menu",
+      "close_workspace_menu": "Close workspace menu",
+      "open_extended_sidebar": "Open extended sidebar",
+      "close_extended_sidebar": "Close extended sidebar"
     }
   }
 }

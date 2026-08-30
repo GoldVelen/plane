@@ -94,7 +94,10 @@ export class ThemeStore implements IThemeStore {
     } else {
       this.sidebarCollapsed = collapsed;
     }
-    localStorage.setItem("app_sidebar_collapsed", this.sidebarCollapsed.toString());
+    // The mobile sidebar is an overlay and should not replace the user's desktop layout preference.
+    if (window.innerWidth >= 768) {
+      localStorage.setItem("app_sidebar_collapsed", this.sidebarCollapsed.toString());
+    }
   };
 
   /**

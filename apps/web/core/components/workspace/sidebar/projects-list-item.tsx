@@ -31,6 +31,7 @@ import { DEFAULT_TAB_KEY, getTabUrl } from "@/components/navigation/tab-navigati
 import { useTabPreferences } from "@/components/navigation/use-tab-preferences";
 import { LeaveProjectModal } from "@/components/project/leave-project-modal";
 import { PublishProjectModal } from "@/components/project/publish-project/modal";
+import { getStudioProjectNavigationItems } from "@/components/studio/navigation";
 // hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
@@ -480,7 +481,11 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
               {isProjectListOpen && (
                 <Disclosure.Panel as="div" className="relative mt-1 mb-1.5 flex flex-col gap-0.5 pl-6">
                   <div className="absolute top-0 bottom-1 left-[15px] w-[1px] bg-layer-3" />
-                  <ProjectNavigation workspaceSlug={workspaceSlug.toString()} projectId={projectId.toString()} />
+                  <ProjectNavigation
+                    workspaceSlug={workspaceSlug.toString()}
+                    projectId={projectId.toString()}
+                    additionalNavigationItems={getStudioProjectNavigationItems}
+                  />
                 </Disclosure.Panel>
               )}
             </Transition>

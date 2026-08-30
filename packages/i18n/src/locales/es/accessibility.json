@@ -29,6 +29,12 @@
       "hide_password": "Ocultar contraseña",
       "close_alert": "Cerrar alerta",
       "close_popover": "Cerrar ventana emergente"
+    },
+    "app_sidebar": {
+      "open_workspace_menu": "Open workspace menu",
+      "close_workspace_menu": "Close workspace menu",
+      "open_extended_sidebar": "Open extended sidebar",
+      "close_extended_sidebar": "Close extended sidebar"
     }
   }
 }
