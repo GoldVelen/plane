@@ -70,7 +70,7 @@ export const List = observer(function List(props: IList) {
     state,
     member,
     true,
-    t("common.all_issues")
+    t("default_global_view.all_issues")
   );
 
   if (!groupList) return null;

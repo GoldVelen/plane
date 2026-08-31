@@ -67,7 +67,7 @@ export const SubIssuesListRoot = observer(function SubIssuesListRoot(props: Prop
     allItemsLabel:
       issueServiceType === EIssueServiceType.EPICS
         ? t("common.entity.all", { entity: t("common.epics") })
-        : t("common.all_issues"),
+        : t("default_global_view.all_issues"),
     groupBy: group_by as GroupByColumnTypes,
     includeNone: true,
     isWorkspaceLevel: isWorkspaceLevel(storeType),

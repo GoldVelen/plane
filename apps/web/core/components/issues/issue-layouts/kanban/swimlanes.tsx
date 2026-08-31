@@ -293,14 +293,14 @@ export const KanBanSwimLanes = observer(function KanBanSwimLanes(props: IKanBanS
   const storeType = useIssueStoreType();
   // derived values
   const groupByList = getGroupByColumns({
-    allItemsLabel: isEpic ? t("common.entity.all", { entity: t("common.epics") }) : t("common.all_issues"),
+    allItemsLabel: isEpic ? t("common.entity.all", { entity: t("common.epics") }) : t("default_global_view.all_issues"),
     groupBy: group_by as GroupByColumnTypes,
     includeNone: true,
     isWorkspaceLevel: isWorkspaceLevel(storeType),
     isEpic: isEpic,
   });
   const subGroupByList = getGroupByColumns({
-    allItemsLabel: isEpic ? t("common.entity.all", { entity: t("common.epics") }) : t("common.all_issues"),
+    allItemsLabel: isEpic ? t("common.entity.all", { entity: t("common.epics") }) : t("default_global_view.all_issues"),
     groupBy: sub_group_by as GroupByColumnTypes,
     includeNone: true,
     isWorkspaceLevel: isWorkspaceLevel(storeType),
