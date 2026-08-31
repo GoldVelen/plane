@@ -36,7 +36,8 @@ export const getGroupByColumns = (
   label: IIssueLabelStore,
   projectState: IStateStore,
   member: IIssueMemberStore,
-  includeNone?: boolean
+  includeNone?: boolean,
+  allItemsLabel?: string
 ): IGroupByColumn[] | undefined => {
   switch (groupBy) {
     case "cycle":
@@ -54,7 +55,8 @@ export const getGroupByColumns = (
     case "created_by":
       return getCreatedByColumns(member) as any;
     default:
-      if (includeNone) return [{ id: `All Issues`, name: `All work items`, payload: {}, icon: undefined }];
+      if (includeNone)
+        return [{ id: `All Issues`, name: allItemsLabel ?? `All work items`, payload: {}, icon: undefined }];
   }
 };
 
@@ -139,8 +141,8 @@ const getPriorityColumns = () => {
   }));
 };
 
-const getLabelsColumns = (label: IIssueLabelStore) => {
-  const { labels: storeLabels } = label;
+const getLabelsColumns = (labelStore: IIssueLabelStore) => {
+  const { labels: storeLabels } = labelStore;
 
   if (!storeLabels) return;
 
@@ -156,8 +158,8 @@ const getLabelsColumns = (label: IIssueLabelStore) => {
   }));
 };
 
-const getAssigneeColumns = (member: IIssueMemberStore) => {
-  const { members } = member;
+const getAssigneeColumns = (memberStore: IIssueMemberStore) => {
+  const { members } = memberStore;
 
   if (!members) return;
 
@@ -173,8 +175,8 @@ const getAssigneeColumns = (member: IIssueMemberStore) => {
   return assigneeColumns;
 };
 
-const getCreatedByColumns = (member: IIssueMemberStore) => {
-  const { members } = member;
+const getCreatedByColumns = (memberStore: IIssueMemberStore) => {
+  const { members } = memberStore;
 
   if (!members) return;
 

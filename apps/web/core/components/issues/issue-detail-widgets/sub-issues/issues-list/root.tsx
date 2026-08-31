@@ -64,6 +64,10 @@ export const SubIssuesListRoot = observer(function SubIssuesListRoot(props: Prop
   const filteredSubWorkItemsCount = (getFilteredSubWorkItems(rootIssueId, filters.filters ?? {}) ?? []).length;
 
   const groups = getGroupByColumns({
+    allItemsLabel:
+      issueServiceType === EIssueServiceType.EPICS
+        ? t("common.entity.all", { entity: t("common.epics") })
+        : t("common.all_issues"),
     groupBy: group_by as GroupByColumnTypes,
     includeNone: true,
     isWorkspaceLevel: isWorkspaceLevel(storeType),

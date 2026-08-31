@@ -105,6 +105,7 @@ export const isWorkspaceLevel = (type: EIssuesStoreType) =>
     : false;
 
 type TGetGroupByColumns = {
+  allItemsLabel?: string;
   groupBy: GroupByColumnTypes | null;
   includeNone: boolean;
   isWorkspaceLevel: boolean;
@@ -116,6 +117,7 @@ type TGetGroupByColumns = {
 // We are using `as` to typecast it to the expected type.
 // It can break the includeNone logic if not handled properly.
 export const getGroupByColumns = ({
+  allItemsLabel,
   groupBy,
   includeNone,
   isWorkspaceLevel,
@@ -127,7 +129,7 @@ export const getGroupByColumns = ({
     return [
       {
         id: "All Issues",
-        name: `All ${isEpic ? "Epics" : "work items"}`,
+        name: allItemsLabel ?? `All ${isEpic ? "Epics" : "work items"}`,
         payload: {},
         icon: undefined,
       },
