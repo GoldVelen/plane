@@ -23,14 +23,14 @@ Tags live on this repository: `studio-phase-N`.
 
 Each phase must land a user-visible formal capability on the isolated runtime, with tests, then a commit and tag. Do not re-implement Plane auth, projects, or work items.
 
-| Tag              | Formal capability                                               | In                                                                               | Out                                                              |
-| ---------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| `studio-phase-8` | Closed household test only. Public production is still blocked. | Two-person loopback/private use; answers in `specs/studio-phase-8/legal-gate.md` | Public domain, open signup, public generative AI, Mode B billing |
+| Tag              | Formal capability                                                               | In                                                                                                 | Out                                                                                                   |
+| ---------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `studio-phase-8` | Closed household test. Authenticated public reachability is proposed, not live. | Two-person use; 9 Plane projects; review prompt in `specs/studio-phase-8/chatgpt-review-prompt.md` | Open signup, home port-forward of the dev stack, public generative AI, Mode B billing, production tag |
 
 ## Hard stops
 
 - Do not create a second account, project, or work-item system.
 - Do not change Plane tokens/theme/generic components.
-- Production (`studio-phase-8`) is a legal gate. Answers on 2026-08-31 authorize a **two-person closed test** only. Public domain, open registration, and public generative AI remain forbidden. See `specs/studio-phase-8/legal-gate.md`.
+- Production (`studio-phase-8`) is a legal gate. Two-person closed test is authorized. Authenticated public reachability is proposed in `specs/studio-phase-8/chatgpt-review-prompt.md` and is **not live**. Open registration, home port-forward of the dev stack, and public generative AI remain forbidden. See `specs/studio-phase-8/legal-gate.md`.
 - GitHub (`studio-phase-5`) may be marked `PENDING_EXTERNAL_CREDENTIAL` if no App credentials exist; the code path and verification harness must still exist.
 - Push to `origin` is separate from commit/tag unless explicitly authorized.

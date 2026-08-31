@@ -22,7 +22,7 @@ PIPL / Cybersecurity Law / Data Security Law still apply to the personal account
 
 ## GO
 
-- Keep using the isolated stack on loopback, or later a **private** home LAN / Tailscale-style mesh that is not a public hostname.
+- Keep using the isolated stack on loopback until a reviewed public-reachability design, domain, TLS, and rotated secrets exist.
 - Two Plane-native accounts in one workspace. No second login stack.
 - Operate the existing projects and add further Plane projects as native CE projects.
 - Backups stay on this machine; credentials stay gitignored.
@@ -31,13 +31,17 @@ PIPL / Cybersecurity Law / Data Security Law still apply to the personal account
 
 ## NO-GO
 
-- Public domain, port-forward to the internet, open signup, or `studio-phase-8` production tag
+- Opening a public hostname before HTTPS, rotated secrets, production web build, and invite-only Access/auth
+- Home-router port-forward of the Vite dev server or Django API
+- Open signup, or `studio-phase-8` production tag
 - Treating Studio OS itself as a public generative-AI service
 - Mode B (this instance holds paid third-party keys for anyone else) and billing, until commercial policy is decided
 - Sending household personal data to a public analytics collector
 - Restoring backups onto a public host
 
 Re-open this gate if any of these happen: public marketing, users beyond a closed household test, paid third-party keys held by this instance, or generative AI offered to people who are not the two operators.
+
+On 2026-08-31 the operator additionally asked for **authenticated public reachability** (travel / spouse off-home). That is not authorization to open ports today. Implementation waits on `specs/studio-phase-8/chatgpt-review-prompt.md` review plus domain, TLS, and secret rotation. Home port-forward of the current loopback stack remains forbidden.
 
 ## AI split
 
@@ -67,4 +71,15 @@ Workspace `studio-os`:
 | `XYO`      | Xyora     | FOCUS / TEST             |
 | `WRE`      | WeatherRE | KEEP_ALIVE / MAINTENANCE |
 
-Older Studio OS seed names (PulseNote, LoveCloud, HEREVERSE, 巡游历, 拜托拜托, 历史人物性格测试) are **not** in this Plane instance and must not be invented until the operator confirms which ones to create as native Plane projects.
+Created 2026-08-31 as native Plane projects with Studio profiles `INCUBATING / IDEA / P2` and empty focus (not marked to advance):
+
+| Identifier | Name             | product_type        |
+| ---------- | ---------------- | ------------------- |
+| `PN`       | 腕记 PulseNote   | IOS_APP             |
+| `LC`       | LoveCloud        | IOS_APP             |
+| `HRV`      | HEREVERSE        | OTHER               |
+| `XYL`      | 巡游历           | WECHAT_MINI_PROGRAM |
+| `BTHB`     | 拜托拜托         | WECHAT_MINI_PROGRAM |
+| `HPT`      | 历史人物性格测试 | WEB_APP             |
+
+Bucket, stage, and current focus remain for the two operators to confirm in the UI. Public reachability is **not** enabled.
