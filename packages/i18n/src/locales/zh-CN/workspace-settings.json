@@ -67,7 +67,7 @@
           "projects": "项目",
           "search_projects": "搜索项目",
           "select_projects": "选择项目",
-          "selected_projects": "已选择 {{count}} 个项目",
+          "selected_projects": "已选择 {count} 个项目",
           "scope": {
             "all": "所有当前和未来公开项目",
             "selected": "指定项目",
@@ -85,17 +85,20 @@
           },
           "summary": {
             "all": "所有公开项目",
-            "selected": "{{count}} 个项目",
+            "selected": "{count} 个项目",
             "none": "暂无项目"
           },
           "errors": {
             "select_project": "请至少选择一个项目，或选择“暂不加入项目”。"
           },
-          "edit_title": "编辑 {{name}} 的项目权限",
+          "edit_title": "编辑 {name} 的项目权限",
           "edit_description": "设置该工作区成员可以访问的项目，以及在项目中的角色。",
           "updated_title": "项目权限已更新",
           "updated_message": "该成员的项目权限已同步。",
           "update_failed_title": "项目权限更新失败"
+        },
+        "authentication_methods": {
+          "magic_code": "验证码"
         },
         "modal": {
           "title": "邀请人员协作",

@@ -67,7 +67,7 @@
           "projects": "Projects",
           "search_projects": "Search projects",
           "select_projects": "Select projects",
-          "selected_projects": "{{count}} projects selected",
+          "selected_projects": "{count} projects selected",
           "scope": {
             "all": "All current and future public projects",
             "selected": "Selected projects",
@@ -85,17 +85,20 @@
           },
           "summary": {
             "all": "All public projects",
-            "selected": "{{count}} projects",
+            "selected": "{count} projects",
             "none": "No projects"
           },
           "errors": {
             "select_project": "Select at least one project or choose no projects."
           },
-          "edit_title": "Edit project access for {{name}}",
+          "edit_title": "Edit project access for {name}",
           "edit_description": "Choose which projects this workspace member can access and their role in those projects.",
           "updated_title": "Project access updated",
           "updated_message": "The member's project access is now up to date.",
           "update_failed_title": "Project access was not updated"
+        },
+        "authentication_methods": {
+          "magic_code": "Magic code"
         },
         "modal": {
           "title": "Invite people to collaborate",

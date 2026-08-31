@@ -29,7 +29,14 @@ export const useMemberColumns = () => {
       filtersStore: { filters, updateFilters },
     },
   } = useMember();
-  const { t } = useTranslation();
+  const { t, currentLocale } = useTranslation();
+
+  const formatJoiningDate = (value: string | undefined): string | undefined => {
+    if (!value) return;
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return renderFormattedDate(value);
+    return new Intl.DateTimeFormat(currentLocale, { dateStyle: "medium" }).format(date);
+  };
 
   // derived values
   const isAdmin = allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.WORKSPACE);
@@ -128,7 +135,13 @@ export const useMemberColumns = () => {
         if (isSuspended(rowData)) return null;
         const loginMedium = rowData.member.last_login_medium;
         if (!loginMedium) return null;
-        return <div>{LOGIN_MEDIUM_LABELS[loginMedium]}</div>;
+        const label =
+          loginMedium === "magic-code"
+            ? t("workspace_settings.settings.members.authentication_methods.magic_code")
+            : loginMedium === "email"
+              ? t("email")
+              : LOGIN_MEDIUM_LABELS[loginMedium];
+        return <div>{label}</div>;
       },
     },
 
@@ -136,7 +149,7 @@ export const useMemberColumns = () => {
       key: "Joining date",
       content: t("workspace_settings.settings.members.details.joining_date"),
       tdRender: (rowData: RowData) =>
-        isSuspended(rowData) ? null : <div>{renderFormattedDate(rowData?.member?.joining_date)}</div>,
+        isSuspended(rowData) ? null : <div>{formatJoiningDate(rowData?.member?.joining_date)}</div>,
       thRender: () => (
         <MemberHeaderColumn
           property="joining_date"
