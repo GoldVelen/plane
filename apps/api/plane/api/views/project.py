@@ -7,7 +7,7 @@ import json
 
 # Django imports
 from django.db import IntegrityError, transaction
-from django.db.models import Exists, F, Func, OuterRef, Prefetch, Q, Subquery, Count
+from django.db.models import Exists, F, Func, OuterRef, Prefetch, Subquery, Count
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
@@ -43,6 +43,7 @@ from plane.utils.exception_logger import log_exception
 from .base import BaseAPIView
 from plane.utils.host import base_host
 from plane.utils.order_queryset import PROJECT_ORDER_BY_ALLOWLIST, sanitize_order_by
+from plane.utils.project_access import add_all_access_members_to_project
 from plane.api.serializers import (
     ProjectSerializer,
     ProjectLiteSerializer,
@@ -87,11 +88,8 @@ class ProjectListCreateAPIEndpoint(BaseAPIView):
         return (
             Project.objects.filter(workspace__slug=self.kwargs.get("slug"))
             .filter(
-                Q(
-                    project_projectmember__member=self.request.user,
-                    project_projectmember__is_active=True,
-                )
-                | Q(network=2)
+                project_projectmember__member=self.request.user,
+                project_projectmember__is_active=True,
             )
             .select_related("project_lead")
             .annotate(
@@ -254,6 +252,14 @@ class ProjectListCreateAPIEndpoint(BaseAPIView):
                             role=20,
                         )
 
+                    excluded_member_ids = {request.user.id}
+                    if serializer.instance.project_lead_id is not None:
+                        excluded_member_ids.add(serializer.instance.project_lead_id)
+                    add_all_access_members_to_project(
+                        serializer.instance,
+                        exclude_member_ids=excluded_member_ids,
+                    )
+
                     State.objects.bulk_create(
                         [
                             State(
@@ -348,16 +354,13 @@ class ProjectListLiteAPIEndpoint(BaseAPIView):
     use_read_replica = True
 
     def get_queryset(self):
-        # Projects the user can access: those they are an active member of, plus
-        # public (network=2) ones.
+        # Project membership is the access boundary. Public projects are added
+        # explicitly for members whose workspace scope is "all".
         return (
             Project.objects.filter(workspace__slug=self.kwargs.get("slug"))
             .filter(
-                Q(
-                    project_projectmember__member=self.request.user,
-                    project_projectmember__is_active=True,
-                )
-                | Q(network=2)
+                project_projectmember__member=self.request.user,
+                project_projectmember__is_active=True,
             )
             .distinct()
         )
@@ -395,8 +398,8 @@ class ProjectListLiteAPIEndpoint(BaseAPIView):
         """List projects (lite)
 
         Retrieve a paginated, lightweight list of projects the user can access in
-        the workspace (projects they are an active member of, plus public projects),
-        optimized for pickers and references.
+        the workspace (projects where they have an active membership), optimized
+        for pickers and references.
         """
         if not Workspace.objects.filter(slug=slug).exists():
             return Response(
@@ -441,11 +444,8 @@ class ProjectDetailAPIEndpoint(BaseAPIView):
         return (
             Project.objects.filter(workspace__slug=self.kwargs.get("slug"))
             .filter(
-                Q(
-                    project_projectmember__member=self.request.user,
-                    project_projectmember__is_active=True,
-                )
-                | Q(network=2)
+                project_projectmember__member=self.request.user,
+                project_projectmember__is_active=True,
             )
             .select_related("workspace", "workspace__owner", "default_assignee", "project_lead")
             .annotate(
@@ -570,15 +570,17 @@ class ProjectDetailAPIEndpoint(BaseAPIView):
             )
 
             if serializer.is_valid():
-                serializer.save()
-                if serializer.data["intake_view"]:
-                    intake = Intake.objects.filter(project=project, is_default=True).first()
-                    if not intake:
-                        Intake.objects.create(
-                            name=f"{project.name} Intake",
-                            project=project,
-                            is_default=True,
-                        )
+                with transaction.atomic():
+                    serializer.save()
+                    add_all_access_members_to_project(project)
+                    if serializer.data["intake_view"]:
+                        intake = Intake.objects.filter(project=project, is_default=True).first()
+                        if not intake:
+                            Intake.objects.create(
+                                name=f"{project.name} Intake",
+                                project=project,
+                                is_default=True,
+                            )
 
                 project = self.get_queryset().filter(pk=serializer.instance.id).first()
 

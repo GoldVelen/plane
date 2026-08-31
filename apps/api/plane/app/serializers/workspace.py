@@ -27,6 +27,7 @@ from plane.db.models import (
     WorkspaceUserPreference,
 )
 from plane.utils.constants import RESTRICTED_WORKSPACE_SLUGS
+from plane.utils.project_access import ProjectAccessValidationError, normalize_project_access
 from plane.utils.url import contains_url
 from plane.utils.content_validator import (
     validate_html_content,
@@ -53,9 +54,7 @@ class WorkSpaceSerializer(DynamicBaseSerializer):
         # digit. Mirrors the frontend HAS_ALPHANUMERIC_REGEX check so the rule
         # cannot be bypassed via a direct API call.
         if not has_alphanumeric(value):
-            raise serializers.ValidationError(
-                "Name must contain at least one letter or number"
-            )
+            raise serializers.ValidationError("Name must contain at least one letter or number")
         return value
 
     def validate_slug(self, value):
@@ -108,6 +107,21 @@ class WorkspaceMemberMeSerializer(BaseSerializer):
 
 class WorkspaceMemberAdminSerializer(DynamicBaseSerializer):
     member = UserAdminLiteSerializer(read_only=True)
+    project_ids = serializers.SerializerMethodField()
+
+    def get_project_ids(self, obj):
+        prefetched_memberships = getattr(obj.member, "active_project_memberships", None)
+        if prefetched_memberships is not None:
+            return [str(membership.project_id) for membership in prefetched_memberships]
+        return [
+            str(project_id)
+            for project_id in ProjectMember.objects.filter(
+                workspace_id=obj.workspace_id,
+                member_id=obj.member_id,
+                is_active=True,
+                project__archived_at__isnull=True,
+            ).values_list("project_id", flat=True)
+        ]
 
     class Meta:
         model = WorkspaceMember
@@ -120,6 +134,26 @@ class WorkSpaceMemberInviteSerializer(BaseSerializer):
 
     def get_invite_link(self, obj):
         return f"/workspace-invitations/?invitation_id={obj.id}&slug={obj.workspace.slug}&token={obj.token}"
+
+    def validate(self, attrs):
+        if self.instance is None:
+            return attrs
+
+        try:
+            access = normalize_project_access(
+                workspace_id=self.instance.workspace_id,
+                workspace_role=attrs.get("role", self.instance.role),
+                scope=attrs.get("project_access_scope", self.instance.project_access_scope),
+                project_role=attrs.get("default_project_role", self.instance.default_project_role),
+                project_ids=attrs.get("project_ids", self.instance.project_ids),
+            )
+        except ProjectAccessValidationError as exc:
+            raise serializers.ValidationError({"error": str(exc)}) from exc
+
+        attrs["project_access_scope"] = access.scope
+        attrs["default_project_role"] = access.project_role
+        attrs["project_ids"] = list(access.project_ids)
+        return attrs
 
     class Meta:
         model = WorkspaceMemberInvite
@@ -154,6 +188,8 @@ class WorkSpaceMemberInvitePublicSerializer(BaseSerializer):
             "email",
             "workspace",
             "role",
+            "project_access_scope",
+            "default_project_role",
             "message",
             "accepted",
             "responded_at",

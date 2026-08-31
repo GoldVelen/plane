@@ -8,10 +8,11 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { ROLE, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
+import { ROLE_DETAILS, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import { LinkIcon, TrashIcon, ChevronDownIcon } from "@plane/propel/icons";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
+import { EProjectAccessScope } from "@plane/types";
 import type { TContextMenuItem } from "@plane/ui";
 import { CustomSelect, CustomMenu } from "@plane/ui";
 import { cn, copyTextToClipboard } from "@plane/utils";
@@ -52,6 +53,14 @@ export const WorkspaceInvitationsListItem = observer(function WorkspaceInvitatio
     [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
     EUserPermissionsLevel.WORKSPACE
   );
+  const projectAccessLabel =
+    invitationDetails?.project_access_scope === EProjectAccessScope.ALL
+      ? t("workspace_settings.settings.members.project_access.summary.all")
+      : invitationDetails?.project_access_scope === EProjectAccessScope.NONE
+        ? t("workspace_settings.settings.members.project_access.summary.none")
+        : t("workspace_settings.settings.members.project_access.summary.selected", {
+            count: invitationDetails?.project_ids?.length ?? 0,
+          });
 
   const handleRemoveInvitation = async () => {
     try {
@@ -60,15 +69,15 @@ export const WorkspaceInvitationsListItem = observer(function WorkspaceInvitatio
       await deleteMemberInvitation(workspaceSlug.toString(), invitationDetails.id);
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: "Success!",
-        message: "Invitation removed successfully.",
+        title: t("common.toast.success"),
+        message: t("workspace_settings.settings.members.toasts.invitation_removed"),
       });
     } catch (err: unknown) {
       const error = err as { error?: string };
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
-        message: error?.error || "Something went wrong. Please try again.",
+        title: t("common.toast.error"),
+        message: error?.error || t("something_went_wrong_please_try_again"),
       });
     }
   };
@@ -128,6 +137,7 @@ export const WorkspaceInvitationsListItem = observer(function WorkspaceInvitatio
           </span>
           <div>
             <h4 className="cursor-default text-body-xs-regular">{invitationDetails.email}</h4>
+            <p className="mt-0.5 text-caption-sm-regular text-tertiary">{projectAccessLabel}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 text-11">
@@ -142,7 +152,7 @@ export const WorkspaceInvitationsListItem = observer(function WorkspaceInvitatio
                     hasRoleChangeAccess ? "" : "text-placeholder"
                   }`}
                 >
-                  {ROLE[invitationDetails.role]}
+                  {t(ROLE_DETAILS[invitationDetails.role as keyof typeof ROLE_DETAILS].i18n_title)}
                 </span>
                 {hasRoleChangeAccess && (
                   <span className="grid place-items-center">
@@ -155,21 +165,32 @@ export const WorkspaceInvitationsListItem = observer(function WorkspaceInvitatio
             onChange={(value: EUserPermissions) => {
               if (!workspaceSlug || !value) return;
 
+              const selectedProjectIds = invitationDetails.project_ids ?? [];
+              const projectAccessScope =
+                value === EUserPermissions.GUEST && invitationDetails.project_access_scope === EProjectAccessScope.ALL
+                  ? selectedProjectIds.length > 0
+                    ? EProjectAccessScope.SELECTED
+                    : EProjectAccessScope.NONE
+                  : invitationDetails.project_access_scope;
+
               updateMemberInvitation(workspaceSlug.toString(), invitationDetails.id, {
                 role: value,
+                project_access_scope: projectAccessScope,
+                default_project_role: value,
+                project_ids: projectAccessScope === EProjectAccessScope.SELECTED ? selectedProjectIds : [],
               }).catch((err: unknown) => {
                 const error = err as { error?: string };
                 setToast({
                   type: TOAST_TYPE.ERROR,
-                  title: "Error!",
-                  message: error?.error || "An error occurred while updating member role. Please try again.",
+                  title: t("common.toast.error"),
+                  message: error?.error || t("workspace_settings.settings.members.toasts.role_update_failed"),
                 });
               });
             }}
             disabled={!hasRoleChangeAccess}
             placement="bottom-end"
           >
-            {Object.keys(ROLE).map((key) => {
+            {Object.entries(ROLE_DETAILS).map(([key, roleDetails]) => {
               if (
                 currentWorkspaceRole &&
                 Number(currentWorkspaceRole) !== 20 &&
@@ -179,7 +200,7 @@ export const WorkspaceInvitationsListItem = observer(function WorkspaceInvitatio
 
               return (
                 <CustomSelect.Option key={key} value={parseInt(key, 10)}>
-                  <>{ROLE[parseInt(key) as keyof typeof ROLE]}</>
+                  <>{t(roleDetails.i18n_title)}</>
                 </CustomSelect.Option>
               );
             })}

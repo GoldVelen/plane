@@ -7,36 +7,43 @@
 import { observer } from "mobx-react";
 // plane imports
 import { START_OF_THE_WEEK_OPTIONS } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { EStartOfTheWeek } from "@plane/types";
 import { CustomSelect } from "@plane/ui";
 // components
 import { SettingsControlItem } from "@/components/settings/control-item";
+import { getLocalizedWeekdayLabel } from "./weekday-label";
 // hooks
 import { useUserProfile } from "@/hooks/store/user";
 
-const getStartOfWeekLabel = (startOfWeek: EStartOfTheWeek) =>
-  START_OF_THE_WEEK_OPTIONS.find((option) => option.value === startOfWeek)?.label;
-
-export const StartOfWeekPreference = observer(function StartOfWeekPreference(props: {
-  option: { title: string; description: string };
-}) {
+export const StartOfWeekPreference = observer(function StartOfWeekPreference() {
   // hooks
   const { data: userProfile, updateUserProfile } = useUserProfile();
+  const { currentLocale, t } = useTranslation();
+
+  const getStartOfWeekLabel = (startOfWeek: EStartOfTheWeek) => getLocalizedWeekdayLabel(startOfWeek, currentLocale);
 
   const handleStartOfWeekChange = async (val: number) => {
     try {
       await updateUserProfile({ start_of_the_week: val });
-      setToast({ type: TOAST_TYPE.SUCCESS, title: "Success", message: "First day of the week updated successfully" });
+      setToast({
+        type: TOAST_TYPE.SUCCESS,
+        title: t("success"),
+        message: t("power_k.preferences_actions.toast.generic.success"),
+      });
     } catch (_error) {
-      setToast({ type: TOAST_TYPE.ERROR, title: "Update failed", message: "Please try again later." });
+      setToast({
+        type: TOAST_TYPE.ERROR,
+        title: t("error"),
+        message: t("power_k.preferences_actions.toast.generic.error"),
+      });
     }
   };
 
   return (
     <SettingsControlItem
-      title={props.option.title}
-      description={props.option.description}
+      title={t("power_k.preferences_actions.update_start_of_week")}
       control={
         <CustomSelect
           value={userProfile.start_of_the_week}
@@ -50,7 +57,7 @@ export const StartOfWeekPreference = observer(function StartOfWeekPreference(pro
           <>
             {START_OF_THE_WEEK_OPTIONS.map((day) => (
               <CustomSelect.Option key={day.value} value={day.value}>
-                {day.label}
+                {getLocalizedWeekdayLabel(day.value, currentLocale)}
               </CustomSelect.Option>
             ))}
           </>

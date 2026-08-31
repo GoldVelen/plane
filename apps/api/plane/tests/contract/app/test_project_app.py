@@ -477,8 +477,8 @@ class TestProjectAPIPatchDelete(TestProjectBase):
         assert not Project.objects.filter(id=project.id).exists()
 
     @pytest.mark.django_db
-    def test_delete_project_success_workspace_admin(self, session_client, workspace):
-        """Test successful project deletion by workspace admin"""
+    def test_delete_project_forbidden_workspace_admin_without_project_access(self, session_client, workspace):
+        """Workspace administration alone does not grant access to an isolated project."""
         # Create workspace admin user
         workspace_admin = User.objects.create_user(email="admin@example.com", username="admin")
         WorkspaceMember.objects.create(workspace=workspace, member=workspace_admin, role=20, is_active=True)
@@ -490,8 +490,8 @@ class TestProjectAPIPatchDelete(TestProjectBase):
         url = self.get_project_url(workspace.slug, pk=project.id)
         response = session_client.delete(url)
 
-        assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert not Project.objects.filter(id=project.id).exists()
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert Project.objects.filter(id=project.id).exists()
 
     @pytest.mark.django_db
     def test_delete_project_forbidden_non_admin(self, session_client, workspace):

@@ -375,7 +375,8 @@ class SearchEndpoint(BaseAPIView):
                     projects = (
                         Project.objects.filter(
                             q,
-                            Q(project_projectmember__member=self.request.user) | Q(network=2),
+                            project_projectmember__member=self.request.user,
+                            project_projectmember__is_active=True,
                             workspace__slug=slug,
                         )
                         .order_by("-created_at")
@@ -580,7 +581,8 @@ class SearchEndpoint(BaseAPIView):
                     projects = (
                         Project.objects.filter(
                             q,
-                            Q(project_projectmember__member=self.request.user) | Q(network=2),
+                            project_projectmember__member=self.request.user,
+                            project_projectmember__is_active=True,
                             workspace__slug=slug,
                         )
                         .order_by("-created_at")

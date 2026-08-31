@@ -27,7 +27,7 @@ import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 import { PlusIcon, CheckIcon, ChevronDownIcon } from "@plane/propel/icons";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IUser, IWorkspace } from "@plane/types";
+import { EProjectAccessScope, type IUser, type IWorkspace } from "@plane/types";
 // ui
 import { Input, Spinner } from "@plane/ui";
 // services
@@ -149,7 +149,7 @@ const InviteMemberInput = observer(function InviteMemberInput(props: InviteMembe
             rules={{
               pattern: {
                 value: emailRegex,
-                message: "Invalid Email ID",
+                message: t("workspace_settings.settings.members.modal.errors.invalid"),
               },
             }}
             render={({ field: { value, onChange, ref } }) => (
@@ -213,7 +213,7 @@ const InviteMemberInput = observer(function InviteMemberInput(props: InviteMembe
                     style={styles.popper}
                     {...attributes.popper}
                   >
-                    {Object.entries(ROLE_DETAILS).map(([key, value]) => (
+                    {Object.entries(ROLE_DETAILS).map(([key, roleDetails]) => (
                       <Listbox.Option
                         as="div"
                         key={key}
@@ -227,8 +227,8 @@ const InviteMemberInput = observer(function InviteMemberInput(props: InviteMembe
                         {({ selected }) => (
                           <div className="flex items-center gap-2 p-1 text-wrap">
                             <div className="flex flex-col">
-                              <div className="text-13 font-medium">{t(value.i18n_title)}</div>
-                              <div className="flex text-11 text-tertiary">{t(value.i18n_description)}</div>
+                              <div className="text-13 font-medium">{t(roleDetails.i18n_title)}</div>
+                              <div className="flex text-11 text-tertiary">{t(roleDetails.i18n_description)}</div>
                             </div>
                             {selected && <CheckIcon className="h-4 w-4 shrink-0" />}
                           </div>
@@ -254,7 +254,9 @@ const InviteMemberInput = observer(function InviteMemberInput(props: InviteMembe
       {email && !emailRegex.test(email) && (
         <div className="mx-8 my-1">
           <span className="text-13">🤥</span>{" "}
-          <span className="mt-1 text-11 text-danger-primary">That doesn{"'"}t look like an email address.</span>
+          <span className="mt-1 text-11 text-danger-primary">
+            {t("workspace_settings.settings.members.modal.errors.invalid")}
+          </span>
         </div>
       )}
     </div>
@@ -263,6 +265,7 @@ const InviteMemberInput = observer(function InviteMemberInput(props: InviteMembe
 
 export function InviteMembers(props: Props) {
   const { finishOnboarding, workspace } = props;
+  const { t } = useTranslation();
 
   const [isInvitationDisabled, setIsInvitationDisabled] = useState(true);
 
@@ -290,28 +293,30 @@ export function InviteMembers(props: Props) {
     let payload = { ...formData };
     payload = { emails: payload.emails.filter((email) => email.email !== "") };
 
-    await workspaceService
-      .inviteWorkspace(workspace.slug, {
+    try {
+      await workspaceService.inviteWorkspace(workspace.slug, {
         emails: payload.emails.map((email) => ({
           email: email.email,
           role: email.role,
+          project_access_scope: EProjectAccessScope.NONE,
+          default_project_role: email.role,
+          project_ids: [],
         })),
-      })
-      .then(async () => {
-        setToast({
-          type: TOAST_TYPE.SUCCESS,
-          title: "Success!",
-          message: "Invitations sent successfully.",
-        });
-        await nextStep();
-      })
-      .catch((err) => {
-        setToast({
-          type: TOAST_TYPE.ERROR,
-          title: "Error!",
-          message: err?.error,
-        });
       });
+      setToast({
+        type: TOAST_TYPE.SUCCESS,
+        title: t("common.toast.success"),
+        message: t("workspace_settings.settings.members.invitations_sent_successfully"),
+      });
+      await nextStep();
+    } catch (err: unknown) {
+      const error = err as { error?: string };
+      setToast({
+        type: TOAST_TYPE.ERROR,
+        title: t("common.toast.error"),
+        message: error.error,
+      });
+    }
   };
 
   const appendField = () => {

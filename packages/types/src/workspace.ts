@@ -18,6 +18,18 @@ export enum EUserWorkspaceRoles {
   GUEST = 5,
 }
 
+export enum EProjectAccessScope {
+  ALL = "all",
+  SELECTED = "selected",
+  NONE = "none",
+}
+
+export interface IWorkspaceProjectAccess {
+  project_access_scope: EProjectAccessScope;
+  default_project_role: TUserPermissions;
+  project_ids: string[];
+}
+
 export interface IWorkspace {
   readonly id: string;
   readonly owner: IUser;
@@ -42,7 +54,7 @@ export interface IWorkspaceLite {
   slug: string;
 }
 
-export interface IWorkspaceMemberInvitation {
+export interface IWorkspaceMemberInvitation extends Omit<IWorkspaceProjectAccess, "project_ids"> {
   accepted: boolean;
   email: string;
   id: string;
@@ -51,6 +63,7 @@ export interface IWorkspaceMemberInvitation {
   role: TUserPermissions;
   token: string;
   invite_link: string;
+  project_ids?: string[];
   workspace: {
     id: string;
     logo_url: string;
@@ -60,7 +73,12 @@ export interface IWorkspaceMemberInvitation {
 }
 
 export interface IWorkspaceBulkInviteFormData {
-  emails: { email: string; role: TUserPermissions }[];
+  emails: Array<
+    {
+      email: string;
+      role: TUserPermissions;
+    } & IWorkspaceProjectAccess
+  >;
 }
 
 export type Properties = {
@@ -81,7 +99,7 @@ export type Properties = {
 
 export interface IWorkspaceMember {
   id: string;
-  member: IUserLite;
+  member: IUserLite & { last_login_medium?: TLoginMediums };
   role: TUserPermissions | EUserWorkspaceRoles;
   created_at?: string;
   avatar_url?: string;
@@ -92,6 +110,9 @@ export interface IWorkspaceMember {
   display_name?: string;
   last_login_medium?: TLoginMediums;
   is_active?: boolean;
+  project_access_scope?: EProjectAccessScope;
+  default_project_role?: TUserPermissions;
+  project_ids?: string[];
 }
 
 export interface IWorkspaceMemberMe {

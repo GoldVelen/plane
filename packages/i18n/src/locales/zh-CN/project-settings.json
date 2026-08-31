@@ -22,8 +22,8 @@
       "label": "成员",
       "project_lead": "项目负责人",
       "project_lead_description": "请选择该项目的项目负责人。",
-      "default_assignee": "默认受理人",
-      "default_assignee_description": "请选择该项目的默认指派人。",
+      "default_assignee": "默认负责人",
+      "default_assignee_description": "请选择该项目的默认负责人。",
       "project_subscribers": "项目订阅者",
       "project_subscribers_description": "请选择将接收该项目通知的成员。",
       "guest_super_permissions": {

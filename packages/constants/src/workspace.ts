@@ -177,6 +177,10 @@ export const DEFAULT_GLOBAL_VIEWS_LIST: {
     i18n_label: "default_global_view.all_issues",
   },
   {
+    key: "unassigned",
+    i18n_label: "default_global_view.unassigned",
+  },
+  {
     key: "assigned",
     i18n_label: "default_global_view.assigned",
   },

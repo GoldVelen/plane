@@ -11,6 +11,7 @@ import jwt
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.db import transaction
 from django.utils import timezone
 
 # Third party modules
@@ -28,10 +29,15 @@ from plane.app.serializers import (
 from plane.app.views.base import BaseAPIView
 from plane.bgtasks.event_tracking_task import track_event
 from plane.bgtasks.workspace_invitation_task import workspace_invitation
-from plane.db.models import User, Workspace, WorkspaceMember, WorkspaceMemberInvite
+from plane.db.models import Profile, Workspace, WorkspaceMember, WorkspaceMemberInvite
 from plane.utils.cache import invalidate_cache, invalidate_cache_directly
 from plane.utils.host import base_host
 from plane.utils.analytics_events import USER_JOINED_WORKSPACE, USER_INVITED_TO_WORKSPACE
+from plane.utils.project_access import (
+    ProjectAccessValidationError,
+    normalize_project_access,
+    provision_workspace_member_from_invitation,
+)
 from .. import BaseViewSet
 
 
@@ -60,8 +66,13 @@ class WorkspaceInvitationsViewset(BaseViewSet):
         # check for role level of the requesting user
         requesting_user = WorkspaceMember.objects.get(workspace__slug=slug, member=request.user, is_active=True)
 
+        try:
+            invitee_roles = [int(email.get("role", 5)) for email in emails]
+        except (TypeError, ValueError):
+            return Response({"error": "One or more workspace roles are invalid"}, status=status.HTTP_400_BAD_REQUEST)
+
         # Check if any invited user has an higher role
-        if len([email for email in emails if int(email.get("role", 5)) > requesting_user.role]):
+        if any(role > requesting_user.role for role in invitee_roles):
             return Response(
                 {"error": "You cannot invite a user with higher role"},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -73,7 +84,7 @@ class WorkspaceInvitationsViewset(BaseViewSet):
         # Check if user is already a member of workspace
         workspace_members = WorkspaceMember.objects.filter(
             workspace_id=workspace.id,
-            member__email__in=[email.get("email") for email in emails],
+            member__email__in=[email.get("email", "").strip().lower() for email in emails],
             is_active=True,
         ).select_related("member", "member__avatar_asset")
 
@@ -89,31 +100,42 @@ class WorkspaceInvitationsViewset(BaseViewSet):
         workspace_invitations = []
         for email in emails:
             try:
-                validate_email(email.get("email"))
+                invitee_email = email.get("email", "").strip().lower()
+                validate_email(invitee_email)
+                invitee_role = int(email.get("role", 5))
+                access = normalize_project_access(
+                    workspace_id=workspace.id,
+                    workspace_role=invitee_role,
+                    scope=email.get("project_access_scope"),
+                    project_role=email.get("default_project_role", invitee_role),
+                    project_ids=email.get("project_ids", []),
+                )
                 workspace_invitations.append(
                     WorkspaceMemberInvite(
-                        email=email.get("email").strip().lower(),
+                        email=invitee_email,
                         workspace_id=workspace.id,
                         token=jwt.encode(
-                            {"email": email, "timestamp": datetime.now().timestamp()},
+                            {"email": invitee_email, "timestamp": datetime.now().timestamp()},
                             settings.SECRET_KEY,
                             algorithm="HS256",
                         ),
-                        role=email.get("role", 5),
+                        role=invitee_role,
+                        project_access_scope=access.scope,
+                        default_project_role=access.project_role,
+                        project_ids=list(access.project_ids),
                         created_by=request.user,
                     )
                 )
-            except ValidationError:
+            except (ValidationError, ProjectAccessValidationError, TypeError, ValueError) as exc:
                 return Response(
-                    {
-                        "error": f"Invalid email - {email} provided a valid email address is required to send the invite"  # noqa: E501
-                    },
+                    {"error": str(exc) or "The invitation details are invalid"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
         # Create workspace member invite
-        workspace_invitations = WorkspaceMemberInvite.objects.bulk_create(
-            workspace_invitations, batch_size=10, ignore_conflicts=True
-        )
+        with transaction.atomic():
+            workspace_invitations = WorkspaceMemberInvite.objects.bulk_create(
+                workspace_invitations, batch_size=10, ignore_conflicts=True
+            )
 
         current_site = base_host(request=request, is_app=True)
 
@@ -135,6 +157,8 @@ class WorkspaceInvitationsViewset(BaseViewSet):
                     "workspace_id": workspace.id,
                     "workspace_slug": workspace.slug,
                     "invitee_role": invitation.role,
+                    "project_access_scope": invitation.project_access_scope,
+                    "default_project_role": invitation.default_project_role,
                     "invited_at": str(timezone.now()),
                     "invitee_email": invitation.email,
                 },
@@ -162,93 +186,84 @@ class WorkspaceJoinEndpoint(BaseAPIView):
     )
     @invalidate_cache(path="/api/users/me/settings/", multiple=True)
     def post(self, request, slug, pk):
-        workspace_invite = WorkspaceMemberInvite.objects.get(pk=pk, workspace__slug=slug)
-
         token = request.data.get("token", "")
 
-        # Validate the token to verify the user received the invitation email
-        if not token or workspace_invite.token != token:
-            return Response(
-                {"error": "You do not have permission to join the workspace"},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        # Require an authenticated session — the accepting user must be the
-        # person who was invited.  Without this check an attacker who registers
-        # with the invited address (email-squat) and obtains the token via the
-        # GET endpoint can steal the workspace membership (GHSA-4vj8-p63v-8p24).
-        if not request.user.is_authenticated:
-            return Response(
-                {"error": "Authentication required to accept workspace invitation"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-        if request.user.email.lower() != workspace_invite.email.lower():
-            return Response(
-                {"error": "You do not have permission to accept this invitation"},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        # If already responded then return error
-        if workspace_invite.responded_at is None:
-            workspace_invite.accepted = request.data.get("accepted", False)
-            workspace_invite.responded_at = timezone.now()
-            workspace_invite.save()
-
-            if workspace_invite.accepted:
-                # Check if the user created account after invitation
-                user = User.objects.filter(email=workspace_invite.email).first()
-
-                # If the user is present then create the workspace member
-                if user is not None:
-                    # Check if the user was already a member of workspace then activate the user
-                    workspace_member = WorkspaceMember.objects.filter(
-                        workspace=workspace_invite.workspace, member=user
-                    ).first()
-                    if workspace_member is not None:
-                        workspace_member.is_active = True
-                        workspace_member.role = workspace_invite.role
-                        workspace_member.save()
-                    else:
-                        # Create a Workspace
-                        _ = WorkspaceMember.objects.create(
-                            workspace=workspace_invite.workspace,
-                            member=user,
-                            role=workspace_invite.role,
-                        )
-
-                    # Set the user last_workspace_id to the accepted workspace
-                    user.last_workspace_id = workspace_invite.workspace.id
-                    user.save()
-                    track_event.delay(
-                        user_id=user.id,
-                        event_name=USER_JOINED_WORKSPACE,
-                        slug=slug,
-                        event_properties={
-                            "user_id": user.id,
-                            "workspace_id": workspace_invite.workspace.id,
-                            "workspace_slug": workspace_invite.workspace.slug,
-                            "role": workspace_invite.role,
-                            "joined_at": str(timezone.now()),
-                        },
+        try:
+            with transaction.atomic():
+                workspace_invite = (
+                    WorkspaceMemberInvite.objects.select_for_update()
+                    .select_related("workspace")
+                    .get(
+                        pk=pk,
+                        workspace__slug=slug,
                     )
-
-                    # Delete the invitation
-                    workspace_invite.delete()
-
-                return Response(
-                    {"message": "Workspace Invitation Accepted"},
-                    status=status.HTTP_200_OK,
                 )
 
-            # Workspace invitation rejected
-            return Response(
-                {"message": "Workspace Invitation was not accepted"},
-                status=status.HTTP_200_OK,
-            )
+                # Validate the token to verify the user received the invitation email
+                if not token or workspace_invite.token != token:
+                    return Response(
+                        {"error": "You do not have permission to join the workspace"},
+                        status=status.HTTP_403_FORBIDDEN,
+                    )
+
+                # Require an authenticated session — the accepting user must be the
+                # person who was invited.  Without this check an attacker who registers
+                # with the invited address (email-squat) and obtains the token via the
+                # GET endpoint can steal the workspace membership (GHSA-4vj8-p63v-8p24).
+                if not request.user.is_authenticated:
+                    return Response(
+                        {"error": "Authentication required to accept workspace invitation"},
+                        status=status.HTTP_401_UNAUTHORIZED,
+                    )
+                if request.user.email.lower() != workspace_invite.email.lower():
+                    return Response(
+                        {"error": "You do not have permission to accept this invitation"},
+                        status=status.HTTP_403_FORBIDDEN,
+                    )
+
+                if workspace_invite.responded_at is not None:
+                    return Response(
+                        {"error": "You have already responded to the invitation request"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                if not request.data.get("accepted", False):
+                    workspace_invite.accepted = False
+                    workspace_invite.responded_at = timezone.now()
+                    workspace_invite.save(update_fields=["accepted", "responded_at", "updated_at"])
+                    return Response(
+                        {"message": "Workspace Invitation was not accepted"},
+                        status=status.HTTP_200_OK,
+                    )
+
+                workspace_member = provision_workspace_member_from_invitation(workspace_invite, request.user)
+                Profile.objects.update_or_create(
+                    user=request.user,
+                    defaults={"last_workspace_id": workspace_invite.workspace_id},
+                )
+
+                event_properties = {
+                    "user_id": request.user.id,
+                    "workspace_id": workspace_invite.workspace_id,
+                    "workspace_slug": workspace_invite.workspace.slug,
+                    "role": workspace_invite.role,
+                    "joined_at": str(timezone.now()),
+                }
+                transaction.on_commit(
+                    lambda: track_event.delay(
+                        user_id=workspace_member.member_id,
+                        event_name=USER_JOINED_WORKSPACE,
+                        slug=slug,
+                        event_properties=event_properties,
+                    )
+                )
+                workspace_invite.delete()
+        except ProjectAccessValidationError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(
-            {"error": "You have already responded to the invitation request"},
-            status=status.HTTP_400_BAD_REQUEST,
+            {"message": "Workspace Invitation Accepted"},
+            status=status.HTTP_200_OK,
         )
 
     def get(self, request, slug, pk):
@@ -273,52 +288,49 @@ class UserWorkspaceInvitationsViewSet(BaseViewSet):
     @invalidate_cache(path="/api/users/me/workspaces/", multiple=True)
     def create(self, request):
         invitations = request.data.get("invitations", [])
-        workspace_invitations = WorkspaceMemberInvite.objects.filter(
-            pk__in=invitations, email=request.user.email
-        ).order_by("-created_at")
+        joined_invitations = []
+        try:
+            with transaction.atomic():
+                workspace_invitations = list(
+                    WorkspaceMemberInvite.objects.select_for_update()
+                    .filter(pk__in=invitations, email=request.user.email)
+                    .select_related("workspace")
+                    .order_by("-created_at")
+                )
 
-        # If the user is already a member of workspace and was deactivated then activate the user
-        for invitation in workspace_invitations:
+                for invitation in workspace_invitations:
+                    provision_workspace_member_from_invitation(invitation, request.user)
+                    joined_invitations.append(
+                        (
+                            invitation.workspace.slug,
+                            invitation.workspace_id,
+                            invitation.role,
+                        )
+                    )
+                WorkspaceMemberInvite.objects.filter(
+                    pk__in=[invitation.pk for invitation in workspace_invitations]
+                ).delete()
+        except ProjectAccessValidationError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        for workspace_slug, workspace_id, role in joined_invitations:
             invalidate_cache_directly(
-                path=f"/api/workspaces/{invitation.workspace.slug}/members/",
+                path=f"/api/workspaces/{workspace_slug}/members/",
                 user=False,
                 request=request,
                 multiple=True,
             )
-            # Update the WorkspaceMember for this specific invitation
-            WorkspaceMember.objects.filter(workspace_id=invitation.workspace_id, member=request.user).update(
-                is_active=True, role=invitation.role
-            )
-
-            # Track event
             track_event.delay(
                 user_id=request.user.id,
                 event_name=USER_JOINED_WORKSPACE,
-                slug=invitation.workspace.slug,
+                slug=workspace_slug,
                 event_properties={
                     "user_id": request.user.id,
-                    "workspace_id": invitation.workspace.id,
-                    "workspace_slug": invitation.workspace.slug,
-                    "role": invitation.role,
+                    "workspace_id": workspace_id,
+                    "workspace_slug": workspace_slug,
+                    "role": role,
                     "joined_at": str(timezone.now()),
                 },
             )
-
-        # Bulk create the user for all the workspaces
-        WorkspaceMember.objects.bulk_create(
-            [
-                WorkspaceMember(
-                    workspace=invitation.workspace,
-                    member=request.user,
-                    role=invitation.role,
-                    created_by=request.user,
-                )
-                for invitation in workspace_invitations
-            ],
-            ignore_conflicts=True,
-        )
-
-        # Delete joined workspace invites
-        workspace_invitations.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -5,6 +5,7 @@
 # Third Party imports
 from rest_framework.response import Response
 from rest_framework import status
+from django.db import transaction
 from django.db.models import Min
 
 # Module imports
@@ -22,6 +23,10 @@ from plane.db.models import Project, ProjectMember, ProjectUserProperty, Workspa
 from plane.bgtasks.project_add_user_email_task import project_add_user_email
 from plane.utils.host import base_host
 from plane.app.permissions.base import allow_permission, ROLE
+from plane.utils.project_access import (
+    reconcile_workspace_member_project_access_after_removal,
+    record_project_membership_access,
+)
 
 
 class ProjectMemberViewSet(BaseViewSet):
@@ -44,6 +49,7 @@ class ProjectMemberViewSet(BaseViewSet):
         )
 
     @allow_permission([ROLE.ADMIN])
+    @transaction.atomic
     def create(self, request, slug, project_id):
         # Get the list of members to be added to the project and their roles i.e. the user_id and the role
         members = request.data.get("members", [])
@@ -139,15 +145,22 @@ class ProjectMemberViewSet(BaseViewSet):
             project_id=project_id,
             member_id__in=[member.get("member_id") for member in members],
         )
-        # Send emails to notify the users
-        [
-            project_add_user_email.delay(
-                base_host(request=request, is_app=True),
-                project_member.id,
-                request.user.id,
+        for project_member in project_members:
+            record_project_membership_access(
+                workspace_id=project.workspace_id,
+                member_id=project_member.member_id,
+                project_role=project_member.role,
             )
-            for project_member in project_members
-        ]
+        # Notify only after the membership and its workspace scope commit together.
+        current_site = base_host(request=request, is_app=True)
+        for project_member in project_members:
+            transaction.on_commit(
+                lambda project_member_id=project_member.id: project_add_user_email.delay(
+                    current_site,
+                    project_member_id,
+                    request.user.id,
+                )
+            )
         # Serialize the project members
         serializer = ProjectMemberRoleSerializer(project_members, many=True)
         # Return the serialized data
@@ -203,8 +216,13 @@ class ProjectMemberViewSet(BaseViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST])
+    @transaction.atomic
     def partial_update(self, request, slug, project_id, pk):
-        project_member = ProjectMember.objects.get(pk=pk, workspace__slug=slug, project_id=project_id, is_active=True)
+        project_member = (
+            ProjectMember.objects.select_for_update()
+            .select_related("project")
+            .get(pk=pk, workspace__slug=slug, project_id=project_id, is_active=True)
+        )
 
         # Fetch the target's workspace role (used to cap the new project role)
         target_workspace_role = WorkspaceMember.objects.get(
@@ -280,21 +298,57 @@ class ProjectMemberViewSet(BaseViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
+        removes_project_admin = project_member.role == ROLE.ADMIN.value and (
+            ("role" in request.data and int(request.data.get("role")) != ROLE.ADMIN.value)
+            or request.data.get("is_active") is False
+        )
+        if (
+            removes_project_admin
+            and not ProjectMember.objects.filter(
+                project_id=project_id,
+                role=ROLE.ADMIN.value,
+                is_active=True,
+            )
+            .exclude(pk=project_member.pk)
+            .exists()
+        ):
+            return Response(
+                {"error": "You cannot remove or demote the project's only admin"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         serializer = ProjectMemberSerializer(project_member, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save()
+            if request.data.get("is_active") is True:
+                record_project_membership_access(
+                    workspace_id=project_member.workspace_id,
+                    member_id=project_member.member_id,
+                    project_role=project_member.role,
+                )
+            elif request.data.get("is_active") is False:
+                reconcile_workspace_member_project_access_after_removal(
+                    workspace_id=project_member.workspace_id,
+                    member_id=project_member.member_id,
+                    project=project_member.project,
+                )
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @allow_permission([ROLE.ADMIN])
+    @transaction.atomic
     def destroy(self, request, slug, project_id, pk):
-        project_member = ProjectMember.objects.get(
-            workspace__slug=slug,
-            project_id=project_id,
-            pk=pk,
-            member__is_bot=False,
-            is_active=True,
+        project_member = (
+            ProjectMember.objects.select_for_update()
+            .select_related("project")
+            .get(
+                workspace__slug=slug,
+                project_id=project_id,
+                pk=pk,
+                member__is_bot=False,
+                is_active=True,
+            )
         )
         # check requesting user role
         requesting_project_member = ProjectMember.objects.get(
@@ -317,16 +371,26 @@ class ProjectMemberViewSet(BaseViewSet):
             )
 
         project_member.is_active = False
-        project_member.save()
+        project_member.save(update_fields=["is_active", "updated_at"])
+        reconcile_workspace_member_project_access_after_removal(
+            workspace_id=project_member.workspace_id,
+            member_id=project_member.member_id,
+            project=project_member.project,
+        )
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST])
+    @transaction.atomic
     def leave(self, request, slug, project_id):
-        project_member = ProjectMember.objects.get(
-            workspace__slug=slug,
-            project_id=project_id,
-            member=request.user,
-            is_active=True,
+        project_member = (
+            ProjectMember.objects.select_for_update()
+            .select_related("project")
+            .get(
+                workspace__slug=slug,
+                project_id=project_id,
+                member=request.user,
+                is_active=True,
+            )
         )
 
         # Check if the leaving user is the only admin of the project
@@ -345,7 +409,12 @@ class ProjectMemberViewSet(BaseViewSet):
             )
         # Deactivate the user
         project_member.is_active = False
-        project_member.save()
+        project_member.save(update_fields=["is_active", "updated_at"])
+        reconcile_workspace_member_project_access_after_removal(
+            workspace_id=project_member.workspace_id,
+            member_id=project_member.member_id,
+            project=project_member.project,
+        )
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

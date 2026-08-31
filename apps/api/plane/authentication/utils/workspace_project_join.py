@@ -3,6 +3,7 @@
 # See the LICENSE file for details.
 
 # Django imports
+from django.db import transaction
 from django.utils import timezone
 
 # Module imports
@@ -15,27 +16,18 @@ from plane.db.models import (
 from plane.utils.cache import invalidate_cache_directly
 from plane.bgtasks.event_tracking_task import track_event
 from plane.utils.analytics_events import USER_JOINED_WORKSPACE
+from plane.utils.project_access import provision_workspace_member_from_invitation
 
 
+@transaction.atomic
 def process_workspace_project_invitations(user):
     """This function takes in User and adds him to all workspace and projects that the user has accepted invited of"""
 
     # Check if user has any accepted invites for workspace and add them to workspace
     workspace_member_invites = WorkspaceMemberInvite.objects.filter(email=user.email, accepted=True)
 
-    WorkspaceMember.objects.bulk_create(
-        [
-            WorkspaceMember(
-                workspace_id=workspace_member_invite.workspace_id,
-                member=user,
-                role=workspace_member_invite.role,
-            )
-            for workspace_member_invite in workspace_member_invites
-        ],
-        ignore_conflicts=True,
-    )
-
     for workspace_member_invite in workspace_member_invites:
+        provision_workspace_member_from_invitation(workspace_member_invite, user)
         invalidate_cache_directly(
             path=f"/api/workspaces/{str(workspace_member_invite.workspace.slug)}/members/",
             url_params=False,

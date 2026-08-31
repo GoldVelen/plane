@@ -13,7 +13,7 @@ from plane.app.views.base import BaseAPIView
 from plane.license.api.permissions import InstanceAdminPermission
 from plane.db.models import Workspace, WorkspaceMember, Project
 from plane.license.api.serializers import WorkspaceSerializer
-from plane.utils.constants import RESTRICTED_WORKSPACE_SLUGS
+from plane.utils.constants import PROJECT_ACCESS_SCOPE_ALL, RESTRICTED_WORKSPACE_SLUGS
 
 
 class InstanceWorkSpaceAvailabilityCheckEndpoint(BaseAPIView):
@@ -94,6 +94,8 @@ class InstanceWorkSpaceEndpoint(BaseAPIView):
                     workspace_id=serializer.data["id"],
                     member=request.user,
                     role=20,
+                    project_access_scope=PROJECT_ACCESS_SCOPE_ALL,
+                    default_project_role=20,
                     company_role=request.data.get("company_role", ""),
                 )
                 return Response(serializer.data, status=status.HTTP_201_CREATED)

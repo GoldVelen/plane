@@ -6,7 +6,7 @@
 
 import { observer } from "mobx-react";
 // plane imports
-import { PROFILE_SETTINGS_TABS } from "@plane/constants";
+import { PROFILE_SETTINGS, PROFILE_SETTINGS_TABS } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import type { TProfileSettingsTabs } from "@plane/types";
 // components
@@ -14,6 +14,7 @@ import { LogoSpinner } from "@/components/common/logo-spinner";
 import { PageHead } from "@/components/core/page-title";
 import { ProfileSettingsContent } from "@/components/settings/profile/content";
 import { ProfileSettingsSidebarRoot } from "@/components/settings/profile/sidebar";
+import { SettingsMobileNav } from "@/components/settings/mobile/nav";
 // hooks
 import { useUser } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
@@ -38,19 +39,31 @@ function ProfileSettingsPage(props: Route.ComponentProps) {
       </div>
     );
 
+  const activeTab = profileTabId as TProfileSettingsTabs;
+
   return (
     <>
       <PageHead title={`${t("profile.label")} - ${t("general_settings")}`} />
-      <div className="relative size-full">
-        <div className="flex size-full">
+      <div className="relative flex size-full flex-col">
+        <SettingsMobileNav
+          activePath={PROFILE_SETTINGS[activeTab].i18n_label}
+          hamburgerContent={(mobileProps) => (
+            <ProfileSettingsSidebarRoot
+              {...mobileProps}
+              activeTab={activeTab}
+              updateActiveTab={(tab) => router.push(`/settings/profile/${tab}`)}
+            />
+          )}
+        />
+        <div className="flex min-h-0 flex-1">
           <ProfileSettingsSidebarRoot
-            activeTab={profileTabId as TProfileSettingsTabs}
-            className="w-[250px]"
+            activeTab={activeTab}
+            className="hidden w-[250px] md:block"
             updateActiveTab={(tab) => router.push(`/settings/profile/${tab}`)}
           />
           <ProfileSettingsContent
-            activeTab={profileTabId as TProfileSettingsTabs}
-            className="mx-auto w-fit max-w-225 grow px-page-x py-20"
+            activeTab={activeTab}
+            className="w-full grow md:mx-auto md:max-w-225 md:px-page-x md:py-20"
           />
         </div>
       </div>

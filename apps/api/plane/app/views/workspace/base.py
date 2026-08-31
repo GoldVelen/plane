@@ -43,7 +43,7 @@ from plane.db.models import (
     Profile,
 )
 from plane.app.permissions import ROLE, allow_permission
-from plane.utils.constants import RESTRICTED_WORKSPACE_SLUGS
+from plane.utils.constants import PROJECT_ACCESS_SCOPE_ALL, RESTRICTED_WORKSPACE_SLUGS
 from plane.license.utils.instance_value import get_configuration_value
 from plane.bgtasks.workspace_seed_task import workspace_seed
 from plane.bgtasks.event_tracking_task import track_event
@@ -127,6 +127,8 @@ class WorkSpaceViewSet(BaseViewSet):
                     workspace_id=serializer.data["id"],
                     member=request.user,
                     role=20,
+                    project_access_scope=PROJECT_ACCESS_SCOPE_ALL,
+                    default_project_role=20,
                     company_role=request.data.get("company_role", ""),
                 )
 

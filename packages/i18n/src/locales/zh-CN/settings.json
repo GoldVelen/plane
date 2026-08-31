@@ -79,8 +79,10 @@
       "workload": "工作量",
       "overview": "概览",
       "created": "已创建的工作项",
-      "assigned": "已分配的工作项",
+      "assigned": "分配给我的工作项",
       "subscribed": "已订阅的工作项",
+      "unassigned": "待分配工作项",
+      "open_queue": "打开队列",
       "state_distribution": {
         "title": "按状态分类的工作项",
         "empty": "创建工作项以在图表中查看按状态分类的工作项，以便更好地分析。"
@@ -107,7 +109,7 @@
     },
     "tabs": {
       "summary": "摘要",
-      "assigned": "已分配",
+      "assigned": "分配给我",
       "created": "已创建",
       "subscribed": "已订阅",
       "activity": "活动"

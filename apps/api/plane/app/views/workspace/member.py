@@ -3,8 +3,8 @@
 # See the LICENSE file for details.
 
 # Django imports
-from django.db.models import Count, Q, OuterRef, Subquery, IntegerField
-from django.utils import timezone
+from django.db import transaction
+from django.db.models import Count, OuterRef, Prefetch, Subquery, IntegerField
 from django.db.models.functions import Coalesce
 
 # Third party modules
@@ -21,8 +21,18 @@ from plane.app.serializers import (
     WorkSpaceMemberSerializer,
 )
 from plane.app.views.base import BaseAPIView
-from plane.db.models import Project, ProjectMember, WorkspaceMember, DraftIssue
+from plane.db.models import ProjectMember, WorkspaceMember, DraftIssue
 from plane.utils.cache import invalidate_cache
+from plane.utils.constants import (
+    PROJECT_ACCESS_SCOPE_ALL,
+    PROJECT_ACCESS_SCOPE_NONE,
+    PROJECT_ACCESS_SCOPE_SELECTED,
+)
+from plane.utils.project_access import (
+    ProjectAccessValidationError,
+    normalize_project_access,
+    synchronize_workspace_member_project_access,
+)
 
 from .. import BaseViewSet
 
@@ -35,11 +45,23 @@ class WorkSpaceMemberViewSet(BaseViewSet):
     use_read_replica = True
 
     def get_queryset(self):
+        active_project_memberships = ProjectMember.objects.filter(
+            workspace__slug=self.kwargs.get("slug"),
+            is_active=True,
+            project__archived_at__isnull=True,
+        ).only("id", "member_id", "project_id")
         return self.filter_queryset(
             super()
             .get_queryset()
             .filter(workspace__slug=self.kwargs.get("slug"))
             .select_related("member", "member__avatar_asset")
+            .prefetch_related(
+                Prefetch(
+                    "member__member_project",
+                    queryset=active_project_memberships,
+                    to_attr="active_project_memberships",
+                )
+            )
         )
 
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
@@ -49,9 +71,25 @@ class WorkSpaceMemberViewSet(BaseViewSet):
         # Get all active workspace members
         workspace_members = self.get_queryset()
         if workspace_member.role > 5:
-            serializer = WorkspaceMemberAdminSerializer(workspace_members, fields=("id", "member", "role"), many=True)
+            serializer = WorkspaceMemberAdminSerializer(
+                workspace_members,
+                fields=(
+                    "id",
+                    "member",
+                    "role",
+                    "is_active",
+                    "project_access_scope",
+                    "default_project_role",
+                    "project_ids",
+                ),
+                many=True,
+            )
         else:
-            serializer = WorkSpaceMemberSerializer(workspace_members, fields=("id", "member", "role"), many=True)
+            serializer = WorkSpaceMemberSerializer(
+                workspace_members,
+                fields=("id", "member", "role", "is_active"),
+                many=True,
+            )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
@@ -68,37 +106,106 @@ class WorkSpaceMemberViewSet(BaseViewSet):
             )
 
         if workspace_member.role > ROLE.GUEST.value:
-            serializer = WorkspaceMemberAdminSerializer(member, fields=("id", "member", "role"))
+            serializer = WorkspaceMemberAdminSerializer(
+                member,
+                fields=(
+                    "id",
+                    "member",
+                    "role",
+                    "is_active",
+                    "project_access_scope",
+                    "default_project_role",
+                    "project_ids",
+                ),
+            )
         else:
-            serializer = WorkSpaceMemberSerializer(member, fields=("id", "member", "role"))
+            serializer = WorkSpaceMemberSerializer(member, fields=("id", "member", "role", "is_active"))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @allow_permission(allowed_roles=[ROLE.ADMIN], level="WORKSPACE")
     def partial_update(self, request, slug, pk):
-        workspace_member = WorkspaceMember.objects.get(
-            pk=pk, workspace__slug=slug, member__is_bot=False, is_active=True
-        )
-        if request.user.id == workspace_member.member_id:
-            return Response(
-                {"error": "You cannot update your own role"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        try:
+            with transaction.atomic():
+                workspace_member = WorkspaceMember.objects.select_for_update().get(
+                    pk=pk,
+                    workspace__slug=slug,
+                    member__is_bot=False,
+                    is_active=True,
+                )
+                if request.user.id == workspace_member.member_id:
+                    return Response(
+                        {"error": "You cannot update your own membership"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
 
-        # If a user is moved to a guest role he can't have any other role in projects
-        if "role" in request.data and int(request.data.get("role")) == 5:
-            ProjectMember.objects.filter(workspace__slug=slug, member_id=workspace_member.member_id).update(role=5)
+                data = request.data.copy()
+                project_ids = data.pop("project_ids", None)
+                has_project_access_update = any(
+                    key in request.data
+                    for key in ("role", "project_access_scope", "default_project_role", "project_ids")
+                )
 
-        serializer = WorkSpaceMemberSerializer(workspace_member, data=request.data, partial=True)
+                try:
+                    requested_workspace_role = int(data.get("role", workspace_member.role))
+                except (TypeError, ValueError):
+                    return Response(
+                        {"error": "Workspace role is invalid"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                access = None
+                if has_project_access_update:
+                    current_project_ids = list(
+                        ProjectMember.objects.filter(
+                            workspace_id=workspace_member.workspace_id,
+                            member_id=workspace_member.member_id,
+                            is_active=True,
+                            project__archived_at__isnull=True,
+                        ).values_list("project_id", flat=True)
+                    )
+
+                    if "role" in data:
+                        if "default_project_role" not in request.data:
+                            data["default_project_role"] = requested_workspace_role
+                        if "project_access_scope" not in request.data:
+                            if requested_workspace_role == 20:
+                                data["project_access_scope"] = PROJECT_ACCESS_SCOPE_ALL
+                            elif (
+                                requested_workspace_role != 20
+                                and workspace_member.project_access_scope == PROJECT_ACCESS_SCOPE_ALL
+                            ):
+                                data["project_access_scope"] = (
+                                    PROJECT_ACCESS_SCOPE_SELECTED if current_project_ids else PROJECT_ACCESS_SCOPE_NONE
+                                )
+
+                    access = normalize_project_access(
+                        workspace_id=workspace_member.workspace_id,
+                        workspace_role=requested_workspace_role,
+                        scope=data.get("project_access_scope", workspace_member.project_access_scope),
+                        project_role=data.get("default_project_role", workspace_member.default_project_role),
+                        project_ids=project_ids if project_ids is not None else current_project_ids,
+                    )
+                    data["project_access_scope"] = access.scope
+                    data["default_project_role"] = access.project_role
+
+                serializer = WorkSpaceMemberSerializer(workspace_member, data=data, partial=True)
+                if not serializer.is_valid():
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                serializer.save()
+
+                if access is not None:
+                    synchronize_workspace_member_project_access(workspace_member, access)
+
+                response_serializer = WorkspaceMemberAdminSerializer(workspace_member)
+                return Response(response_serializer.data, status=status.HTTP_200_OK)
+        except ProjectAccessValidationError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
     @allow_permission(allowed_roles=[ROLE.ADMIN], level="WORKSPACE")
+    @transaction.atomic
     def destroy(self, request, slug, pk):
         # Check the user role who is deleting the user
-        workspace_member = WorkspaceMember.objects.get(
+        workspace_member = WorkspaceMember.objects.select_for_update().get(
             workspace__slug=slug, pk=pk, member__is_bot=False, is_active=True
         )
 
@@ -119,34 +226,23 @@ class WorkSpaceMemberViewSet(BaseViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            Project.objects.annotate(
-                total_members=Count("project_projectmember"),
-                member_with_role=Count(
-                    "project_projectmember",
-                    filter=Q(
-                        project_projectmember__member_id=workspace_member.id,
-                        project_projectmember__role=20,
-                    ),
-                ),
+        try:
+            access = normalize_project_access(
+                workspace_id=workspace_member.workspace_id,
+                workspace_role=workspace_member.role,
+                scope=PROJECT_ACCESS_SCOPE_NONE,
+                project_role=workspace_member.role,
+                project_ids=(),
             )
-            .filter(total_members=1, member_with_role=1, workspace__slug=slug)
-            .exists()
-        ):
+            synchronize_workspace_member_project_access(workspace_member, access)
+        except ProjectAccessValidationError as exc:
             return Response(
-                {
-                    "error": "User is a part of some projects where they are the only admin, they should either leave that project or promote another user to admin."  # noqa: E501
-                },
+                {"error": str(exc)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Deactivate the users from the projects where the user is part of
-        _ = ProjectMember.objects.filter(
-            workspace__slug=slug, member_id=workspace_member.member_id, is_active=True
-        ).update(is_active=False, updated_at=timezone.now())
-
         workspace_member.is_active = False
-        workspace_member.save()
+        workspace_member.save(update_fields=["is_active", "updated_at"])
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @invalidate_cache(
@@ -158,8 +254,13 @@ class WorkSpaceMemberViewSet(BaseViewSet):
     @invalidate_cache(path="/api/users/me/settings/")
     @invalidate_cache(path="api/users/me/workspaces/", user=False, multiple=True)
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
+    @transaction.atomic
     def leave(self, request, slug):
-        workspace_member = WorkspaceMember.objects.get(workspace__slug=slug, member=request.user, is_active=True)
+        workspace_member = WorkspaceMember.objects.select_for_update().get(
+            workspace__slug=slug,
+            member=request.user,
+            is_active=True,
+        )
 
         # Check if the leaving user is the only admin of the workspace
         if (
@@ -173,35 +274,23 @@ class WorkSpaceMemberViewSet(BaseViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            Project.objects.annotate(
-                total_members=Count("project_projectmember"),
-                member_with_role=Count(
-                    "project_projectmember",
-                    filter=Q(
-                        project_projectmember__member_id=request.user.id,
-                        project_projectmember__role=20,
-                    ),
-                ),
+        try:
+            access = normalize_project_access(
+                workspace_id=workspace_member.workspace_id,
+                workspace_role=workspace_member.role,
+                scope=PROJECT_ACCESS_SCOPE_NONE,
+                project_role=workspace_member.role,
+                project_ids=(),
             )
-            .filter(total_members=1, member_with_role=1, workspace__slug=slug)
-            .exists()
-        ):
+            synchronize_workspace_member_project_access(workspace_member, access)
+        except ProjectAccessValidationError as exc:
             return Response(
-                {
-                    "error": "You are a part of some projects where you are the only admin, you should either leave the project or promote another user to admin."  # noqa: E501
-                },
+                {"error": str(exc)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # # Deactivate the users from the projects where the user is part of
-        _ = ProjectMember.objects.filter(
-            workspace__slug=slug, member_id=workspace_member.member_id, is_active=True
-        ).update(is_active=False, updated_at=timezone.now())
-
-        # # Deactivate the user
         workspace_member.is_active = False
-        workspace_member.save()
+        workspace_member.save(update_fields=["is_active", "updated_at"])
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

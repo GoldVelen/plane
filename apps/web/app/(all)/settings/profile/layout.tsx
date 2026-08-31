@@ -15,8 +15,8 @@ export default function ProfileSettingsLayout() {
     <>
       <ProjectsAppPowerKProvider />
       <AuthenticationWrapper>
-        <div className="relative flex size-full overflow-hidden bg-canvas p-2">
-          <main className="relative flex size-full flex-col overflow-hidden rounded-lg border border-subtle bg-surface-1">
+        <div className="relative flex size-full overflow-hidden bg-canvas p-0 md:p-2">
+          <main className="relative flex size-full flex-col overflow-hidden border-0 border-subtle bg-surface-1 md:rounded-lg md:border">
             <div className="size-full overflow-hidden">
               <Outlet />
             </div>

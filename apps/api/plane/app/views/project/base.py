@@ -8,6 +8,7 @@ import json
 
 # Django imports
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db import transaction
 from django.db.models import Exists, F, OuterRef, Prefetch, Q, Subquery, Count
 from django.utils import timezone
 
@@ -37,11 +38,11 @@ from plane.db.models import (
     State,
     DEFAULT_STATES,
     Workspace,
-    WorkspaceMember,
 )
 from plane.db.models.intake import IntakeIssueStatus
 from plane.utils.host import base_host
 from plane.utils.order_queryset import PROJECT_ORDER_BY_ALLOWLIST, sanitize_order_by
+from plane.utils.project_access import add_all_access_members_to_project
 
 
 class ProjectViewSet(BaseViewSet):
@@ -102,30 +103,10 @@ class ProjectViewSet(BaseViewSet):
     def list_detail(self, request, slug):
         fields = [field for field in request.GET.get("fields", "").split(",") if field]
         projects = self.get_queryset().order_by("sort_order", "name")
-        if WorkspaceMember.objects.filter(
-            member=request.user,
-            workspace__slug=slug,
-            is_active=True,
-            role=ROLE.GUEST.value,
-        ).exists():
-            projects = projects.filter(
-                project_projectmember__member=self.request.user,
-                project_projectmember__is_active=True,
-            )
-
-        if WorkspaceMember.objects.filter(
-            member=request.user,
-            workspace__slug=slug,
-            is_active=True,
-            role=ROLE.MEMBER.value,
-        ).exists():
-            projects = projects.filter(
-                Q(
-                    project_projectmember__member=self.request.user,
-                    project_projectmember__is_active=True,
-                )
-                | Q(network=2)
-            )
+        projects = projects.filter(
+            project_projectmember__member=self.request.user,
+            project_projectmember__is_active=True,
+        )
 
         if request.GET.get("per_page", False) and request.GET.get("cursor", False):
             return self.paginate(
@@ -196,30 +177,10 @@ class ProjectViewSet(BaseViewSet):
             "updated_by",
         )
 
-        if WorkspaceMember.objects.filter(
-            member=request.user,
-            workspace__slug=slug,
-            is_active=True,
-            role=ROLE.GUEST.value,
-        ).exists():
-            projects = projects.filter(
-                project_projectmember__member=self.request.user,
-                project_projectmember__is_active=True,
-            )
-
-        if WorkspaceMember.objects.filter(
-            member=request.user,
-            workspace__slug=slug,
-            is_active=True,
-            role=ROLE.MEMBER.value,
-        ).exists():
-            projects = projects.filter(
-                Q(
-                    project_projectmember__member=self.request.user,
-                    project_projectmember__is_active=True,
-                )
-                | Q(network=2)
-            )
+        projects = projects.filter(
+            project_projectmember__member=self.request.user,
+            project_projectmember__is_active=True,
+        )
         return Response(projects, status=status.HTTP_200_OK)
 
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
@@ -255,6 +216,7 @@ class ProjectViewSet(BaseViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER], level="WORKSPACE")
+    @transaction.atomic
     def create(self, request, slug):
         workspace = Workspace.objects.get(slug=slug)
 
@@ -277,6 +239,14 @@ class ProjectViewSet(BaseViewSet):
                     member_id=serializer.data["project_lead"],
                     role=ROLE.ADMIN.value,
                 )
+
+            excluded_member_ids = {request.user.id}
+            if serializer.data["project_lead"] is not None:
+                excluded_member_ids.add(serializer.data["project_lead"])
+            add_all_access_members_to_project(
+                serializer.instance,
+                exclude_member_ids=excluded_member_ids,
+            )
 
             State.objects.bulk_create(
                 [
@@ -311,15 +281,8 @@ class ProjectViewSet(BaseViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @transaction.atomic
     def partial_update(self, request, slug, pk=None):
-        # try:
-        is_workspace_admin = WorkspaceMember.objects.filter(
-            member=request.user,
-            workspace__slug=slug,
-            is_active=True,
-            role=ROLE.ADMIN.value,
-        ).exists()
-
         is_project_admin = ProjectMember.objects.filter(
             member=request.user,
             workspace__slug=slug,
@@ -328,8 +291,7 @@ class ProjectViewSet(BaseViewSet):
             is_active=True,
         ).exists()
 
-        # Return error for if the user is neither workspace admin nor project admin
-        if not is_project_admin and not is_workspace_admin:
+        if not is_project_admin:
             return Response(
                 {"error": "You don't have the required permissions."},
                 status=status.HTTP_403_FORBIDDEN,
@@ -355,6 +317,7 @@ class ProjectViewSet(BaseViewSet):
 
         if serializer.is_valid():
             serializer.save()
+            add_all_access_members_to_project(project)
             if intake_view:
                 intake = Intake.objects.filter(project=project, is_default=True).first()
                 if not intake:
@@ -380,21 +343,13 @@ class ProjectViewSet(BaseViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, slug, pk):
-        if (
-            WorkspaceMember.objects.filter(
-                member=request.user,
-                workspace__slug=slug,
-                is_active=True,
-                role=ROLE.ADMIN.value,
-            ).exists()
-            or ProjectMember.objects.filter(
-                member=request.user,
-                workspace__slug=slug,
-                project_id=pk,
-                role=ROLE.ADMIN.value,
-                is_active=True,
-            ).exists()
-        ):
+        if ProjectMember.objects.filter(
+            member=request.user,
+            workspace__slug=slug,
+            project_id=pk,
+            role=ROLE.ADMIN.value,
+            is_active=True,
+        ).exists():
             project = Project.objects.get(pk=pk, workspace__slug=slug)
             project.delete()
             webhook_activity.delay(

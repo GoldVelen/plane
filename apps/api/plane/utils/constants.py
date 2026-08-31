@@ -69,3 +69,12 @@ RESTRICTED_WORKSPACE_SLUGS = [
     "instances",
     "instance",
 ]
+
+PROJECT_ACCESS_SCOPE_ALL = "all"
+PROJECT_ACCESS_SCOPE_SELECTED = "selected"
+PROJECT_ACCESS_SCOPE_NONE = "none"
+PROJECT_ACCESS_SCOPE_CHOICES = (
+    (PROJECT_ACCESS_SCOPE_ALL, "All current and future public projects"),
+    (PROJECT_ACCESS_SCOPE_SELECTED, "Selected projects"),
+    (PROJECT_ACCESS_SCOPE_NONE, "No projects"),
+)

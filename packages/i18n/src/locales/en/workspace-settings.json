@@ -45,17 +45,61 @@
         "pending_invites": "Pending invites",
         "invitations_sent_successfully": "Invitations sent successfully",
         "leave_confirmation": "Are you sure you want to leave the workspace? You will no longer have access to this workspace. This action cannot be undone.",
+        "status": {
+          "suspended": "Suspended"
+        },
+        "toasts": {
+          "invitation_removed": "Invitation removed successfully.",
+          "role_update_failed": "The member role could not be updated. Please try again."
+        },
         "details": {
           "full_name": "Full name",
           "display_name": "Display name",
           "email_address": "Email address",
           "account_type": "Account type",
+          "project_access": "Project access",
           "authentication": "Authentication",
           "joining_date": "Joining date"
         },
+        "project_access": {
+          "project_scope": "Project scope",
+          "project_role": "Project role",
+          "projects": "Projects",
+          "search_projects": "Search projects",
+          "select_projects": "Select projects",
+          "selected_projects": "{{count}} projects selected",
+          "scope": {
+            "all": "All current and future public projects",
+            "selected": "Selected projects",
+            "none": "No projects yet"
+          },
+          "scope_descriptions": {
+            "all": "Adds this member to every current and future public project. Private projects remain isolated.",
+            "selected": "Only the projects selected here will be visible and assignable to this member.",
+            "none": "The member can join the workspace, but cannot see or be assigned project work until access is granted."
+          },
+          "roles": {
+            "admin": "Project admin",
+            "member": "Project member",
+            "guest": "Project guest"
+          },
+          "summary": {
+            "all": "All public projects",
+            "selected": "{{count}} projects",
+            "none": "No projects"
+          },
+          "errors": {
+            "select_project": "Select at least one project or choose no projects."
+          },
+          "edit_title": "Edit project access for {{name}}",
+          "edit_description": "Choose which projects this workspace member can access and their role in those projects.",
+          "updated_title": "Project access updated",
+          "updated_message": "The member's project access is now up to date.",
+          "update_failed_title": "Project access was not updated"
+        },
         "modal": {
           "title": "Invite people to collaborate",
-          "description": "Invite people to collaborate on your workspace.",
+          "description": "Invite people to the workspace and choose which projects they can access.",
           "button": "Send invitations",
           "button_loading": "Sending invitations",
           "placeholder": "name@company.com",

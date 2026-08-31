@@ -33,10 +33,11 @@ export const SendWorkspaceInvitationModal = observer(function SendWorkspaceInvit
   // router
   const { workspaceSlug } = useParams();
   // derived values
-  const { control, fields, formState, remove, onFormSubmit, handleClose, appendField } = useWorkspaceInvitationActions({
-    onSubmit,
-    onClose,
-  });
+  const { control, fields, formState, setValue, remove, onFormSubmit, handleClose, appendField } =
+    useWorkspaceInvitationActions({
+      onSubmit,
+      onClose,
+    });
 
   return (
     <ModalCore isOpen={isOpen} position={EModalPosition.TOP} width={EModalWidth.XXL}>
@@ -51,13 +52,14 @@ export const SendWorkspaceInvitationModal = observer(function SendWorkspaceInvit
             appendField={appendField}
           />
         }
-        className="p-5"
+        className="max-h-[85vh] overflow-y-auto p-5"
       >
         <InvitationFields
           workspaceSlug={workspaceSlug.toString()}
           fields={fields}
           control={control}
           formState={formState}
+          setValue={setValue}
           remove={remove}
         />
       </InvitationForm>

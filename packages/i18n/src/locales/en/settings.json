@@ -81,6 +81,8 @@
       "created": "Work items created",
       "assigned": "Work items assigned",
       "subscribed": "Work items subscribed",
+      "unassigned": "Work items awaiting assignment",
+      "open_queue": "Open queue",
       "state_distribution": {
         "title": "Work items by state",
         "empty": "Create work items to view the them by states in the graph for better analysis."

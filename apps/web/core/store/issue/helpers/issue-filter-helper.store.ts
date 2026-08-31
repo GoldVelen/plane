@@ -30,6 +30,7 @@ import { EIssueLayoutTypes } from "@plane/types";
 import { getComputedDisplayFilters, getComputedDisplayProperties } from "@plane/utils";
 // lib
 import { storage } from "@/lib/local-storage";
+import { getStaticViewFilterCondition } from "./static-view-filter";
 
 interface ILocalStoreIssueFilters {
   key: EIssuesStoreType;
@@ -155,24 +156,7 @@ export class IssueFilterHelperStore implements IIssueFilterHelperStore {
    * @returns
    */
   getFilterConditionBasedOnViews: IIssueFilterHelperStore["getFilterConditionBasedOnViews"] = (currentUserId, type) => {
-    if (!currentUserId) return undefined;
-    switch (type) {
-      case "assigned":
-        return {
-          assignees: currentUserId,
-        };
-      case "created":
-        return {
-          created_by: currentUserId,
-        };
-      case "subscribed":
-        return {
-          subscriber: currentUserId,
-        };
-      case "all-issues":
-      default:
-        return undefined;
-    }
+    return getStaticViewFilterCondition(currentUserId, type);
   };
 
   /**

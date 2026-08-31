@@ -9,6 +9,7 @@ import { Command } from "cmdk";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // hooks
+import { useTranslation } from "@plane/i18n";
 import { CloseIcon, SearchIcon } from "@plane/propel/icons";
 import { cn } from "@plane/utils";
 // power-k
@@ -22,6 +23,7 @@ import { useAppRouter } from "@/hooks/use-app-router";
 import { useExpandableSearch } from "@/hooks/use-expandable-search";
 
 export const TopNavPowerK = observer(() => {
+  const { t } = useTranslation();
   // router
   const router = useAppRouter();
   const params = useParams();
@@ -101,7 +103,7 @@ export const TopNavPowerK = observer(() => {
     return () => {
       setTopNavInputRef(null);
     };
-  }, [setTopNavInputRef]);
+  }, [inputRef, setTopNavInputRef]);
 
   const handleClear = () => {
     setSearchTerm("");
@@ -138,6 +140,8 @@ export const TopNavPowerK = observer(() => {
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      const commandContainer = e.currentTarget.closest("[data-top-nav-power-k]");
+
       // Cmd/Ctrl+K closes the search dropdown
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
@@ -170,7 +174,7 @@ export const TopNavPowerK = observer(() => {
       if ((e.key === "ArrowDown" || e.key === "ArrowUp") && isOpen) {
         e.preventDefault();
         // Get the Command.List element
-        const commandList = containerRef.current?.querySelector("[cmdk-list]") as HTMLElement;
+        const commandList = commandContainer?.querySelector("[cmdk-list]") as HTMLElement;
         if (commandList) {
           // Create and dispatch a keyboard event on the list to trigger cmdk navigation
           const syntheticEvent = new KeyboardEvent("keydown", {
@@ -195,7 +199,7 @@ export const TopNavPowerK = observer(() => {
       if (e.key === "Enter" && isOpen) {
         e.preventDefault();
         // Find the currently selected/focused item
-        const selectedItem = containerRef.current?.querySelector('[cmdk-item][aria-selected="true"]') as HTMLElement;
+        const selectedItem = commandContainer?.querySelector('[cmdk-item][aria-selected="true"]') as HTMLElement;
         if (selectedItem) {
           // Trigger click on the selected item
           selectedItem.click();
@@ -203,11 +207,11 @@ export const TopNavPowerK = observer(() => {
         return;
       }
     },
-    [searchTerm, activePage, context, shouldShowContextBasedActions, setActivePage, closePanel]
+    [searchTerm, activePage, context, shouldShowContextBasedActions, setActivePage, closePanel, isOpen]
   );
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative" data-top-nav-power-k>
       <div
         className={cn("relative z-30 flex w-[364px] items-center transition-all duration-300 ease-in-out", {
           "w-[554px]": isOpen,
@@ -220,8 +224,6 @@ export const TopNavPowerK = observer(() => {
               "bg-layer-1": isOpen,
             }
           )}
-          onClick={() => inputRef.current?.focus()}
-          role="button"
         >
           <SearchIcon className="mr-2 size-3.5 shrink-0 text-placeholder" />
           <input
@@ -235,7 +237,7 @@ export const TopNavPowerK = observer(() => {
             onMouseDown={handleMouseDown}
             onFocus={handleFocus}
             onKeyDown={handleKeyDown}
-            placeholder="Search commands..."
+            placeholder={t("power_k.page_placeholders.default")}
             className="placeholder-text-placeholder min-w-0 flex-1 bg-transparent text-13 text-primary outline-none"
           />
           {searchTerm && (

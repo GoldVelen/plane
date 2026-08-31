@@ -144,6 +144,7 @@
   "your_work": "Your work",
   "drafts": "Drafts",
   "projects": "Projects",
+  "project_work_item_count": "{count, plural, one {There is # work item in this project} other {There are # work items in this project}}",
   "views": "Views",
   "archives": "Archives",
   "settings": "Settings",
@@ -815,6 +816,7 @@
   },
   "default_global_view": {
     "all_issues": "All work items",
+    "unassigned": "Unassigned",
     "assigned": "Assigned",
     "created": "Created",
     "subscribed": "Subscribed"

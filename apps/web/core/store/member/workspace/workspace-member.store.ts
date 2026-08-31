@@ -9,7 +9,12 @@ import { action, computed, makeObservable, observable, runInAction } from "mobx"
 import { computedFn } from "mobx-utils";
 // types
 import type { EUserPermissions } from "@plane/constants";
-import type { IWorkspaceBulkInviteFormData, IWorkspaceMember, IWorkspaceMemberInvitation } from "@plane/types";
+import type {
+  IWorkspaceBulkInviteFormData,
+  IWorkspaceMember,
+  IWorkspaceMemberInvitation,
+  IWorkspaceProjectAccess,
+} from "@plane/types";
 // services
 import { WorkspaceService } from "@/services/workspace.service";
 // types
@@ -26,7 +31,12 @@ export interface IWorkspaceMembership {
   member: string;
   role: EUserPermissions;
   is_active?: boolean;
+  project_access_scope?: IWorkspaceProjectAccess["project_access_scope"];
+  default_project_role?: IWorkspaceProjectAccess["default_project_role"];
+  project_ids?: string[];
 }
+
+type TWorkspaceMemberUpdate = Partial<IWorkspaceProjectAccess> & { role?: EUserPermissions };
 
 export interface IWorkspaceMemberStore {
   // observables
@@ -49,7 +59,7 @@ export interface IWorkspaceMemberStore {
   fetchWorkspaceMembers: (workspaceSlug: string) => Promise<IWorkspaceMember[]>;
   fetchWorkspaceMemberInvitations: (workspaceSlug: string) => Promise<IWorkspaceMemberInvitation[]>;
   // crud actions
-  updateMember: (workspaceSlug: string, userId: string, data: { role: EUserPermissions }) => Promise<void>;
+  updateMember: (workspaceSlug: string, userId: string, data: TWorkspaceMemberUpdate) => Promise<void>;
   removeMemberFromWorkspace: (workspaceSlug: string, userId: string) => Promise<void>;
   // invite actions
   inviteMembersToWorkspace: (workspaceSlug: string, data: IWorkspaceBulkInviteFormData) => Promise<void>;
@@ -209,6 +219,9 @@ export class WorkspaceMemberStore implements IWorkspaceMemberStore {
       role: workspaceMember.role,
       member: this.memberRoot?.memberMap?.[workspaceMember.member],
       is_active: workspaceMember.is_active,
+      project_access_scope: workspaceMember.project_access_scope,
+      default_project_role: workspaceMember.default_project_role,
+      project_ids: workspaceMember.project_ids,
     };
     return memberDetails;
   });
@@ -242,6 +255,9 @@ export class WorkspaceMemberStore implements IWorkspaceMemberStore {
             member: member.member.id,
             role: member.role,
             is_active: member.is_active,
+            project_access_scope: member.project_access_scope,
+            default_project_role: member.default_project_role,
+            project_ids: member.project_ids,
           });
         });
       });
@@ -254,16 +270,29 @@ export class WorkspaceMemberStore implements IWorkspaceMemberStore {
    * @param userId
    * @param data
    */
-  updateMember = async (workspaceSlug: string, userId: string, data: { role: EUserPermissions }) => {
+  updateMember = async (workspaceSlug: string, userId: string, data: TWorkspaceMemberUpdate) => {
     const memberDetails = this.getWorkspaceMemberDetails(userId);
     if (!memberDetails) throw new Error("Member not found");
     // original data to revert back in case of error
     const originalProjectMemberData = { ...this.workspaceMemberMap?.[workspaceSlug]?.[userId] };
     try {
       runInAction(() => {
-        set(this.workspaceMemberMap, [workspaceSlug, userId, "role"], data.role);
+        set(this.workspaceMemberMap, [workspaceSlug, userId], {
+          ...originalProjectMemberData,
+          ...data,
+        });
       });
-      await this.workspaceService.updateWorkspaceMember(workspaceSlug, memberDetails.id, data);
+      const response = await this.workspaceService.updateWorkspaceMember(workspaceSlug, memberDetails.id, data);
+      runInAction(() => {
+        set(this.workspaceMemberMap, [workspaceSlug, userId], {
+          ...this.workspaceMemberMap[workspaceSlug][userId],
+          role: response.role,
+          is_active: response.is_active,
+          project_access_scope: response.project_access_scope,
+          default_project_role: response.default_project_role,
+          project_ids: response.project_ids,
+        });
+      });
     } catch (error) {
       // revert back to original members in case of error
       runInAction(() => {

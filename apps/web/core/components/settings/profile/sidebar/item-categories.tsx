@@ -18,6 +18,7 @@ import {
 import { useTranslation } from "@plane/i18n";
 import type { ISvgIcons } from "@plane/propel/icons";
 import type { TProfileSettingsTabs } from "@plane/types";
+import { useUserSettings } from "@/hooks/store/user";
 // local imports
 import { SettingsSidebarItem } from "../../sidebar/item";
 import { ProfileSettingsSidebarWorkspaceOptions } from "./workspace-options";
@@ -32,17 +33,24 @@ const ICONS: Record<TProfileSettingsTabs, LucideIcon | React.FC<ISvgIcons>> = {
 
 type Props = {
   activeTab: TProfileSettingsTabs;
+  isMobile?: boolean;
   updateActiveTab: (tab: TProfileSettingsTabs) => void;
 };
 
 export const ProfileSettingsSidebarItemCategories = observer(function ProfileSettingsSidebarItemCategories(
   props: Props
 ) {
-  const { activeTab, updateActiveTab } = props;
+  const { activeTab, isMobile = false, updateActiveTab } = props;
   // params
   const { profileTabId } = useParams();
   // translation
   const { t } = useTranslation();
+  const { toggleSidebar } = useUserSettings();
+
+  const handleTabChange = (tab: TProfileSettingsTabs) => {
+    updateActiveTab(tab);
+    if (isMobile) toggleSidebar(true);
+  };
 
   return (
     <div className="mt-4 flex flex-col gap-y-4">
@@ -61,7 +69,7 @@ export const ProfileSettingsSidebarItemCategories = observer(function ProfileSet
                 <SettingsSidebarItem
                   key={item.key}
                   as="button"
-                  onClick={() => updateActiveTab(item.key)}
+                  onClick={() => handleTabChange(item.key)}
                   isActive={activeTab === item.key}
                   icon={ICONS[item.key]}
                   label={t(item.i18n_label)}

@@ -13,7 +13,12 @@ from django.db import models
 
 # Module imports
 from .base import BaseModel
-from plane.utils.constants import RESTRICTED_WORKSPACE_SLUGS
+from plane.utils.constants import (
+    PROJECT_ACCESS_SCOPE_CHOICES,
+    PROJECT_ACCESS_SCOPE_NONE,
+    PROJECT_ACCESS_SCOPE_SELECTED,
+    RESTRICTED_WORKSPACE_SLUGS,
+)
 from plane.utils.color import get_random_color
 
 ROLE_CHOICES = ((20, "Admin"), (15, "Member"), (5, "Guest"))
@@ -211,6 +216,12 @@ class WorkspaceMember(BaseModel):
     getting_started_checklist = models.JSONField(default=dict)
     tips = models.JSONField(default=dict)
     explored_features = models.JSONField(default=dict)
+    project_access_scope = models.CharField(
+        max_length=16,
+        choices=PROJECT_ACCESS_SCOPE_CHOICES,
+        default=PROJECT_ACCESS_SCOPE_SELECTED,
+    )
+    default_project_role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=15)
 
     class Meta:
         unique_together = ["workspace", "member", "deleted_at"]
@@ -239,6 +250,13 @@ class WorkspaceMemberInvite(BaseModel):
     message = models.TextField(null=True)
     responded_at = models.DateTimeField(null=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=5)
+    project_access_scope = models.CharField(
+        max_length=16,
+        choices=PROJECT_ACCESS_SCOPE_CHOICES,
+        default=PROJECT_ACCESS_SCOPE_NONE,
+    )
+    default_project_role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=15)
+    project_ids = models.JSONField(default=list)
 
     class Meta:
         unique_together = ["email", "workspace", "deleted_at"]

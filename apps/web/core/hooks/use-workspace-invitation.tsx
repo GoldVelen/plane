@@ -5,12 +5,14 @@
  */
 
 import { useEffect } from "react";
-import type { Control, FieldArrayWithId, FormState, UseFormWatch } from "react-hook-form";
+import type { Control, FieldArrayWithId, FormState, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { useFieldArray, useForm } from "react-hook-form";
 // plane imports
 import { EUserPermissions } from "@plane/constants";
+import type { IWorkspaceProjectAccess } from "@plane/types";
+import { getDefaultProjectAccess } from "@/components/workspace/project-access";
 
-type EmailRole = {
+type EmailRole = IWorkspaceProjectAccess & {
   email: string;
   role: EUserPermissions;
 };
@@ -24,6 +26,7 @@ const SEND_WORKSPACE_INVITATION_MODAL_DEFAULT_VALUES: InvitationFormValues = {
     {
       email: "",
       role: EUserPermissions.MEMBER,
+      ...getDefaultProjectAccess(EUserPermissions.MEMBER),
     },
   ],
 };
@@ -38,6 +41,7 @@ type TUseWorkspaceInvitationReturn = {
   fields: FieldArrayWithId<InvitationFormValues, "emails", "id">[];
   formState: FormState<InvitationFormValues>;
   watch: UseFormWatch<InvitationFormValues>;
+  setValue: UseFormSetValue<InvitationFormValues>;
   remove: (index: number) => void;
   onFormSubmit: () => void;
   handleClose: () => void;
@@ -47,7 +51,7 @@ type TUseWorkspaceInvitationReturn = {
 export const useWorkspaceInvitationActions = (props: TUseWorkspaceInvitationProps): TUseWorkspaceInvitationReturn => {
   const { onSubmit, onClose } = props;
   // form info
-  const { control, reset, watch, handleSubmit, formState } = useForm<InvitationFormValues>({
+  const { control, reset, watch, setValue, handleSubmit, formState } = useForm<InvitationFormValues>({
     defaultValues: SEND_WORKSPACE_INVITATION_MODAL_DEFAULT_VALUES,
   });
 
@@ -65,17 +69,29 @@ export const useWorkspaceInvitationActions = (props: TUseWorkspaceInvitationProp
   };
 
   const appendField = () => {
-    append({ email: "", role: EUserPermissions.MEMBER });
-  };
-
-  const onSubmitForm = async (data: InvitationFormValues) => {
-    await onSubmit(data)?.then(() => {
-      reset(SEND_WORKSPACE_INVITATION_MODAL_DEFAULT_VALUES);
+    append({
+      email: "",
+      role: EUserPermissions.MEMBER,
+      ...getDefaultProjectAccess(EUserPermissions.MEMBER),
     });
   };
 
+  const onSubmitForm = async (data: InvitationFormValues) => {
+    const submission = onSubmit(data);
+    if (!submission) return;
+    await submission;
+    reset(SEND_WORKSPACE_INVITATION_MODAL_DEFAULT_VALUES);
+  };
+
   useEffect(() => {
-    if (fields.length === 0) append([{ email: "", role: EUserPermissions.MEMBER }]);
+    if (fields.length === 0)
+      append([
+        {
+          email: "",
+          role: EUserPermissions.MEMBER,
+          ...getDefaultProjectAccess(EUserPermissions.MEMBER),
+        },
+      ]);
   }, [fields, append]);
 
   return {
@@ -83,6 +99,7 @@ export const useWorkspaceInvitationActions = (props: TUseWorkspaceInvitationProp
     fields,
     formState,
     watch,
+    setValue,
     remove,
     onFormSubmit: handleSubmit(onSubmitForm),
     handleClose,
