@@ -1,6 +1,6 @@
 # Studio OS isolated-stack runbook
 
-Loopback only. Compose project `studio-plane-phase1`. API `http://127.0.0.1:8200`. Web `http://127.0.0.1:3200`.
+Loopback / closed household test only. Compose project `studio-plane-phase1`. API `http://127.0.0.1:8200`. Web `http://127.0.0.1:3200`. Open signup is off. Do not bind a public hostname. Legal gate: `specs/studio-phase-8/legal-gate.md`.
 
 ## Start
 
@@ -8,7 +8,7 @@ See `deployments/studio/local/README.md`. Do not stand up a second stack.
 
 ## Sign-in
 
-Account `studio.admin@local.test`. Password is only in gitignored `deployments/studio/local/.audit-credentials`.
+Account `studio.admin@local.test`. Password is only in gitignored `deployments/studio/local/.audit-credentials`. Add the second household member with Plane’s native workspace invite; do not stand up another login system.
 
 ## Migrate
 

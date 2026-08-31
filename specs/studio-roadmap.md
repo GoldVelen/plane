@@ -23,14 +23,14 @@ Tags live on this repository: `studio-phase-N`.
 
 Each phase must land a user-visible formal capability on the isolated runtime, with tests, then a commit and tag. Do not re-implement Plane auth, projects, or work items.
 
-| Tag              | Formal capability | In                            | Out                                                                     |
-| ---------------- | ----------------- | ----------------------------- | ----------------------------------------------------------------------- |
-| `studio-phase-8` | Production deploy | Only after legal-risk answers | Must not ship a public AI/user-data service without the legal checklist |
+| Tag              | Formal capability                                               | In                                                                               | Out                                                              |
+| ---------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `studio-phase-8` | Closed household test only. Public production is still blocked. | Two-person loopback/private use; answers in `specs/studio-phase-8/legal-gate.md` | Public domain, open signup, public generative AI, Mode B billing |
 
 ## Hard stops
 
 - Do not create a second account, project, or work-item system.
 - Do not change Plane tokens/theme/generic components.
-- Production (`studio-phase-8`) is a legal gate: closed test vs public service, user data, AI generation, billing, and key-holding model must be answered before exposing the instance beyond loopback.
+- Production (`studio-phase-8`) is a legal gate. Answers on 2026-08-31 authorize a **two-person closed test** only. Public domain, open registration, and public generative AI remain forbidden. See `specs/studio-phase-8/legal-gate.md`.
 - GitHub (`studio-phase-5`) may be marked `PENDING_EXTERNAL_CREDENTIAL` if no App credentials exist; the code path and verification harness must still exist.
 - Push to `origin` is separate from commit/tag unless explicitly authorized.
