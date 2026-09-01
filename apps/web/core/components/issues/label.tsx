@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React from "react";
 // components
 import { Tooltip } from "@plane/propel/tooltip";
@@ -14,6 +15,7 @@ type Props = {
 };
 
 export function ViewIssueLabel({ labelDetails, maxRender = 1 }: Props) {
+  const { t } = useTranslation();
   const { isMobile } = usePlatformOS();
   return (
     <>
@@ -25,7 +27,12 @@ export function ViewIssueLabel({ labelDetails, maxRender = 1 }: Props) {
                 key={label.id}
                 className="shadow-sm flex flex-shrink-0 cursor-default items-center rounded-md border border-strong px-2.5 py-1 text-11"
               >
-                <Tooltip position="top" tooltipHeading="Label" tooltipContent={label.name} isMobile={isMobile}>
+                <Tooltip
+                  position="top"
+                  tooltipHeading={t("common.label")}
+                  tooltipContent={label.name}
+                  isMobile={isMobile}
+                >
                   <div className="flex items-center gap-1.5 text-secondary">
                     <span
                       className="h-2 w-2 flex-shrink-0 rounded-full"
@@ -43,13 +50,13 @@ export function ViewIssueLabel({ labelDetails, maxRender = 1 }: Props) {
           <div className="shadow-sm flex flex-shrink-0 cursor-default items-center rounded-md border border-strong px-2.5 py-1 text-11">
             <Tooltip
               position="top"
-              tooltipHeading="Labels"
+              tooltipHeading={t("common.labels")}
               tooltipContent={labelDetails.map((l) => l.name).join(", ")}
               isMobile={isMobile}
             >
               <div className="flex items-center gap-1.5 text-secondary">
                 <span className="h-2 w-2 flex-shrink-0 rounded-full bg-accent-primary" />
-                {`${labelDetails.length} Labels`}
+                {t("legacy_ui.value0_labels", { value0: labelDetails.length })}
               </div>
             </Tooltip>
           </div>

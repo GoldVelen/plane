@@ -37,13 +37,13 @@ type Props = {
 const integrationDetails: { [key: string]: any } = {
   github: {
     logo: GithubLogo,
-    installed: "Activate GitHub on individual projects to sync with specific repositories.",
-    notInstalled: "Connect with GitHub with your Plane workspace to sync project work items.",
+    installedKey: "legacy_ui.activate_github_on_individual_projects_to_sync_with_specific_repositories",
+    notInstalledKey: "legacy_ui.connect_with_github_with_your_plane_workspace_to_sync_project_work_items",
   },
   slack: {
     logo: SlackLogo,
-    installed: "Activate Slack on individual projects to sync with specific channels.",
-    notInstalled: "Connect with Slack with your Plane workspace to sync project work items.",
+    installedKey: "legacy_ui.activate_slack_on_individual_projects_to_sync_with_specific_channels",
+    notInstalledKey: "legacy_ui.connect_with_slack_with_your_plane_workspace_to_sync_project_work_items",
   },
 };
 
@@ -93,8 +93,8 @@ export const SingleIntegrationCard = observer(function SingleIntegrationCard({ i
 
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Deleted successfully!",
-          message: `${integration.title} integration deleted successfully.`,
+          title: t("legacy_ui.deleted_successfully"),
+          message: t("legacy_ui.value0_integration_deleted_successfully", { value0: integration.title }),
         });
       })
       .catch(() => {
@@ -103,7 +103,9 @@ export const SingleIntegrationCard = observer(function SingleIntegrationCard({ i
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: `${integration.title} integration could not be deleted. Please try again.`,
+          message: t("legacy_ui.value0_integration_could_not_be_deleted_please_try_again", {
+            value0: integration.title,
+          }),
         });
       });
   };
@@ -116,11 +118,7 @@ export const SingleIntegrationCard = observer(function SingleIntegrationCard({ i
     <div className="flex items-center justify-between gap-2 border-b border-subtle bg-surface-1 px-4 py-6">
       <div className="flex items-start gap-4">
         <div className="h-10 w-10 flex-shrink-0">
-          <img
-            src={integrationDetails[integration.provider].logo}
-            className="h-full w-full object-cover"
-            alt={`${integration.title} Logo`}
-          />
+          <img src={integrationDetails[integration.provider].logo} className="h-full w-full object-cover" alt="" />
         </div>
         <div>
           <h3 className="flex items-center gap-2 text-body-xs-medium">
@@ -132,9 +130,9 @@ export const SingleIntegrationCard = observer(function SingleIntegrationCard({ i
           <p className="text-body-xs-regular text-secondary">
             {workspaceIntegrations
               ? isInstalled
-                ? integrationDetails[integration.provider].installed
-                : integrationDetails[integration.provider].notInstalled
-              : "Loading..."}
+                ? t(integrationDetails[integration.provider].installedKey)
+                : t(integrationDetails[integration.provider].notInstalledKey)
+              : t("legacy_ui.loading")}
           </p>
         </div>
       </div>
@@ -144,7 +142,7 @@ export const SingleIntegrationCard = observer(function SingleIntegrationCard({ i
           <Tooltip
             isMobile={isMobile}
             disabled={isUserAdmin}
-            tooltipContent={!isUserAdmin ? "You don't have permission to perform this" : null}
+            tooltipContent={!isUserAdmin ? t("legacy_ui.you_don_t_have_permission_to_perform_this") : null}
           >
             <Button
               className={`${!isUserAdmin ? "hover:cursor-not-allowed" : ""}`}
@@ -156,14 +154,16 @@ export const SingleIntegrationCard = observer(function SingleIntegrationCard({ i
               disabled={!isUserAdmin}
               loading={deletingIntegration}
             >
-              {deletingIntegration ? "Uninstalling..." : "Uninstall"}
+              {deletingIntegration
+                ? t("oauth_bridge_integration.uninstalling")
+                : t("oauth_bridge_integration.uninstall")}
             </Button>
           </Tooltip>
         ) : (
           <Tooltip
             isMobile={isMobile}
             disabled={isUserAdmin}
-            tooltipContent={!isUserAdmin ? "You don't have permission to perform this" : null}
+            tooltipContent={!isUserAdmin ? t("legacy_ui.you_don_t_have_permission_to_perform_this") : null}
           >
             <Button
               className={`${!isUserAdmin ? "hover:cursor-not-allowed" : ""}`}
@@ -174,7 +174,7 @@ export const SingleIntegrationCard = observer(function SingleIntegrationCard({ i
               }}
               loading={isInstalling}
             >
-              {isInstalling ? "Installing..." : "Install"}
+              {isInstalling ? t("legacy_ui.installing") : t("common.install")}
             </Button>
           </Tooltip>
         )

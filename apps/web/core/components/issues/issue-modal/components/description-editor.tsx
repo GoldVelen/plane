@@ -99,7 +99,7 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: "Editor is still processing changes. Please wait before proceeding.",
+        message: t("legacy_ui.editor_is_still_processing_changes_please_wait_before_proceeding"),
       });
       event.preventDefault(); // Prevent default action if editor is not ready to discard
     }
@@ -122,15 +122,14 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
     aiService
       .createGptTask(workspaceSlug.toString(), {
         prompt: issueName,
-        task: "Generate a proper description for this work item.",
+        task: t("legacy_ui.generate_a_proper_description_for_this_work_item"),
       })
       .then((res) => {
         if (res.response === "")
           setToast({
             type: TOAST_TYPE.ERROR,
             title: t("toast.error"),
-            message:
-              "Work item title isn't informative enough to generate the description. Please try with a different title.",
+            message: t("legacy_ui.work_item_title_isn_t_informative_enough_to_generate_the_description_please_try_"),
           });
         else handleAiAssistance(res.response_html);
       })
@@ -141,13 +140,14 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
           setToast({
             type: TOAST_TYPE.ERROR,
             title: t("toast.error"),
-            message: error || "You have reached the maximum number of requests of 50 requests per month per user.",
+            message:
+              error || t("legacy_ui.you_have_reached_the_maximum_number_of_requests_of_50_requests_per_month_per_use"),
           });
         else
           setToast({
             type: TOAST_TYPE.ERROR,
             title: t("toast.error"),
-            message: error || "Some error occurred. Please try again.",
+            message: error || t("common.error.message"),
           });
       })
       .finally(() => setIAmFeelingLucky(false));
@@ -255,10 +255,11 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
                 tabIndex={getIndex("feeling_lucky")}
               >
                 {iAmFeelingLucky ? (
-                  "Generating response"
+                  t("legacy_ui.generating_response")
                 ) : (
                   <>
-                    <Sparkle className="h-3.5 w-3.5" />I{"'"}m feeling lucky
+                    <Sparkle className="h-3.5 w-3.5" />I{"'"}
+                    {t("legacy_ui.m_feeling_lucky")}
                   </>
                 )}
               </button>
@@ -283,7 +284,7 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
                     tabIndex={-1}
                   >
                     <Sparkle className="h-4 w-4" />
-                    AI
+                    {t("legacy_ui.ai")}
                   </button>
                 }
                 workspaceId={workspaceId}

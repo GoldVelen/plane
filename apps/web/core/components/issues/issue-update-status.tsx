@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React from "react";
 import { observer } from "mobx-react";
 import { RefreshCw } from "lucide-react";
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export const NameDescriptionUpdateStatus = observer(function NameDescriptionUpdateStatus(props: Props) {
+  const { t } = useTranslation();
   const { isSubmitting } = props;
 
   return (
@@ -27,7 +29,9 @@ export const NameDescriptionUpdateStatus = observer(function NameDescriptionUpda
         {isSubmitting !== "submitted" && isSubmitting !== "saved" && (
           <RefreshCw className="size-3.5 animate-spin stroke-tertiary" />
         )}
-        <span className="text-13 text-tertiary">{isSubmitting === "submitting" ? "Saving..." : "Saved"}</span>
+        <span className="text-13 text-tertiary">
+          {isSubmitting === "submitting" ? t("oauth_bridge_integration.provider_form.saving") : t("legacy_ui.saved")}
+        </span>
       </div>
     </>
   );

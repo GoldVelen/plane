@@ -93,7 +93,7 @@ export const InboxIssueMainContent = observer(function InboxIssueMainContent(pro
           setToast({
             title: t("toast.error"),
             type: TOAST_TYPE.ERROR,
-            message: "Work item delete failed",
+            message: t("legacy_ui.work_item_delete_failed"),
           });
         }
       },
@@ -102,9 +102,9 @@ export const InboxIssueMainContent = observer(function InboxIssueMainContent(pro
           await inboxIssue.updateIssue(data);
         } catch (_error) {
           setToast({
-            title: "Work item update failed",
+            title: t("legacy_ui.work_item_update_failed"),
             type: TOAST_TYPE.ERROR,
-            message: "Work item update failed",
+            message: t("legacy_ui.work_item_update_failed"),
           });
         }
       },
@@ -181,7 +181,7 @@ export const InboxIssueMainContent = observer(function InboxIssueMainContent(pro
                 createdAt: issue.created_at ? new Date(issue.created_at) : new Date(),
                 createdByDisplayName:
                   inboxIssue.source === EInboxIssueSource.FORMS
-                    ? "Intake Form user"
+                    ? t("legacy_ui.intake_form_user")
                     : (getUserDetails(issue.created_by ?? "")?.display_name ?? ""),
                 id: issue.id,
                 isRestoreDisabled: !isEditable,

@@ -65,14 +65,14 @@ export const CreateUpdateModuleModal = observer(function CreateUpdateModuleModal
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "Module created successfully.",
+          message: t("legacy_ui.module_created_successfully"),
         });
       })
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: err?.detail ?? err?.error ?? "Module could not be created. Please try again.",
+          message: err?.detail ?? err?.error ?? t("legacy_ui.module_could_not_be_created_please_try_again"),
         });
       });
   };
@@ -88,14 +88,14 @@ export const CreateUpdateModuleModal = observer(function CreateUpdateModuleModal
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "Module updated successfully.",
+          message: t("legacy_ui.module_updated_successfully"),
         });
       })
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: err?.detail ?? err?.error ?? "Module could not be updated. Please try again.",
+          message: err?.detail ?? err?.error ?? t("legacy_ui.module_could_not_be_updated_please_try_again"),
         });
       });
   };

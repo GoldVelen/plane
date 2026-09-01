@@ -11,5 +11,5 @@ import CssFileIcon from "@/app/assets/attachment/css-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function CssIcon({ width, height }: ImageIconPros) {
-  return <img src={CssFileIcon} width={width} height={height} alt="CssFileIcon" />;
+  return <img src={CssFileIcon} width={width} height={height} alt="" />;
 }

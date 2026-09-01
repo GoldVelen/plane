@@ -83,40 +83,46 @@ function WorkspaceInvitationPage() {
         {invitationDetail && !invitationDetail.responded_at ? (
           error ? (
             <div className="shadow-2xl flex w-full flex-col space-y-4 rounded-sm border border-subtle bg-surface-1 px-4 py-8 text-center md:w-1/3">
-              <h2 className="text-18 uppercase">INVITATION NOT FOUND</h2>
+              <h2 className="text-18 uppercase">{t("legacy_ui.invitation_not_found")}</h2>
             </div>
           ) : (
             <EmptySpace
-              title={`You have been invited to ${invitationDetail.workspace.name}`}
-              description="Your workspace is where you'll create projects, collaborate on your work items, and organize different streams of work in your Plane account."
+              title={t("legacy_ui.you_have_been_invited_to_value0", { value0: invitationDetail.workspace.name })}
+              description={t(
+                "legacy_ui.your_workspace_is_where_you_ll_create_projects_collaborate_on_your_work_items_an"
+              )}
             >
               <EmptySpaceItem Icon={CheckIcon} title={t("inbox_issue.actions.accept")} action={handleAccept} />
-              <EmptySpaceItem Icon={CloseIcon} title="Ignore" action={handleReject} />
+              <EmptySpaceItem Icon={CloseIcon} title={t("legacy_ui.ignore")} action={handleReject} />
             </EmptySpace>
           )
         ) : error || invitationDetail?.responded_at ? (
           invitationDetail?.accepted ? (
             <EmptySpace
-              title={`You are already a member of ${invitationDetail.workspace.name}`}
-              description="Your workspace is where you'll create projects, collaborate on your work items, and organize different streams of work in your Plane account."
+              title={t("legacy_ui.you_are_already_a_member_of_value0", { value0: invitationDetail.workspace.name })}
+              description={t(
+                "legacy_ui.your_workspace_is_where_you_ll_create_projects_collaborate_on_your_work_items_an"
+              )}
             >
-              <EmptySpaceItem Icon={Boxes} title="Continue to home" href="/" />
+              <EmptySpaceItem Icon={Boxes} title={t("legacy_ui.continue_to_home")} href="/" />
             </EmptySpace>
           ) : (
             <EmptySpace
-              title="This invitation link is not active anymore."
-              description="Your workspace is where you'll create projects, collaborate on your work items, and organize different streams of work in your Plane account."
-              link={{ text: "Or start from an empty project", href: "/" }}
+              title={t("legacy_ui.this_invitation_link_is_not_active_anymore")}
+              description={t(
+                "legacy_ui.your_workspace_is_where_you_ll_create_projects_collaborate_on_your_work_items_an"
+              )}
+              link={{ text: t("legacy_ui.or_start_from_an_empty_project"), href: "/" }}
             >
               {!currentUser ? (
-                <EmptySpaceItem Icon={User2} title="Sign in to continue" href="/" />
+                <EmptySpaceItem Icon={User2} title={t("legacy_ui.sign_in_to_continue")} href="/" />
               ) : (
-                <EmptySpaceItem Icon={Boxes} title="Continue to home" href="/" />
+                <EmptySpaceItem Icon={Boxes} title={t("legacy_ui.continue_to_home")} href="/" />
               )}
               <EmptySpaceItem Icon={Star} title={t("home.star_us_on_github")} href="https://github.com/makeplane" />
               <EmptySpaceItem
                 Icon={Share2}
-                title="Join our community of active creators"
+                title={t("legacy_ui.join_our_community_of_active_creators")}
                 href="https://forum.plane.so"
               />
             </EmptySpace>

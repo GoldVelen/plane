@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { i18nInstance, useTranslation } from "@plane/i18n";
 import * as React from "react";
 import { Toast as BaseToast } from "@base-ui-components/react/toast";
 import { AlertTriangle, CheckIcon, InfoIcon, XIcon } from "lucide-react";
@@ -112,6 +113,7 @@ function ToastList() {
 }
 
 function ToastRender({ id, toast }: { id: React.Key; toast: BaseToast.Root.ToastObject }) {
+  const { t } = useTranslation();
   const toastData = toast.data as SetToastProps;
   const type = toastData.type as TOAST_TYPE;
   const data = TOAST_DATA[type];
@@ -178,7 +180,7 @@ function ToastRender({ id, toast }: { id: React.Key; toast: BaseToast.Root.Toast
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <BaseToast.Title className="text-h6-medium text-primary">
-            {toastData.type === TOAST_TYPE.LOADING ? (toastData.title ?? "Loading...") : toastData.title}
+            {toastData.type === TOAST_TYPE.LOADING ? (toastData.title ?? t("legacy_ui.loading")) : toastData.title}
           </BaseToast.Title>
           {toastData.type !== TOAST_TYPE.LOADING && toastData.message && (
             <BaseToast.Description className="text-body-xs-regular text-tertiary">
@@ -204,6 +206,7 @@ export type ToastStaticProps = {
 };
 
 export function ToastStatic({ type, title, message, actionItems, theme = "light" }: ToastStaticProps) {
+  const { t } = useTranslation();
   const data = TOAST_DATA[type];
 
   return (
@@ -235,7 +238,7 @@ export function ToastStatic({ type, title, message, actionItems, theme = "light"
           </div>
           <div className="flex min-w-0 flex-1 flex-col gap-1">
             <div className="text-h6-medium text-primary">
-              {type === TOAST_TYPE.LOADING ? (title ?? "Loading...") : title}
+              {type === TOAST_TYPE.LOADING ? (title ?? t("legacy_ui.loading")) : title}
             </div>
             {type !== TOAST_TYPE.LOADING && message && (
               <div className="text-body-xs-regular text-tertiary">{message}</div>
@@ -294,7 +297,7 @@ export const setPromiseToast = <ToastData,>(
   toastManager.promise(promise, {
     loading: {
       data: {
-        title: options.loading ?? "Loading...",
+        title: options.loading ?? i18nInstance.t("legacy_ui.loading"),
         type: TOAST_TYPE.LOADING,
         message: undefined,
         actionItems: undefined,

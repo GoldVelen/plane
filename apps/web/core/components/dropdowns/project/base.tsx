@@ -49,6 +49,7 @@ type Props = TDropdownProps & {
   );
 
 export const ProjectDropdownBase = observer(function ProjectDropdownBase(props: Props) {
+  const { t } = useTranslation();
   const {
     button,
     buttonClassName,
@@ -64,7 +65,7 @@ export const ProjectDropdownBase = observer(function ProjectDropdownBase(props: 
     multiple,
     onChange,
     onClose,
-    placeholder = "Project",
+    placeholder: placeholderProp,
     placement,
     projectIds,
     renderByDefault = true,
@@ -73,6 +74,7 @@ export const ProjectDropdownBase = observer(function ProjectDropdownBase(props: 
     tabIndex,
     value,
   } = props;
+  const placeholder = placeholderProp ?? t("common.project");
   // refs
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -83,7 +85,6 @@ export const ProjectDropdownBase = observer(function ProjectDropdownBase(props: 
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   // plane hooks
-  const { t } = useTranslation();
   // popper-js init
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: placement ?? "bottom-start",
@@ -204,8 +205,12 @@ export const ProjectDropdownBase = observer(function ProjectDropdownBase(props: 
           <DropdownButton
             className={buttonClassName}
             isActive={isOpen}
-            tooltipHeading="Project"
-            tooltipContent={value?.length ? `${value.length} project${value.length !== 1 ? "s" : ""}` : placeholder}
+            tooltipHeading={t("common.project")}
+            tooltipContent={
+              value?.length
+                ? t("legacy_ui.value0_project_value1", { value0: value.length, value1: value.length !== 1 ? "s" : "" })
+                : placeholder
+            }
             showTooltip={showTooltip}
             variant={buttonVariant}
             renderToolTipByDefault={renderByDefault}

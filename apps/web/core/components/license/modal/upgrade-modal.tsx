@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 // plane imports
 import {
@@ -32,6 +33,7 @@ export type PaidPlanUpgradeModalProps = {
 };
 
 export const PaidPlanUpgradeModal = observer(function PaidPlanUpgradeModal(props: PaidPlanUpgradeModalProps) {
+  const { t } = useTranslation();
   const { isOpen, handleClose } = props;
   // derived values
   const isSelfHosted = true;
@@ -54,11 +56,12 @@ export const PaidPlanUpgradeModal = observer(function PaidPlanUpgradeModal(props
         <div className="grid h-full grid-cols-12 gap-6">
           {/* Free Plan Section */}
           <div className={cn(COMMON_CARD_CLASSNAME)}>
-            <div className="flex text-24 leading-8 font-bold">Upgrade to a paid plan and unlock missing features.</div>
+            <div className="flex text-24 leading-8 font-bold">
+              {t("legacy_ui.upgrade_to_a_paid_plan_and_unlock_missing_features")}
+            </div>
             <div className="mt-4 mb-2">
               <p className="mb-4 pr-8 text-13 text-primary">
-                Dashboards, Workflows, Approvals, Time Management, and other superpowers are just a click away. Upgrade
-                today to unlock features your teams need yesterday.
+                {t("legacy_ui.dashboards_workflows_approvals_time_management_and_other_superpowers_are_just_a_")}
               </p>
             </div>
 
@@ -76,7 +79,7 @@ export const PaidPlanUpgradeModal = observer(function PaidPlanUpgradeModal(props
               extraFeatures={
                 <p className={COMMON_EXTRA_FEATURES_CLASSNAME}>
                   <a href={SUBSCRIPTION_WEBPAGE_URLS[EProductSubscriptionEnum.PRO]} target="_blank" rel="noreferrer">
-                    See full features list
+                    {t("legacy_ui.see_full_features_list")}
                   </a>
                 </p>
               }
@@ -98,7 +101,7 @@ export const PaidPlanUpgradeModal = observer(function PaidPlanUpgradeModal(props
                     target="_blank"
                     rel="noreferrer"
                   >
-                    See full features list
+                    {t("legacy_ui.see_full_features_list")}
                   </a>
                 </p>
               }
@@ -120,7 +123,7 @@ export const PaidPlanUpgradeModal = observer(function PaidPlanUpgradeModal(props
                     target="_blank"
                     rel="noreferrer"
                   >
-                    See full features list
+                    {t("legacy_ui.see_full_features_list")}
                   </a>
                 </p>
               }

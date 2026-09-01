@@ -46,8 +46,8 @@ export const DeleteEstimateModal = observer(function DeleteEstimateModal(props: 
       setButtonLoader(false);
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: "Estimate deleted",
-        message: "Estimate has been removed from your project.",
+        title: t("legacy_ui.estimate_deleted"),
+        message: t("legacy_ui.estimate_has_been_removed_from_your_project"),
       });
       handleClose();
     } catch (_error) {
@@ -55,7 +55,7 @@ export const DeleteEstimateModal = observer(function DeleteEstimateModal(props: 
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("project_settings.estimates.toasts.created.error.title"),
-        message: "We were unable to delete the estimate, please try again.",
+        message: t("legacy_ui.we_were_unable_to_delete_the_estimate_please_try_again"),
       });
     }
   };
@@ -65,15 +65,15 @@ export const DeleteEstimateModal = observer(function DeleteEstimateModal(props: 
       <div className="relative space-y-6 py-5">
         {/* heading */}
         <div className="relative flex items-center justify-between gap-2 px-5">
-          <div className="text-18 font-medium text-primary">Delete Estimate System</div>
+          <div className="text-18 font-medium text-primary">{t("legacy_ui.delete_estimate_system")}</div>
         </div>
 
         {/* estimate steps */}
         <div className="px-5">
           <div className="text-14 text-secondary">
-            Deleting the estimate <span className="font-bold text-primary">{estimate?.name}</span>
-            &nbsp;system will remove it from all work items permanently. This action cannot be undone. If you add
-            estimates again, you will need to update all the work items.
+            {t("legacy_ui.deleting_the_estimate")}
+            <span className="font-bold text-primary">{estimate?.name}</span>
+            {t("legacy_ui.system_will_remove_it_from_all_work_items_permanently_this_action_cannot_be_undo")}
           </div>
         </div>
 
@@ -82,7 +82,7 @@ export const DeleteEstimateModal = observer(function DeleteEstimateModal(props: 
             {t("cancel")}
           </Button>
           <Button variant="error-fill" size="lg" onClick={handleDeleteEstimate} disabled={buttonLoader}>
-            {buttonLoader ? "Deleting" : "Delete Estimate"}
+            {buttonLoader ? t("deleting") : t("legacy_ui.delete_estimate")}
           </Button>
         </div>
       </div>

@@ -36,10 +36,10 @@ export function ProfileWorkload({ stateDistribution }: Props) {
                 <div className="flex-col space-y-1">
                   <span className="text-13 text-placeholder">
                     {group.state_group === "unstarted"
-                      ? "Not started"
+                      ? t("legacy_ui.not_started")
                       : group.state_group === "started"
-                        ? "Working on"
-                        : STATE_GROUPS[group.state_group].label}
+                        ? t("legacy_ui.working_on")
+                        : t(STATE_GROUPS[group.state_group].labelTranslationKey)}
                   </span>
                   <p className="text-18 font-semibold">{group.state_count}</p>
                 </div>

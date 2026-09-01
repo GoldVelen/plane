@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { Maximize } from "lucide-react";
 import { useEffect, useState } from "react";
 // plane imports
@@ -24,6 +25,7 @@ type Props = {
 };
 
 export function ImageFullScreenActionRoot(props: Props) {
+  const { t } = useTranslation();
   const { image, isTouchDevice, toggleToolbarViewStatus } = props;
   // states
   const [isFullScreenEnabled, setIsFullScreenEnabled] = useState(false);
@@ -45,7 +47,7 @@ export function ImageFullScreenActionRoot(props: Props) {
         width={width}
         toggleFullScreenMode={setIsFullScreenEnabled}
       />
-      <Tooltip tooltipContent="View in full screen" disabled={isTouchDevice}>
+      <Tooltip tooltipContent={t("legacy_ui.view_in_full_screen")} disabled={isTouchDevice}>
         <button
           type="button"
           onClick={(e) => {
@@ -54,7 +56,7 @@ export function ImageFullScreenActionRoot(props: Props) {
             setIsFullScreenEnabled(true);
           }}
           className="grid h-full flex-shrink-0 place-items-center text-on-color/60 transition-colors hover:text-on-color"
-          aria-label="View image in full screen"
+          aria-label={t("legacy_ui.view_image_in_full_screen")}
         >
           <Maximize className="size-3" />
         </button>

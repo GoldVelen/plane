@@ -11,5 +11,5 @@ import VideoFileIcon from "@/app/assets/attachment/video-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function VideoIcon({ width, height }: ImageIconPros) {
-  return <img src={VideoFileIcon} width={width} height={height} alt="VideoFileIcon" />;
+  return <img src={VideoFileIcon} width={width} height={height} alt="" />;
 }

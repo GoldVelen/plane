@@ -142,8 +142,8 @@ export const ProjectLevelWorkItemFiltersHOC = observer(function ProjectLevelWork
       if (!viewDetails) {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "We couldn't find the view",
-          message: "The view you're trying to update doesn't exist.",
+          title: t("legacy_ui.we_couldn_t_find_the_view"),
+          message: t("legacy_ui.the_view_you_re_trying_to_update_doesn_t_exist"),
         });
 
         return;
@@ -156,14 +156,14 @@ export const ProjectLevelWorkItemFiltersHOC = observer(function ProjectLevelWork
           setToast({
             type: TOAST_TYPE.SUCCESS,
             title: t("toast.success"),
-            message: "Your view has been updated successfully.",
+            message: t("legacy_ui.your_view_has_been_updated_successfully"),
           });
         })
         .catch(() => {
           setToast({
             type: TOAST_TYPE.ERROR,
             title: t("toast.error"),
-            message: "Your view could not be updated. Please try again.",
+            message: t("legacy_ui.your_view_could_not_be_updated_please_try_again"),
           });
         });
     },

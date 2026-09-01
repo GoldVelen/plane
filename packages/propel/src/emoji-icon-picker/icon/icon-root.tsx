@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useEffect, useState } from "react";
 import { InfoIcon } from "lucide-react";
 import { SearchIcon } from "../../icons";
@@ -20,6 +21,7 @@ type IconRootProps = {
 };
 
 export function IconRoot(props: IconRootProps) {
+  const { t } = useTranslation();
   const { defaultColor, onChange, searchDisabled = false, iconType } = props;
   // states
   const [activeColor, setActiveColor] = useState(defaultColor);
@@ -52,7 +54,7 @@ export function IconRoot(props: IconRootProps) {
               <SearchIcon className="absolute bottom-3 left-2.5 h-3.5 w-3.5 text-placeholder" />
 
               <input
-                placeholder="Search"
+                placeholder={t("search")}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="block h-full w-full rounded-md border-[0.5px] border-none border-subtle bg-transparent p-0 px-3 py-2 text-16 placeholder-(--text-color-placeholder) focus:outline-none"
@@ -69,7 +71,7 @@ export function IconRoot(props: IconRootProps) {
                   backgroundColor: `#${hexValue}`,
                 }}
               />
-              <span className="flex-shrink-0 text-11 text-tertiary">HEX</span>
+              <span className="flex-shrink-0 text-11 text-tertiary">{t("legacy_ui.hex")}</span>
               <span className="-mr-1 flex-shrink-0 text-11 text-secondary">#</span>
               <input
                 type="text"
@@ -117,7 +119,7 @@ export function IconRoot(props: IconRootProps) {
         </div>
         <div className="flex h-6 w-full items-center gap-2 py-1 pr-3 pl-4">
           <InfoIcon className="h-3 w-3" />
-          <p className="text-11"> Colors will be adjusted to ensure sufficient contrast.</p>
+          <p className="text-11"> {t("legacy_ui.colors_will_be_adjusted_to_ensure_sufficient_contrast")}</p>
         </div>
       </div>
       <div className="mt-2 grid grid-cols-8 justify-items-center gap-1 px-2.5">

@@ -57,20 +57,27 @@ enum EProfileSetupSteps {
   USER_PERSONALIZATION = "USER_PERSONALIZATION",
 }
 
-const USER_ROLE = ["Individual contributor", "Senior Leader", "Manager", "Executive", "Freelancer", "Student"];
+const USER_ROLE = [
+  { value: "Individual contributor", labelKey: "legacy_ui.individual_contributor" },
+  { value: "Senior Leader", labelKey: "legacy_ui.senior_leader" },
+  { value: "Manager", labelKey: "legacy_ui.manager" },
+  { value: "Executive", labelKey: "legacy_ui.executive" },
+  { value: "Freelancer", labelKey: "legacy_ui.freelancer" },
+  { value: "Student", labelKey: "legacy_ui.student" },
+] as const;
 
 const USER_DOMAIN = [
-  "Engineering",
-  "Product",
-  "Marketing",
-  "Sales",
-  "Operations",
-  "Legal",
-  "Finance",
-  "Human Resources",
-  "Project",
-  "Other",
-];
+  { value: "Engineering", labelKey: "legacy_ui.engineering" },
+  { value: "Product", labelKey: "legacy_ui.product" },
+  { value: "Marketing", labelKey: "legacy_ui.marketing" },
+  { value: "Sales", labelKey: "legacy_ui.sales" },
+  { value: "Operations", labelKey: "legacy_ui.operations" },
+  { value: "Legal", labelKey: "legacy_ui.legal" },
+  { value: "Finance", labelKey: "legacy_ui.finance" },
+  { value: "Human Resources", labelKey: "legacy_ui.human_resources" },
+  { value: "Project", labelKey: "common.project" },
+  { value: "Other", labelKey: "legacy_ui.other" },
+] as const;
 
 const authService = new AuthService();
 
@@ -173,7 +180,7 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("error"),
-        message: "User details update failed. Please try again!",
+        message: t("legacy_ui.user_details_update_failed_please_try_again"),
       });
     }
   };
@@ -275,7 +282,7 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
                         </div>
                       </div>
                       <div className="pt-1 text-13 font-medium text-accent-secondary hover:text-tertiary">
-                        Choose image
+                        {t("legacy_ui.choose_image")}
                       </div>
                     </div>
                   ) : (
@@ -302,11 +309,11 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
                     control={control}
                     name="first_name"
                     rules={{
-                      required: "First name is required",
+                      required: t("legacy_ui.first_name_is_required"),
                       validate: validatePersonName,
                       maxLength: {
                         value: 50,
-                        message: "First name must be within 50 characters.",
+                        message: t("legacy_ui.first_name_must_be_within_50_characters"),
                       },
                     }}
                     render={({ field: { value, onChange, ref } }) => (
@@ -319,7 +326,7 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
                         onChange={onChange}
                         ref={ref}
                         hasError={Boolean(errors.first_name)}
-                        placeholder="Wilbur"
+                        placeholder={t("legacy_ui.wilbur")}
                         className="w-full border-strong"
                         autoComplete="on"
                       />
@@ -340,11 +347,11 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
                     control={control}
                     name="last_name"
                     rules={{
-                      required: "Last name is required",
+                      required: t("legacy_ui.last_name_is_required"),
                       validate: validatePersonName,
                       maxLength: {
                         value: 50,
-                        message: "Last name must be within 50 characters.",
+                        message: t("legacy_ui.last_name_must_be_within_50_characters"),
                       },
                     }}
                     render={({ field: { value, onChange, ref } }) => (
@@ -356,7 +363,7 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
                         onChange={onChange}
                         ref={ref}
                         hasError={Boolean(errors.last_name)}
-                        placeholder="Wright"
+                        placeholder={t("legacy_ui.wright")}
                         className="w-full border-strong"
                         autoComplete="on"
                       />
@@ -371,7 +378,8 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
                 <>
                   <div className="space-y-1">
                     <label className="text-13 font-medium text-tertiary" htmlFor="password">
-                      Set a password ({t("common.optional")})
+                      {t("legacy_ui.set_a_password")}
+                      {t("common.optional")})
                     </label>
                     <Controller
                       control={control}
@@ -388,7 +396,7 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
                             onChange={onChange}
                             ref={ref}
                             hasError={Boolean(errors.password)}
-                            placeholder="New password..."
+                            placeholder={t("legacy_ui.new_password")}
                             className="w-full border-[0.5px] border-subtle pr-12 placeholder:text-placeholder"
                             onFocus={() => setIsPasswordInputFocused(true)}
                             onBlur={() => setIsPasswordInputFocused(false)}
@@ -466,29 +474,29 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
                   className="text-13 font-medium text-tertiary after:ml-0.5 after:text-danger-primary after:content-['*']"
                   htmlFor="role"
                 >
-                  What role are you working on? Choose one.
+                  {t("legacy_ui.what_role_are_you_working_on_choose_one")}
                 </label>
                 <Controller
                   control={control}
                   name="role"
                   rules={{
-                    required: "This field is required",
+                    required: t("common.errors.required"),
                   }}
                   render={({ field: { value, onChange } }) => (
                     <div className="flex flex-wrap gap-2 overflow-auto py-2 break-all">
                       {USER_ROLE.map((userRole) => (
                         <div
-                          key={userRole}
+                          key={userRole.value}
                           className={cn(
                             "shrink-0 rounded border-[0.5px] px-3 py-1.5 text-13 font-medium hover:cursor-pointer hover:bg-surface-2",
                             {
-                              "border-accent-strong": value === userRole,
-                              "border-strong": value !== userRole,
+                              "border-accent-strong": value === userRole.value,
+                              "border-strong": value !== userRole.value,
                             }
                           )}
-                          onClick={() => onChange(userRole)}
+                          onClick={() => onChange(userRole.value)}
                         >
-                          {userRole}
+                          {t(userRole.labelKey)}
                         </div>
                       ))}
                     </div>
@@ -501,35 +509,36 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
                   className="text-13 font-medium text-tertiary after:ml-0.5 after:text-danger-primary after:content-['*']"
                   htmlFor="use_case"
                 >
-                  What is your domain expertise? Choose one or more.
+                  {t("legacy_ui.what_is_your_domain_expertise_choose_one_or_more")}
                 </label>
                 <Controller
                   control={control}
                   name="use_case"
                   rules={{
-                    required: "Please select at least one option",
-                    validate: (value) => (value && value.length > 0) || "Please select at least one option",
+                    required: t("legacy_ui.please_select_at_least_one_option"),
+                    validate: (value) =>
+                      (value && value.length > 0) || t("legacy_ui.please_select_at_least_one_option"),
                   }}
                   render={({ field: { value, onChange } }) => (
                     <div className="flex flex-wrap gap-2 overflow-auto py-2 break-all">
                       {USER_DOMAIN.map((userDomain) => {
-                        const isSelected = value?.includes(userDomain) || false;
+                        const isSelected = value?.includes(userDomain.value) || false;
                         return (
                           <div
-                            key={userDomain}
+                            key={userDomain.value}
                             className={`flex-shrink-0 border-[0.5px] hover:cursor-pointer hover:bg-surface-2 ${
                               isSelected ? "border-accent-strong" : "border-strong"
                             } rounded px-3 py-1.5 text-13 font-medium`}
                             onClick={() => {
                               const currentValue = value || [];
                               if (isSelected) {
-                                onChange(currentValue.filter((item) => item !== userDomain));
+                                onChange(currentValue.filter((item) => item !== userDomain.value));
                               } else {
-                                onChange([...currentValue, userDomain]);
+                                onChange([...currentValue, userDomain.value]);
                               }
                             }}
                           >
-                            {userDomain}
+                            {t(userDomain.labelKey)}
                           </div>
                         );
                       })}
@@ -541,7 +550,7 @@ export const ProfileSetup = observer(function ProfileSetup(props: Props) {
             </>
           )}
           <Button variant="primary" type="submit" size="xl" className="w-full" disabled={isButtonDisabled}>
-            {isSubmitting ? <Spinner height="20px" width="20px" /> : "Continue"}
+            {isSubmitting ? <Spinner height="20px" width="20px" /> : t("common.continue")}
           </Button>
         </form>
       </div>

@@ -5,12 +5,14 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "@plane/i18n";
 
 //TODO: remove temp flag isActive later and use showAlert as the source of truth
 const useReloadConfirmations = (isActive = true, message?: string, defaultShowAlert = false, onLeave?: () => void) => {
+  const { t } = useTranslation();
   const [showAlert, setShowAlert] = useState(defaultShowAlert);
 
-  const alertMessage = message ?? "Are you sure you want to leave? Changes you made may not be saved.";
+  const alertMessage = message ?? t("legacy_ui.are_you_sure_you_want_to_leave_changes_you_made_may_not_be_saved");
 
   const handleBeforeUnload = useCallback(
     (event: BeforeUnloadEvent) => {
@@ -18,7 +20,7 @@ const useReloadConfirmations = (isActive = true, message?: string, defaultShowAl
       event.preventDefault();
       event.returnValue = "";
     },
-    [isActive, showAlert]
+    [alertMessage, isActive, onLeave, showAlert]
   );
 
   const handleAnchorClick = useCallback(

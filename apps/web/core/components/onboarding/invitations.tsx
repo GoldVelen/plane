@@ -7,7 +7,7 @@
 import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 // plane imports
-import { ROLE } from "@plane/constants";
+import { ROLE_DETAILS } from "@plane/constants";
 // types
 import { Button } from "@plane/propel/button";
 import type { IWorkspaceMemberInvitation } from "@plane/types";
@@ -66,8 +66,10 @@ export function Invitations(props: Props) {
   return invitations && invitations.length > 0 ? (
     <div className="space-y-4">
       <div className="mx-auto space-y-1 py-4 text-center">
-        <h3 className="text-24 font-bold text-primary">You are invited!</h3>
-        <p className="font-medium text-placeholder">Accept the invites to collaborate with your team.</p>
+        <h3 className="text-24 font-bold text-primary">{t("legacy_ui.you_are_invited")}</h3>
+        <p className="font-medium text-placeholder">
+          {t("legacy_ui.accept_the_invites_to_collaborate_with_your_team")}
+        </p>
       </div>
       <div>
         {invitations &&
@@ -90,7 +92,7 @@ export function Invitations(props: Props) {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="text-13 font-medium">{truncateText(invitedWorkspace?.name, 30)}</div>
-                  <p className="text-11 text-secondary">{ROLE[invitation.role]}</p>
+                  <p className="text-11 text-secondary">{t(ROLE_DETAILS[invitation.role].i18n_title)}</p>
                 </div>
                 <span className={`flex-shrink-0`}>
                   <Checkbox checked={isSelected} />
@@ -106,7 +108,7 @@ export function Invitations(props: Props) {
         onClick={submitInvitations}
         disabled={isJoiningWorkspaces || !invitationsRespond.length}
       >
-        {isJoiningWorkspaces ? <Spinner height="20px" width="20px" /> : "Continue to workspace"}
+        {isJoiningWorkspaces ? <Spinner height="20px" width="20px" /> : t("legacy_ui.continue_to_workspace")}
       </Button>
       <div className="mx-auto mt-4 flex items-center sm:w-96">
         <hr className="w-full border-strong" />
@@ -120,10 +122,10 @@ export function Invitations(props: Props) {
         onClick={handleCurrentViewChange}
         disabled={isJoiningWorkspaces}
       >
-        Create your own workspace
+        {t("legacy_ui.create_your_own_workspace")}
       </Button>
     </div>
   ) : (
-    <div>No Invitations found</div>
+    <div>{t("legacy_ui.no_invitations_found")}</div>
   );
 }

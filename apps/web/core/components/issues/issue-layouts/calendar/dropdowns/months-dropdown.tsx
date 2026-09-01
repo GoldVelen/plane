@@ -8,12 +8,13 @@ import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { usePopper } from "react-popper";
 import { Popover, Transition } from "@headlessui/react";
+import { MONTHS_LIST } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import { ChevronLeftIcon, ChevronRightIcon } from "@plane/propel/icons";
 //hooks
 // icons
 // constants
 import { getDate } from "@plane/utils";
-import { MONTHS_LIST } from "@plane/constants";
 import { useCalendarView } from "@/hooks/store/use-calendar-view";
 import type { ICycleIssuesFilter } from "@/store/issue/cycle";
 import type { IModuleIssuesFilter } from "@/store/issue/module";
@@ -26,6 +27,7 @@ interface Props {
 }
 export const CalendarMonthsDropdown = observer(function CalendarMonthsDropdown(props: Props) {
   const { issuesFilterStore } = props;
+  const { currentLocale, t } = useTranslation();
 
   const issueCalendarView = useCalendarView();
 
@@ -48,29 +50,29 @@ export const CalendarMonthsDropdown = observer(function CalendarMonthsDropdown(p
 
   const { activeMonthDate } = issueCalendarView.calendarFilters;
 
+  const formatMonth = (date: Date, month: "long" | "short") =>
+    new Intl.DateTimeFormat(currentLocale, { month }).format(date);
+  const formatMonthYear = (date: Date, month: "long" | "short") =>
+    new Intl.DateTimeFormat(currentLocale, { month, year: "numeric" }).format(date);
+
   const getWeekLayoutHeader = (): string => {
     const allDaysOfActiveWeek = issueCalendarView.allDaysOfActiveWeek;
 
-    if (!allDaysOfActiveWeek) return "Week view";
+    if (!allDaysOfActiveWeek) return t("common.week");
 
     const daysList = Object.keys(allDaysOfActiveWeek);
 
     const firstDay = getDate(daysList[0]);
     const lastDay = getDate(daysList[daysList.length - 1]);
 
-    if (!firstDay || !lastDay) return "Week view";
+    if (!firstDay || !lastDay) return t("common.week");
 
     if (firstDay.getMonth() === lastDay.getMonth() && firstDay.getFullYear() === lastDay.getFullYear())
-      return `${MONTHS_LIST[firstDay.getMonth() + 1].title} ${firstDay.getFullYear()}`;
+      return formatMonthYear(firstDay, "long");
 
     if (firstDay.getFullYear() !== lastDay.getFullYear()) {
-      return `${MONTHS_LIST[firstDay.getMonth() + 1].shortTitle} ${firstDay.getFullYear()} - ${
-        MONTHS_LIST[lastDay.getMonth() + 1].shortTitle
-      } ${lastDay.getFullYear()}`;
-    } else
-      return `${MONTHS_LIST[firstDay.getMonth() + 1].shortTitle} - ${
-        MONTHS_LIST[lastDay.getMonth() + 1].shortTitle
-      } ${lastDay.getFullYear()}`;
+      return `${formatMonthYear(firstDay, "short")} – ${formatMonthYear(lastDay, "short")}`;
+    } else return `${formatMonth(firstDay, "short")} – ${formatMonthYear(lastDay, "short")}`;
   };
 
   const handleDateChange = (date: Date) => {
@@ -88,9 +90,7 @@ export const CalendarMonthsDropdown = observer(function CalendarMonthsDropdown(p
           className="text-18 font-semibold outline-none"
           disabled={calendarLayout === "week"}
         >
-          {calendarLayout === "month"
-            ? `${MONTHS_LIST[activeMonthDate.getMonth() + 1].title} ${activeMonthDate.getFullYear()}`
-            : getWeekLayoutHeader()}
+          {calendarLayout === "month" ? formatMonthYear(activeMonthDate, "long") : getWeekLayoutHeader()}
         </button>
       </Popover.Button>
       <Transition
@@ -133,19 +133,27 @@ export const CalendarMonthsDropdown = observer(function CalendarMonthsDropdown(p
               </button>
             </div>
             <div className="grid grid-cols-4 items-stretch justify-items-stretch gap-4 pt-3">
-              {Object.values(MONTHS_LIST).map((month, index) => (
-                <button
-                  key={month.shortTitle}
-                  type="button"
-                  className="rounded-sm py-0.5 text-11 hover:bg-layer-1"
-                  onClick={() => {
-                    const newDate = new Date(activeMonthDate.getFullYear(), index, 1);
-                    handleDateChange(newDate);
-                  }}
-                >
-                  {month.shortTitle}
-                </button>
-              ))}
+              {Object.values(MONTHS_LIST).map((month) => {
+                const monthDate = new Date(Date.UTC(2024, month.value - 1, 1));
+                const monthLabel = new Intl.DateTimeFormat(currentLocale, {
+                  month: "short",
+                  timeZone: "UTC",
+                }).format(monthDate);
+
+                return (
+                  <button
+                    key={month.value}
+                    type="button"
+                    className="rounded-sm py-0.5 text-11 hover:bg-layer-1"
+                    onClick={() => {
+                      const newDate = new Date(activeMonthDate.getFullYear(), month.value - 1, 1);
+                      handleDateChange(newDate);
+                    }}
+                  >
+                    {monthLabel}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </Popover.Panel>

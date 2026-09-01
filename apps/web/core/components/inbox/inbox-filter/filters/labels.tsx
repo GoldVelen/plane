@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import type { IIssueLabel } from "@plane/types";
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export const FilterLabels = observer(function FilterLabels(props: Props) {
+  const { t } = useTranslation();
   const { labels, searchQuery } = props;
 
   const [itemsToRender, setItemsToRender] = useState(5);
@@ -49,7 +51,7 @@ export const FilterLabels = observer(function FilterLabels(props: Props) {
   return (
     <>
       <FilterHeader
-        title={`Label${appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : ""}`}
+        title={t("legacy_ui.label_value0", { value0: appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : "" })}
         isPreviewEnabled={previewEnabled}
         handleIsPreviewEnabled={() => setPreviewEnabled(!previewEnabled)}
       />
@@ -73,7 +75,7 @@ export const FilterLabels = observer(function FilterLabels(props: Props) {
                     className="ml-8 text-11 font-medium text-accent-primary"
                     onClick={handleViewToggle}
                   >
-                    {itemsToRender === filteredOptions.length ? "View less" : "View all"}
+                    {itemsToRender === filteredOptions.length ? t("legacy_ui.view_less") : t("legacy_ui.view_all")}
                   </button>
                 )}
               </>

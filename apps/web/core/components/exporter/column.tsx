@@ -22,7 +22,7 @@ export const useExportColumns = () => {
   const columns = [
     {
       key: "Exported By",
-      content: "Exported By",
+      content: t("legacy_ui.exported_by"),
       tdRender: (rowData: RowData) => {
         const { avatar_url, display_name, email } = rowData.initiated_by_detail;
         return (
@@ -49,18 +49,22 @@ export const useExportColumns = () => {
     },
     {
       key: "Exported On",
-      content: "Exported On",
+      content: t("legacy_ui.exported_on"),
       tdRender: (rowData: RowData) => <span>{renderFormattedDate(rowData.created_at)}</span>,
     },
 
     {
       key: "Exported projects",
-      content: "Exported projects",
-      tdRender: (rowData: RowData) => <div className="text-13">{rowData.project.length} project(s)</div>,
+      content: t("legacy_ui.exported_projects"),
+      tdRender: (rowData: RowData) => (
+        <div className="text-13">
+          {rowData.project.length} {t("legacy_ui.project_s")}
+        </div>
+      ),
     },
     {
       key: "Format",
-      content: "Format",
+      content: t("workspace_settings.settings.exports.format"),
       tdRender: (rowData: RowData) => (
         <span className="text-13">
           {rowData.provider === "csv"
@@ -75,7 +79,7 @@ export const useExportColumns = () => {
     },
     {
       key: "Status",
-      content: "Status",
+      content: t("studio.forms.label_status"),
       tdRender: (rowData: RowData) => (
         <span
           className={`rounded-sm px-2 py-1 text-11 capitalize ${
@@ -96,7 +100,7 @@ export const useExportColumns = () => {
     },
     {
       key: "Download",
-      content: "Download",
+      content: t("page_navigation_pane.tabs.assets.download_button"),
       tdRender: (rowData: RowData) =>
         checkExpiry(rowData.created_at) ? (
           <>

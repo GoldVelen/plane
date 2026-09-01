@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { Ban } from "lucide-react";
 import { ChevronDownIcon } from "@plane/propel/icons";
 // plane utils
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export function CalloutBlockColorSelector(props: Props) {
+  const { t } = useTranslation();
   const { disabled, isOpen, onSelect, toggleDropdown } = props;
 
   const handleColorSelect = (val: string | null) => {
@@ -49,7 +51,7 @@ export function CalloutBlockColorSelector(props: Props) {
           )}
           disabled={disabled}
         >
-          <span className="text-12">Color</span>
+          <span className="text-12">{t("legacy_ui.color")}</span>
           <ChevronDownIcon className="size-3 flex-shrink-0" />
         </button>
         {isOpen && (

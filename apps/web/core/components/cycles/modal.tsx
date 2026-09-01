@@ -66,14 +66,14 @@ export function CycleCreateUpdateModal(props: CycleModalProps) {
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "Cycle created successfully.",
+          message: t("legacy_ui.cycle_created_successfully"),
         });
       })
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: err?.detail ?? "Error in creating cycle. Please try again.",
+          message: err?.detail ?? t("legacy_ui.error_in_creating_cycle_please_try_again"),
         });
       });
   };
@@ -94,7 +94,7 @@ export function CycleCreateUpdateModal(props: CycleModalProps) {
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: err?.detail ?? "Error in updating cycle. Please try again.",
+          message: err?.detail ?? t("legacy_ui.error_in_updating_cycle_please_try_again"),
         });
       });
   };
@@ -155,7 +155,7 @@ export function CycleCreateUpdateModal(props: CycleModalProps) {
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: "You already have a cycle on the given dates, if you want to create a draft cycle, remove the dates.",
+        message: t("legacy_ui.you_already_have_a_cycle_on_the_given_dates_if_you_want_to_create_a_draft_cycle_"),
       });
   };
 

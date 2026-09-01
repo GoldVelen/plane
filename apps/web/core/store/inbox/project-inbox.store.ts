@@ -8,6 +8,7 @@ import { uniq, update, isEmpty, omit, set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 import type { EPastDurationFilters } from "@plane/constants";
+import { i18nInstance } from "@plane/i18n";
 // types
 import type {
   TInboxIssue,
@@ -364,7 +365,7 @@ export class ProjectInboxStore implements IProjectInboxStore {
       console.error("Error fetching the intake issues", error);
       this.loader = undefined;
       this.error = {
-        message: "Error fetching the intake work items please try again later.",
+        message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         status: "init-error",
       };
       throw error;
@@ -404,7 +405,7 @@ export class ProjectInboxStore implements IProjectInboxStore {
     } catch (error) {
       console.error("Error fetching the intake issues", error);
       this.error = {
-        message: "Error fetching the paginated intake work items please try again later.",
+        message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         status: "pagination-error",
       };
       throw error;

@@ -14,5 +14,5 @@ export type AudioIconProps = {
 };
 
 export function AudioIcon({ width, height }: AudioIconProps) {
-  return <img src={AudioFileIcon} width={width} height={height} alt="AudioFileIcon" />;
+  return <img src={AudioFileIcon} width={width} height={height} alt="" />;
 }

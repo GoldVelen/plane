@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { Download, Minus } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
@@ -27,6 +28,7 @@ type Props = {
 };
 
 function ImageFullScreenModalWithoutPortal(props: Props) {
+  const { t } = useTranslation();
   const { aspectRatio, isFullScreenEnabled, isTouchDevice, downloadSrc, src, toggleFullScreenMode, width } = props;
   // refs
   const dragStart = useRef({ x: 0, y: 0 });
@@ -206,7 +208,7 @@ function ImageFullScreenModalWithoutPortal(props: Props) {
       })}
       role="dialog"
       aria-modal="true"
-      aria-label="Fullscreen image viewer"
+      aria-label={t("legacy_ui.fullscreen_image_viewer")}
     >
       <div
         ref={modalRef}
@@ -217,7 +219,7 @@ function ImageFullScreenModalWithoutPortal(props: Props) {
           type="button"
           onClick={handleClose}
           className="absolute top-10 right-10 grid size-8 place-items-center"
-          aria-label="Close image viewer"
+          aria-label={t("legacy_ui.close_image_viewer")}
         >
           <CloseIcon className="size-8 text-white/60 transition-colors hover:text-white" />
         </button>
@@ -250,7 +252,7 @@ function ImageFullScreenModalWithoutPortal(props: Props) {
               }}
               className="grid size-6 place-items-center text-white/60 transition-colors duration-200 hover:text-white disabled:text-white/30"
               disabled={magnification <= MIN_ZOOM}
-              aria-label="Zoom out"
+              aria-label={t("legacy_ui.zoom_out")}
             >
               <Minus className="size-4" />
             </button>
@@ -266,7 +268,7 @@ function ImageFullScreenModalWithoutPortal(props: Props) {
               }}
               className="grid size-6 place-items-center text-white/60 transition-colors duration-200 hover:text-white disabled:text-white/30"
               disabled={magnification >= MAX_ZOOM}
-              aria-label="Zoom in"
+              aria-label={t("legacy_ui.zoom_in")}
             >
               <PlusIcon className="size-4" />
             </button>
@@ -276,7 +278,7 @@ function ImageFullScreenModalWithoutPortal(props: Props) {
               type="button"
               onClick={() => window.open(downloadSrc, "_blank")}
               className="grid size-8 flex-shrink-0 place-items-center text-white/60 transition-colors duration-200 hover:text-white"
-              aria-label="Download image"
+              aria-label={t("legacy_ui.download_image")}
             >
               <Download className="size-4" />
             </button>
@@ -286,7 +288,7 @@ function ImageFullScreenModalWithoutPortal(props: Props) {
               type="button"
               onClick={() => window.open(src, "_blank")}
               className="grid size-8 flex-shrink-0 place-items-center text-white/60 transition-colors duration-200 hover:text-white"
-              aria-label="Open image in new tab"
+              aria-label={t("legacy_ui.open_image_in_new_tab")}
             >
               <NewTabIcon className="size-4" />
             </button>

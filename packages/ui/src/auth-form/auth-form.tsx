@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useState, useMemo } from "react";
 import { E_PASSWORD_STRENGTH } from "@plane/constants";
 import { Button } from "../button/button";
@@ -59,6 +60,7 @@ export function AuthForm({
   alternateModeText,
   alternateModeButtonText,
 }: AuthFormProps) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<AuthFormData>({
     email: initialData.email || "",
     password: initialData.password || "",
@@ -117,17 +119,17 @@ export function AuthForm({
 
   const getSubmitButtonText = () => {
     if (submitButtonText) return submitButtonText;
-    return mode === "sign-in" ? "Sign In" : "Create Account";
+    return mode === "sign-in" ? t("auth.common.sign_in") : t("legacy_ui.create_account");
   };
 
   const getAlternateModeText = () => {
     if (alternateModeText) return alternateModeText;
-    return mode === "sign-in" ? "Don't have an account?" : "Already have an account?";
+    return mode === "sign-in" ? t("legacy_ui.don_t_have_an_account") : t("auth.common.already_have_an_account");
   };
 
   const getAlternateModeButtonText = () => {
     if (alternateModeButtonText) return alternateModeButtonText;
-    return mode === "sign-in" ? "Sign Up" : "Sign In";
+    return mode === "sign-in" ? t("auth.common.sign_up") : t("auth.common.sign_in");
   };
 
   return (
@@ -137,10 +139,10 @@ export function AuthForm({
         id="email"
         name="email"
         type="email"
-        label="Email"
+        label={t("email")}
         value={formData.email}
         onChange={handleInputChange("email")}
-        placeholder="name@company.com"
+        placeholder={t("legacy_ui.name_company_com")}
         error={emailError}
         disabled={disabled}
         // autoComplete="email"
@@ -151,12 +153,12 @@ export function AuthForm({
       <AuthPasswordInput
         id="password"
         name="password"
-        label={mode === "sign-in" ? "Password" : "Set a password"}
+        label={mode === "sign-in" ? t("password") : t("auth.common.password.set_password")}
         value={formData.password}
         onChange={handleInputChange("password")}
         onPasswordChange={handlePasswordChange}
         onPasswordStrengthChange={handlePasswordStrengthChange}
-        placeholder="Enter password"
+        placeholder={t("auth.common.password.placeholder")}
         error={passwordError}
         showPasswordStrength={showPasswordStrength && mode === "sign-up"}
         disabled={disabled}

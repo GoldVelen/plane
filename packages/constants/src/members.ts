@@ -30,9 +30,9 @@ export const MEMBER_PROPERTY_DETAILS: {
   [key in keyof IProjectMemberDisplayProperties]: {
     i18n_title: string;
     ascendingOrderKey: TMemberOrderByOptions;
-    ascendingOrderTitle: string;
+    ascendingOrderTitleKey: string;
     descendingOrderKey: TMemberOrderByOptions;
-    descendingOrderTitle: string;
+    descendingOrderTitleKey: string;
     iconName: string;
     isSortingAllowed: boolean;
   };
@@ -40,45 +40,45 @@ export const MEMBER_PROPERTY_DETAILS: {
   full_name: {
     i18n_title: "project_members.full_name",
     ascendingOrderKey: "full_name",
-    ascendingOrderTitle: "A",
+    ascendingOrderTitleKey: "common.order_by.asc",
     descendingOrderKey: "-full_name",
-    descendingOrderTitle: "Z",
+    descendingOrderTitleKey: "common.order_by.desc",
     iconName: "User",
     isSortingAllowed: true,
   },
   display_name: {
     i18n_title: "project_members.display_name",
     ascendingOrderKey: "display_name",
-    ascendingOrderTitle: "A",
+    ascendingOrderTitleKey: "common.order_by.asc",
     descendingOrderKey: "-display_name",
-    descendingOrderTitle: "Z",
+    descendingOrderTitleKey: "common.order_by.desc",
     iconName: "User",
     isSortingAllowed: true,
   },
   email: {
     i18n_title: "project_members.email",
     ascendingOrderKey: "email",
-    ascendingOrderTitle: "A",
+    ascendingOrderTitleKey: "common.order_by.asc",
     descendingOrderKey: "-email",
-    descendingOrderTitle: "Z",
+    descendingOrderTitleKey: "common.order_by.desc",
     iconName: "Mail",
     isSortingAllowed: true,
   },
   joining_date: {
     i18n_title: "project_members.joining_date",
     ascendingOrderKey: "joining_date",
-    ascendingOrderTitle: "Old",
+    ascendingOrderTitleKey: "common.order_by.asc",
     descendingOrderKey: "-joining_date",
-    descendingOrderTitle: "New",
+    descendingOrderTitleKey: "common.order_by.desc",
     iconName: "Calendar",
     isSortingAllowed: true,
   },
   role: {
     i18n_title: "project_members.role",
     ascendingOrderKey: "role",
-    ascendingOrderTitle: "Guest",
+    ascendingOrderTitleKey: "common.order_by.asc",
     descendingOrderKey: "-role",
-    descendingOrderTitle: "Admin",
+    descendingOrderTitleKey: "common.order_by.desc",
     iconName: "Shield",
     isSortingAllowed: true,
   },

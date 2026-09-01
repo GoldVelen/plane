@@ -6,6 +6,7 @@
 
 import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
+import { useTranslation } from "@plane/i18n";
 import { GANTT_TIMELINE_TYPE } from "@plane/types";
 import type {
   IBaseLayoutsGanttItem,
@@ -21,6 +22,7 @@ import { BaseGanttSidebar } from "./sidebar";
 export const BaseGanttLayout = observer(function BaseGanttLayout<T extends IBaseLayoutsGanttItem>(
   props: IBaseLayoutsGanttProps<T>
 ) {
+  const { t } = useTranslation();
   const {
     items,
     groupedItemIds,
@@ -39,14 +41,16 @@ export const BaseGanttLayout = observer(function BaseGanttLayout<T extends IBase
     showAllBlocks = false,
     showToday = true,
     border = false,
-    title = "Items",
-    loaderTitle = "items",
+    title: titleProp,
+    loaderTitle: loaderTitleProp,
     quickAdd,
     loadMoreItems,
     isLoading: _isLoading,
     className,
     timelineType: timelineTypeKey = GANTT_TIMELINE_TYPE.ISSUE,
   } = props;
+  const title = titleProp ?? t("legacy_ui.items");
+  const loaderTitle = loaderTitleProp ?? t("legacy_ui.items");
 
   // Flatten all grouped item IDs into a single array for gantt
   // Gantt doesn't typically show groups, it shows all items on a timeline

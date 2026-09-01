@@ -10,7 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 import { CircleMinus } from "lucide-react";
 import { Disclosure } from "@headlessui/react";
 // plane imports
-import { ROLE, EUserPermissions, MEMBER_TRACKER_ELEMENTS } from "@plane/constants";
+import { ROLE_DETAILS, EUserPermissions, MEMBER_TRACKER_ELEMENTS } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { EUserProjectRoles, IUser, IWorkspaceMember, TProjectMembership } from "@plane/types";
@@ -41,6 +41,7 @@ type AccountTypeProps = {
 
 export function NameColumn(props: NameProps) {
   const { rowData, workspaceSlug, isAdmin, currentUser, setRemoveMemberModal } = props;
+  const { t } = useTranslation();
   // derived values
   const { avatar_url, display_name, email, first_name, id, last_name } = rowData.member;
 
@@ -83,7 +84,7 @@ export function NameColumn(props: NameProps) {
                     onClick={() => setRemoveMemberModal(rowData)}
                   >
                     <CircleMinus className="size-3.5 flex-shrink-0" />
-                    {rowData.member?.id === currentUser?.id ? "Leave " : "Remove "}
+                    {rowData.member?.id === currentUser?.id ? t("leave") : t("common.remove")}
                   </div>
                 </CustomMenu.MenuItem>
               </CustomMenu>
@@ -111,7 +112,7 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
     formState: { errors },
   } = useForm();
   // derived values
-  const roleLabel = ROLE[rowData.original_role ?? EUserPermissions.GUEST];
+  const roleLabel = t(ROLE_DETAILS[rowData.original_role ?? EUserPermissions.GUEST].i18n_title);
   const isCurrentUser = currentUser?.id === rowData.member.id;
   const isRowDataWorkspaceAdmin = [EUserPermissions.ADMIN].includes(
     Number(getWorkspaceMemberDetails(rowData.member.id)?.role) ?? EUserPermissions.GUEST
@@ -135,13 +136,12 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
     (isCurrentUserProjectAdmin && !isRowDataWorkspaceAdmin && !isCurrentUser);
   const checkCurrentOptionWorkspaceRole = (value: string) => {
     const currentMemberWorkspaceRole = getWorkspaceMemberDetails(value)?.role as EUserPermissions | undefined;
-    if (!value || !currentMemberWorkspaceRole) return ROLE;
+    const roleOptions = Object.entries(ROLE_DETAILS);
+    if (!value || !currentMemberWorkspaceRole) return roleOptions;
 
     const isGuest = [EUserPermissions.GUEST].includes(currentMemberWorkspaceRole);
 
-    return Object.fromEntries(
-      Object.entries(ROLE).filter(([key]) => !isGuest || parseInt(key) === EUserPermissions.GUEST)
-    );
+    return roleOptions.filter(([key]) => !isGuest || parseInt(key) === EUserPermissions.GUEST);
   };
 
   return (
@@ -179,9 +179,9 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
               className="w-32 rounded-md p-0"
               input
             >
-              {Object.entries(checkCurrentOptionWorkspaceRole(rowData.member.id)).map(([key, label]) => (
+              {checkCurrentOptionWorkspaceRole(rowData.member.id).map(([key, roleDetails]) => (
                 <CustomSelect.Option key={key} value={key}>
-                  {label}
+                  {t(roleDetails.i18n_title)}
                 </CustomSelect.Option>
               ))}
             </CustomSelect>

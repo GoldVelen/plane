@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import * as React from "react";
 import { AnimatedCounter } from "../animated-counter";
 import { stringToEmoji } from "../emoji-icon-picker";
@@ -106,8 +107,9 @@ const EmojiReactionButton = React.forwardRef(function EmojiReactionButton(
   { onAddReaction, className, ...props }: EmojiReactionButtonProps,
   ref: React.ForwardedRef<HTMLButtonElement>
 ) {
+  const { t } = useTranslation();
   return (
-    <Tooltip tooltipContent="Add reaction">
+    <Tooltip tooltipContent={t("legacy_ui.add_reaction")}>
       <IconButton
         ref={ref}
         icon={AddReactionIcon}

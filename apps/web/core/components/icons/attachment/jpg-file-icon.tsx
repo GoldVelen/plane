@@ -11,5 +11,5 @@ import JpgFileIcon from "@/app/assets/attachment/jpg-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function JpgIcon({ width, height }: ImageIconPros) {
-  return <img src={JpgFileIcon} width={width} height={height} alt="JpgFileIcon" />;
+  return <img src={JpgFileIcon} width={width} height={height} alt="" />;
 }

@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
@@ -28,7 +29,9 @@ type Props = {
 };
 
 export const FilterMember = observer(function FilterMember(props: Props) {
-  const { filterKey, label = "Members", memberIds, searchQuery } = props;
+  const { t } = useTranslation();
+  const { filterKey, label: labelProp, memberIds, searchQuery } = props;
+  const label = labelProp ?? t("common.members");
   // hooks
   const { inboxFilters, handleInboxIssueFilters } = useProjectInbox();
   const { getUserDetails } = useMember();
@@ -92,7 +95,7 @@ export const FilterMember = observer(function FilterMember(props: Props) {
                           size="md"
                         />
                       }
-                      title={currentUser?.id === member.id ? "You" : member?.display_name}
+                      title={currentUser?.id === member.id ? t("you") : member?.display_name}
                     />
                   );
                 })}
@@ -102,7 +105,7 @@ export const FilterMember = observer(function FilterMember(props: Props) {
                     className="ml-8 text-11 font-medium text-accent-primary"
                     onClick={handleViewToggle}
                   >
-                    {itemsToRender === sortedOptions.length ? "View less" : "View all"}
+                    {itemsToRender === sortedOptions.length ? t("legacy_ui.view_less") : t("legacy_ui.view_all")}
                   </button>
                 )}
               </>

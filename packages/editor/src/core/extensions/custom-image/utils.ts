@@ -39,22 +39,22 @@ export const ensurePixelString = <TDefault>(
 };
 
 export const IMAGE_ALIGNMENT_OPTIONS: {
-  label: string;
+  labelKey: string;
   value: TCustomImageAlignment;
   icon: LucideIcon;
 }[] = [
   {
-    label: "Left",
+    labelKey: "legacy_ui.left",
     value: "left",
     icon: AlignLeft,
   },
   {
-    label: "Center",
+    labelKey: "legacy_ui.center",
     value: "center",
     icon: AlignCenter,
   },
   {
-    label: "Right",
+    labelKey: "legacy_ui.right",
     value: "right",
     icon: AlignRight,
   },

@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import type { MouseEvent } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
@@ -32,6 +33,7 @@ type InboxIssueListItemProps = {
 };
 
 export const InboxIssueListItem = observer(function InboxIssueListItem(props: InboxIssueListItemProps) {
+  const { t } = useTranslation();
   const { workspaceSlug, projectId, inboxIssueId, projectIdentifier, setIsMobileSidebar } = props;
   // router
   const searchParams = useSearchParams();
@@ -82,7 +84,7 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
           <div className="flex items-center justify-between">
             <div className="flex flex-wrap items-center gap-2">
               <Tooltip
-                tooltipHeading="Created on"
+                tooltipHeading={t("common.created_on")}
                 tooltipContent={`${renderFormattedDate(issue.created_at ?? "")}`}
                 isMobile={isMobile}
               >
@@ -92,7 +94,7 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
               <div className="rounded-full border-2 border-strong-1" />
 
               {issue.priority && (
-                <Tooltip tooltipHeading="Priority" tooltipContent={`${issue.priority ?? "None"}`}>
+                <Tooltip tooltipHeading={t("priority")} tooltipContent={issue.priority ?? t("none")}>
                   <PriorityIcon priority={issue.priority} withContainer className="h-3 w-3" />
                 </Tooltip>
               )}
@@ -100,7 +102,9 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
               {issue.label_ids && issue.label_ids.length > 3 ? (
                 <div className="relative flex !h-[17.5px] items-center gap-1 rounded-sm border border-strong px-1 text-11">
                   <span className="bg-orange-400 h-2 w-2 rounded-full" />
-                  <span className="max-w-28 truncate normal-case">{`${issue.label_ids.length} labels`}</span>
+                  <span className="max-w-28 truncate normal-case">
+                    {t("legacy_ui.value0_labels_6d3f054f", { value0: issue.label_ids.length })}
+                  </span>
                 </div>
               ) : (
                 <>

@@ -195,7 +195,7 @@
           "validation_success_with_refs": "公式有效！回傳 {resultType}（參照了 {count} 個欄位）",
           "error": {
             "empty": "請輸入公式",
-            "missing_context": "缺少工作空間、專案或工作項目類型上下文",
+            "missing_context": "缺少工作區、專案或工作項目類型上下文",
             "validation_failed": "驗證失敗"
           },
           "picker": {

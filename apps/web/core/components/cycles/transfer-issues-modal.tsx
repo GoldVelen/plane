@@ -44,7 +44,7 @@ export const TransferIssuesModal = observer(function TransferIssuesModal(props: 
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "Work items have been transferred successfully",
+          message: t("legacy_ui.work_items_have_been_transferred_successfully"),
         });
         await getCycleDetails(payload.new_cycle_id);
       })
@@ -52,7 +52,7 @@ export const TransferIssuesModal = observer(function TransferIssuesModal(props: 
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: "Unable to transfer work items. Please try again.",
+          message: t("legacy_ui.unable_to_transfer_work_items_please_try_again"),
         });
       });
   };
@@ -67,7 +67,7 @@ export const TransferIssuesModal = observer(function TransferIssuesModal(props: 
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("error"),
-        message: error.error || "Unable to fetch cycle details",
+        message: error.error || t("legacy_ui.unable_to_fetch_cycle_details"),
       });
     });
   };
@@ -94,7 +94,7 @@ export const TransferIssuesModal = observer(function TransferIssuesModal(props: 
           <SearchIcon className="h-4 w-4 text-secondary" />
           <input
             className="text-13 outline-none"
-            placeholder="Search for a cycle..."
+            placeholder={t("legacy_ui.search_for_a_cycle")}
             onChange={(e) => setQuery(e.target.value)}
             value={query}
           />
@@ -134,12 +134,12 @@ export const TransferIssuesModal = observer(function TransferIssuesModal(props: 
               <div className="flex w-full items-center justify-center gap-4 p-5 text-13">
                 <AlertCircle className="h-3.5 w-3.5 text-secondary" />
                 <span className="text-center text-secondary">
-                  You don’t have any current cycle. Please create one to transfer the work items.
+                  {t("legacy_ui.you_don_t_have_any_current_cycle_please_create_one_to_transfer_the_work_items")}
                 </span>
               </div>
             )
           ) : (
-            <p className="text-center text-secondary">Loading...</p>
+            <p className="text-center text-secondary">{t("legacy_ui.loading")}</p>
           )}
         </div>
       </div>

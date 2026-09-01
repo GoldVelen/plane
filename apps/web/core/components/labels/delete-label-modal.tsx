@@ -48,7 +48,7 @@ export const DeleteLabelModal = observer(function DeleteLabelModal(props: Props)
       })
       .catch((err) => {
         setIsDeleteLoading(false);
-        const error = err?.error || "Label could not be deleted. Please try again.";
+        const error = err?.error || t("legacy_ui.some_error_occurred_please_try_again");
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
@@ -63,12 +63,12 @@ export const DeleteLabelModal = observer(function DeleteLabelModal(props: Props)
       handleSubmit={handleDeletion}
       isSubmitting={isDeleteLoading}
       isOpen={isOpen}
-      title="Delete Label"
+      title={t("legacy_ui.delete_label")}
       content={
         <>
           {t("sso.domain_management.verified_domains.delete_domain.description.prefix")}
-          <span className="font-medium text-primary">{data?.name}</span>? This will remove the label from all the work
-          item and from any views where the label is being filtered upon.
+          <span className="font-medium text-primary">{data?.name}</span>
+          {t("legacy_ui.this_will_remove_the_label_from_all_the_work_item_and_from_any_views_where_the_l")}
         </>
       }
     />

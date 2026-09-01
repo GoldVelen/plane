@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export const FilterProjects = observer(function FilterProjects(props: Props) {
+  const { t } = useTranslation();
   const { appliedFilters, handleUpdate, searchQuery } = props;
   // states
   const [itemsToRender, setItemsToRender] = useState(5);
@@ -53,7 +55,7 @@ export const FilterProjects = observer(function FilterProjects(props: Props) {
   return (
     <>
       <FilterHeader
-        title={`Project${appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : ""}`}
+        title={t("legacy_ui.project_value0", { value0: appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : "" })}
         isPreviewEnabled={previewEnabled}
         handleIsPreviewEnabled={() => setPreviewEnabled(!previewEnabled)}
       />
@@ -81,7 +83,7 @@ export const FilterProjects = observer(function FilterProjects(props: Props) {
                     className="ml-8 text-11 font-medium text-accent-primary"
                     onClick={handleViewToggle}
                   >
-                    {itemsToRender === sortedOptions.length ? "View less" : "View all"}
+                    {itemsToRender === sortedOptions.length ? t("legacy_ui.view_less") : t("legacy_ui.view_all")}
                   </button>
                 )}
               </>

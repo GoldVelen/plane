@@ -5,6 +5,7 @@
  */
 
 import { useCallback, useEffect, useMemo } from "react";
+import { useTranslation } from "@plane/i18n";
 // hooks
 import { useMultipleSelectStore } from "@/hooks/store/use-multiple-select-store";
 //
@@ -37,6 +38,7 @@ export type TSelectionHelper = {
 };
 
 export const useMultipleSelect = (props: Props) => {
+  const { t } = useTranslation();
   const { containerRef, disabled, entities } = props;
   // router
   // const router = useAppRouter();
@@ -60,7 +62,7 @@ export const useMultipleSelect = (props: Props) => {
 
   useReloadConfirmations(
     selectedEntityIds && selectedEntityIds.length > 0,
-    "Are you sure you want to leave? Your current bulk operation selections will be lost.",
+    t("legacy_ui.are_you_sure_you_want_to_leave_your_current_bulk_operation_selections_will_be_lo"),
     true,
     () => {
       clearSelection();

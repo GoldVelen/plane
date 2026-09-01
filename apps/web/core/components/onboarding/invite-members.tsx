@@ -21,7 +21,7 @@ import { XCircle } from "lucide-react";
 import { Listbox } from "@headlessui/react";
 // plane imports
 import type { EUserPermissions } from "@plane/constants";
-import { ROLE, ROLE_DETAILS } from "@plane/constants";
+import { ROLE_DETAILS } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 // types
 import { Button } from "@plane/propel/button";
@@ -196,7 +196,7 @@ const InviteMemberInput = observer(function InviteMemberInput(props: InviteMembe
                       !getValues(`emails.${index}.role_active`) ? "text-placeholder" : "text-primary"
                     } sm:text-13`}
                   >
-                    {ROLE[value]}
+                    {t(ROLE_DETAILS[value].i18n_title)}
                   </span>
 
                   <ChevronDownIcon
@@ -343,9 +343,9 @@ export function InviteMembers(props: Props) {
       <div className="h-full w-full overflow-auto px-6 py-10 sm:px-7 sm:py-14 md:px-14 lg:px-28">
         <div className="mx-auto mt-6 flex w-full flex-col items-center justify-center p-8 md:w-4/5">
           <div className="mx-auto w-4/5 space-y-1 py-4 text-center">
-            <h3 className="text-24 font-bold text-primary">Invite your teammates</h3>
+            <h3 className="text-24 font-bold text-primary">{t("legacy_ui.invite_your_teammates")}</h3>
             <p className="font-medium text-placeholder">
-              Work in plane happens best with your team. Invite them now to use Plane to its potential.
+              {t("legacy_ui.work_in_plane_happens_best_with_your_team_invite_them_now_to_use_plane_to_its_po")}
             </p>
           </div>
           <form
@@ -384,7 +384,7 @@ export function InviteMembers(props: Props) {
                 onClick={appendField}
               >
                 <PlusIcon className="h-4 w-4" strokeWidth={2} />
-                Add another
+                {t("legacy_ui.add_another")}
               </button>
             </div>
             <div className="mx-auto flex w-full max-w-96 flex-col items-center justify-center gap-4 px-8 sm:px-2">
@@ -395,10 +395,10 @@ export function InviteMembers(props: Props) {
                 className="w-full"
                 disabled={isInvitationDisabled || !isValid || isSubmitting}
               >
-                {isSubmitting ? <Spinner height="20px" width="20px" /> : "Continue"}
+                {isSubmitting ? <Spinner height="20px" width="20px" /> : t("common.continue")}
               </Button>
               <Button variant="ghost" size="xl" className="w-full" onClick={nextStep}>
-                I’ll do it later
+                {t("legacy_ui.i_ll_do_it_later")}
               </Button>
             </div>
           </form>

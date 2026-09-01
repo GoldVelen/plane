@@ -8,6 +8,7 @@ import type { Editor } from "@tiptap/core";
 import type { Node as ProseMirrorNode } from "@tiptap/pm/model";
 import { addColumn, removeColumn, addRow, removeRow, TableMap } from "@tiptap/pm/tables";
 import type { TableRect } from "@tiptap/pm/tables";
+import { i18nInstance } from "@plane/i18n";
 // local imports
 import { isCellEmpty } from "../../table/utilities/helpers";
 
@@ -31,8 +32,9 @@ export const createColumnInsertButton = (editor: Editor, tableInfo: TableInfo): 
   const button = document.createElement("button");
   button.type = "button";
   button.className = "table-column-insert-button";
-  button.title = "Insert columns";
-  button.ariaLabel = "Insert columns";
+  const insertColumnsLabel = String(i18nInstance.t("legacy_ui.insert_columns"));
+  button.title = insertColumnsLabel;
+  button.ariaLabel = insertColumnsLabel;
 
   const icon = document.createElement("span");
   icon.innerHTML = addSvg;
@@ -129,8 +131,9 @@ export const createRowInsertButton = (editor: Editor, tableInfo: TableInfo): HTM
   const button = document.createElement("button");
   button.type = "button";
   button.className = "table-row-insert-button";
-  button.title = "Insert rows";
-  button.ariaLabel = "Insert rows";
+  const insertRowsLabel = String(i18nInstance.t("legacy_ui.insert_rows"));
+  button.title = insertRowsLabel;
+  button.ariaLabel = insertRowsLabel;
 
   const icon = document.createElement("span");
   icon.innerHTML = addSvg;

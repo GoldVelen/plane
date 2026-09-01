@@ -106,7 +106,7 @@ export const WorkspaceDraftIssuesRoot = observer(function WorkspaceDraftIssuesRo
               })}
               onClick={handleNextIssues}
             >
-              Load More &darr;
+              {t("legacy_ui.load_more")}
             </div>
           )}
         </Fragment>

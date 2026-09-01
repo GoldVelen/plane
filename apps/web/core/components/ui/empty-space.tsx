@@ -5,6 +5,7 @@
  */
 
 // next
+import { useTranslation } from "@plane/i18n";
 import React from "react";
 import Link from "next/link";
 import { ChevronRightIcon } from "@plane/propel/icons";
@@ -18,6 +19,7 @@ type EmptySpaceProps = {
 };
 
 function EmptySpace({ title, description, children, Icon, link }: EmptySpaceProps) {
+  const { t } = useTranslation();
   return (
     <>
       <div className="max-w-lg">
@@ -37,7 +39,7 @@ function EmptySpace({ title, description, children, Icon, link }: EmptySpaceProp
             <Link href={link.href}>
               <span className="text-13 font-medium text-accent-primary hover:text-accent-primary">
                 {link.text}
-                <span aria-hidden="true"> &rarr;</span>
+                <span aria-hidden="true"> {t("legacy_ui.copy_4466f5ea01")}</span>
               </span>
             </Link>
           </div>

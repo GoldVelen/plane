@@ -164,7 +164,7 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
                   // TODO: Add translation
                   <EmptyStateDetailed
                     assetKey="inbox"
-                    title="No request closed yet"
+                    title={t("legacy_ui.no_request_closed_yet")}
                     description={t("inbox_issue.empty_state.sidebar_closed_tab.description")}
                     assetClassName="size-20"
                     className="px-10"

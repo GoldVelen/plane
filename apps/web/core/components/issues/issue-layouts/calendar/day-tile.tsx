@@ -55,7 +55,7 @@ type Props = {
 };
 
 export const CalendarDayTile = observer(function CalendarDayTile(props: Props) {
-  const { t } = useTranslation();
+  const { currentLocale, t } = useTranslation();
   const {
     issuesFilterStore,
     date,
@@ -115,7 +115,7 @@ export const CalendarDayTile = observer(function CalendarDayTile(props: Props) {
               setToast({
                 type: TOAST_TYPE.ERROR,
                 title: t("toast.error"),
-                message: "Due date cannot be before the start date of the work item.",
+                message: t("legacy_ui.due_date_cannot_be_before_the_start_date_of_the_work_item"),
               });
               return;
             }
@@ -158,7 +158,8 @@ export const CalendarDayTile = observer(function CalendarDayTile(props: Props) {
               : "font-medium" // if week layout, highlight all days
           } ${isWeekend ? "bg-layer-1" : "bg-layer-transparent"} `}
         >
-          {date.date.getDate() === 1 && MONTHS_LIST[date.date.getMonth() + 1].shortTitle + " "}
+          {date.date.getDate() === 1 &&
+            `${new Intl.DateTimeFormat(currentLocale, { month: "short" }).format(date.date)} `}
           {isToday ? (
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent-primary text-on-color">
               {date.date.getDate()}

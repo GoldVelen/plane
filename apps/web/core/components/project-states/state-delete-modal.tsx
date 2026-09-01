@@ -50,14 +50,13 @@ export const StateDeleteModal = observer(function StateDeleteModal(props: TState
           setToast({
             type: TOAST_TYPE.ERROR,
             title: t("toast.error"),
-            message:
-              "This state contains some work items within it, please move them to some other state to delete this state.",
+            message: t("legacy_ui.this_state_contains_some_work_items_within_it_please_move_them_to_some_other_sta"),
           });
         else
           setToast({
             type: TOAST_TYPE.ERROR,
             title: t("toast.error"),
-            message: "State could not be deleted. Please try again.",
+            message: t("legacy_ui.state_could_not_be_deleted_please_try_again"),
           });
       })
       .finally(() => {
@@ -71,11 +70,12 @@ export const StateDeleteModal = observer(function StateDeleteModal(props: TState
       handleSubmit={handleDeletion}
       isSubmitting={isDeleteLoading}
       isOpen={isOpen}
-      title="Delete State"
+      title={t("legacy_ui.delete_state")}
       content={
         <>
-          Are you sure you want to delete state- <span className="font-medium text-primary">{data?.name}</span>? All of
-          the data related to the state will be permanently removed. This action cannot be undone.
+          {t("legacy_ui.are_you_sure_you_want_to_delete_state")}
+          <span className="font-medium text-primary">{data?.name}</span>
+          {t("legacy_ui.all_of_the_data_related_to_the_state_will_be_permanently_removed_this_action_can")}
         </>
       }
     />

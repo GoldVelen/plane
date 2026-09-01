@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { FloatingOverlay } from "@floating-ui/react";
 import type { SuggestionProps } from "@tiptap/suggestion";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
@@ -23,6 +24,7 @@ export type MentionsListDropdownProps = SuggestionProps<TMentionSection, TMentio
   };
 
 export const MentionsListDropdown = forwardRef(function MentionsListDropdown(props: MentionsListDropdownProps, ref) {
+  const { t } = useTranslation();
   const { command, query, searchCallback, onClose } = props;
   // states
   const [sections, setSections] = useState<TMentionSection[]>([]);
@@ -158,7 +160,7 @@ export const MentionsListDropdown = forwardRef(function MentionsListDropdown(pro
         }}
       >
         {isLoading ? (
-          <div className="text-center text-13 text-placeholder">Loading...</div>
+          <div className="text-center text-13 text-placeholder">{t("legacy_ui.loading")}</div>
         ) : sections.length ? (
           sections.map((section, sectionIndex) => (
             <div key={section.key} className="space-y-2">
@@ -200,7 +202,7 @@ export const MentionsListDropdown = forwardRef(function MentionsListDropdown(pro
             </div>
           ))
         ) : (
-          <div className="text-center text-13 text-placeholder">No results</div>
+          <div className="text-center text-13 text-placeholder">{t("legacy_ui.no_results")}</div>
         )}
       </div>
     </>

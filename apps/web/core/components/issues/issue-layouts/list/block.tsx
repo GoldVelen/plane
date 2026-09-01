@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import type { Dispatch, MouseEvent, SetStateAction } from "react";
 import { useEffect, useRef } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
@@ -52,6 +53,7 @@ interface IssueBlockProps {
 }
 
 export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
+  const { t } = useTranslation();
   const {
     issuesMap,
     issueId,
@@ -194,10 +196,10 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
           if (!isDraggingAllowed) {
             setToast({
               type: TOAST_TYPE.WARNING,
-              title: "Cannot move work item",
+              title: t("legacy_ui.cannot_move_work_item"),
               message: !canEditIssueProperties
-                ? "You are not allowed to move this work item"
-                : "Drag and drop is disabled for the current grouping",
+                ? t("legacy_ui.you_are_not_allowed_to_move_this_work_item")
+                : t("legacy_ui.drag_and_drop_is_disabled_for_the_current_grouping"),
             });
           }
         }}
@@ -210,9 +212,9 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
                 <Tooltip
                   tooltipContent={
                     <>
-                      Only work items within the current
+                      {t("legacy_ui.only_work_items_within_the_current")}
                       <br />
-                      project can be selected.
+                      {t("legacy_ui.project_can_be_selected")}
                     </>
                   }
                   disabled={issue.project_id === projectId}

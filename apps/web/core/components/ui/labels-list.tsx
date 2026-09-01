@@ -28,7 +28,7 @@ export function IssueLabelsList(props: IssueLabelsListProps) {
         <>
           <Tooltip
             position="top"
-            tooltipHeading="Labels"
+            tooltipHeading={t("common.labels")}
             tooltipContent={labels.map((l) => l?.name).join(", ")}
             isMobile={isMobile}
           >

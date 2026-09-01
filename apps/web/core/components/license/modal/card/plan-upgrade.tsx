@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 // plane imports
 import { TALK_TO_SALES_URL } from "@plane/constants";
@@ -31,6 +32,7 @@ export type PlanUpgradeCardProps = {
 };
 
 export const PlanUpgradeCard = observer(function PlanUpgradeCard(props: PlanUpgradeCardProps) {
+  const { t } = useTranslation();
   const {
     planVariant,
     features,
@@ -72,10 +74,10 @@ export const PlanUpgradeCard = observer(function PlanUpgradeCard(props: PlanUpgr
 
   const renderPriceContent = (price: TSubscriptionPrice) => (
     <>
-      {price.recurring === "month" && "Monthly"}
+      {price.recurring === "month" && t("studio.enums.routine_cadence.MONTHLY")}
       {price.recurring === "year" && (
         <>
-          Yearly
+          {t("legacy_ui.yearly")}
           {yearlyDiscount > 0 && (
             <span className="text-caption-sm ml-1 rounded-full bg-accent-primary px-1.5 py-0.5 text-on-color">
               -{yearlyDiscount}%

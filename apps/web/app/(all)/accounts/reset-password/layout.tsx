@@ -5,10 +5,11 @@
  */
 
 import { Outlet } from "react-router";
+import { i18nInstance } from "@plane/i18n";
 import type { Route } from "./+types/layout";
 
 export default function ResetPasswordLayout() {
   return <Outlet />;
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "Reset Password - Plane" }];
+export const meta: Route.MetaFunction = () => [{ title: i18nInstance.t("legacy_ui.reset_password_plane") }];

@@ -73,7 +73,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
       {
         i18n_key: "sidebar.work_items",
         key: "work_items",
-        name: "Work items",
+        name: t("sidebar.work_items"),
         href: `/${workspaceSlug}/projects/${projectId}/issues`,
         icon: WorkItemsIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
@@ -83,7 +83,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
       {
         i18n_key: "sidebar.cycles",
         key: "cycles",
-        name: "Cycles",
+        name: t("sidebar.cycles"),
         href: `/${workspaceSlug}/projects/${projectId}/cycles`,
         icon: CycleIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
@@ -93,7 +93,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
       {
         i18n_key: "sidebar.modules",
         key: "modules",
-        name: "Modules",
+        name: t("sidebar.modules"),
         href: `/${workspaceSlug}/projects/${projectId}/modules`,
         icon: ModuleIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
@@ -103,7 +103,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
       {
         i18n_key: "sidebar.views",
         key: "views",
-        name: "Views",
+        name: t("sidebar.views"),
         href: `/${workspaceSlug}/projects/${projectId}/views`,
         icon: ViewsIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
@@ -113,7 +113,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
       {
         i18n_key: "sidebar.pages",
         key: "pages",
-        name: "Pages",
+        name: t("sidebar.pages"),
         href: `/${workspaceSlug}/projects/${projectId}/pages`,
         icon: PageIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
@@ -123,7 +123,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
       {
         i18n_key: "sidebar.intake",
         key: "intake",
-        name: "Intake",
+        name: t("sidebar.intake"),
         href: `/${workspaceSlug}/projects/${projectId}/intake`,
         icon: IntakeIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
@@ -131,7 +131,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
         sortOrder: 6,
       },
     ],
-    [project]
+    [project, t]
   );
 
   // memoized navigation items and adding additional navigation items
@@ -189,7 +189,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
               <div className="flex w-full items-center justify-between gap-1.5 py-[1px]">
                 <div className="flex items-center gap-1.5">
                   <item.icon
-                    className={`size-4 flex-shrink-0 ${item.name === "Intake" ? "stroke-1" : "stroke-[1.5]"}`}
+                    className={`size-4 flex-shrink-0 ${item.key === "intake" ? "stroke-1" : "stroke-[1.5]"}`}
                   />
                   <span className="text-11 font-medium">{t(item.i18n_key)}</span>
                 </div>

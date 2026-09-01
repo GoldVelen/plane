@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import type { Editor } from "@tiptap/core";
 import { TableMap } from "@tiptap/pm/tables";
 import { ArrowLeft, ArrowRight, ToggleRight } from "lucide-react";
@@ -18,25 +19,25 @@ import { TableDragHandleDropdownColorSelector } from "../color-selector";
 
 const DROPDOWN_ITEMS: {
   key: string;
-  label: string;
+  labelKey: string;
   icon: LucideIcon | React.FC<ISvgIcons>;
   action: (editor: Editor) => void;
 }[] = [
   {
     key: "insert-left",
-    label: "Insert left",
+    labelKey: "legacy_ui.insert_left",
     icon: ArrowLeft,
     action: (editor) => editor.chain().focus().addColumnBefore().run(),
   },
   {
     key: "insert-right",
-    label: "Insert right",
+    labelKey: "legacy_ui.insert_right",
     icon: ArrowRight,
     action: (editor) => editor.chain().focus().addColumnAfter().run(),
   },
   {
     key: "duplicate",
-    label: "Duplicate",
+    labelKey: "inbox_issue.status.duplicate.title",
     icon: CopyIcon,
     action: (editor) => {
       const table = findTable(editor.state.selection);
@@ -51,13 +52,13 @@ const DROPDOWN_ITEMS: {
   },
   {
     key: "clear-contents",
-    label: "Clear contents",
+    labelKey: "legacy_ui.clear_contents",
     icon: CloseIcon,
     action: (editor) => editor.chain().focus().clearSelectedCells().run(),
   },
   {
     key: "delete",
-    label: "Delete",
+    labelKey: "delete",
     icon: TrashIcon,
     action: (editor) => editor.chain().focus().deleteColumn().run(),
   },
@@ -69,6 +70,7 @@ type Props = {
 };
 
 export function ColumnOptionsDropdown(props: Props) {
+  const { t } = useTranslation();
   const { editor, onClose } = props;
 
   return (
@@ -83,7 +85,7 @@ export function ColumnOptionsDropdown(props: Props) {
           onClose();
         }}
       >
-        <div className="flex-grow truncate">Header column</div>
+        <div className="flex-grow truncate">{t("legacy_ui.header_column")}</div>
         <ToggleRight className="size-3 shrink-0" />
       </button>
       <hr className="my-2 border-subtle" />
@@ -101,7 +103,7 @@ export function ColumnOptionsDropdown(props: Props) {
           }}
         >
           <item.icon className="size-3 shrink-0" />
-          <div className="flex-grow truncate">{item.label}</div>
+          <div className="flex-grow truncate">{t(item.labelKey)}</div>
         </button>
       ))}
     </>

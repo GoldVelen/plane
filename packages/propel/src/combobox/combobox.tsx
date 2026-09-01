@@ -6,6 +6,7 @@
 
 import * as React from "react";
 import { Combobox as BaseCombobox } from "@base-ui-components/react/combobox";
+import { useTranslation } from "@plane/i18n";
 import { SearchIcon } from "../icons";
 import { cn } from "../utils/classname";
 
@@ -116,13 +117,15 @@ function ComboboxOptions({
   className,
   inputClassName,
   optionsContainerClassName,
-  emptyMessage = "No results found",
+  emptyMessage,
   positionerClassName,
   searchQuery: controlledSearchQuery,
   onSearchQueryChange,
   onSearchQueryKeyDown,
   dataPreventOutsideClick,
 }: ComboboxOptionsProps) {
+  const { t } = useTranslation();
+  const resolvedEmptyMessage = emptyMessage ?? t("command_k.empty_state.search.title");
   // const [searchQuery, setSearchQuery] = React.useState("");
   const [internalSearchQuery, setInternalSearchQuery] = React.useState("");
 
@@ -199,12 +202,12 @@ function ComboboxOptions({
             >
               {filteredChildren}
               {showSearch &&
-                emptyMessage &&
+                resolvedEmptyMessage &&
                 React.Children.count(
                   React.Children.toArray(filteredChildren).filter(
                     (child) => React.isValidElement(child) && child.type === ComboboxOption
                   )
-                ) === 0 && <div className="px-2 py-1.5 text-13 text-placeholder">{emptyMessage}</div>}
+                ) === 0 && <div className="px-2 py-1.5 text-13 text-placeholder">{resolvedEmptyMessage}</div>}
             </BaseCombobox.List>
           </div>
         </BaseCombobox.Popup>

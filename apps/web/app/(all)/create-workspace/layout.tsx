@@ -5,10 +5,11 @@
  */
 
 import { Outlet } from "react-router";
+import { i18nInstance } from "@plane/i18n";
 import type { Route } from "./+types/layout";
 
 export default function CreateWorkspaceLayout() {
   return <Outlet />;
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "Create Workspace" }];
+export const meta: Route.MetaFunction = () => [{ title: i18nInstance.t("legacy_ui.create_workspace") }];

@@ -88,18 +88,21 @@ export const UseCaseSetupStep = observer(function UseCaseSetupStep({ handleStepC
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10">
       {/* Header */}
-      <CommonOnboardingHeader title="What brings you to Plane?" description="Tell us your goals and team size." />
+      <CommonOnboardingHeader
+        title={t("legacy_ui.what_brings_you_to_plane")}
+        description={t("legacy_ui.tell_us_your_goals_and_team_size")}
+      />
 
       {/* Use Case Selection */}
       <div className="flex flex-col gap-3">
-        <p className="text-body-sm-semibold text-placeholder">Select one or more</p>
+        <p className="text-body-sm-semibold text-placeholder">{t("legacy_ui.select_one_or_more")}</p>
 
         <Controller
           control={control}
           name="use_case"
           rules={{
-            required: "Please select at least one option",
-            validate: (value) => (value && value.length > 0) || "Please select at least one option",
+            required: t("legacy_ui.please_select_at_least_one_option"),
+            validate: (value) => (value && value.length > 0) || t("legacy_ui.please_select_at_least_one_option"),
           }}
           render={({ field: { value, onChange } }) => (
             <div className="flex flex-col gap-3">

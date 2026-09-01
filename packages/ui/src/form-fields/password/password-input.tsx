@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
 import { Tooltip } from "@plane/propel/tooltip";
@@ -24,12 +25,13 @@ export function PasswordInput({
   id,
   value,
   onChange,
-  placeholder = "Enter your password",
+  placeholder,
   className,
   showToggle = true,
   error = false,
   autoComplete = "off",
 }: TPasswordInputProps) {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="relative">
@@ -46,11 +48,16 @@ export function PasswordInput({
           },
           className
         )}
-        placeholder={placeholder}
+        placeholder={placeholder ?? t("auth.common.password.placeholder")}
         autoComplete={autoComplete}
       />
       {showToggle && (
-        <Tooltip tooltipContent={showPassword ? "Hide password" : "Show password"} position="top">
+        <Tooltip
+          tooltipContent={
+            showPassword ? t("aria_labels.auth_forms.hide_password") : t("aria_labels.auth_forms.show_password")
+          }
+          position="top"
+        >
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}

@@ -30,8 +30,8 @@ export const ProjectViewEmptyState = observer(function ProjectViewEmptyState() {
     // TODO: Add translation
     <EmptyStateDetailed
       assetKey="work-item"
-      title="View work items will appear here"
-      description="Work items help you track individual pieces of work. With work items, keep track of what's going on, who is working on it, and what's done."
+      title={t("legacy_ui.view_work_items_will_appear_here")}
+      description={t("legacy_ui.work_items_help_you_track_individual_pieces_of_work_with_work_items_keep_track_o")}
       actions={[
         {
           label: t("sidebar.new_work_item"),

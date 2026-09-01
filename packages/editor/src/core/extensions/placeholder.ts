@@ -5,6 +5,8 @@
  */
 
 import { Placeholder } from "@tiptap/extension-placeholder";
+// plane imports
+import { i18nInstance } from "@plane/i18n";
 // constants
 import { CORE_EXTENSIONS } from "@/constants/extension";
 // types
@@ -22,7 +24,8 @@ export const CustomPlaceholderExtension = (args: TArgs) => {
     placeholder: ({ editor, node }) => {
       if (!editor.isEditable) return "";
 
-      if (node.type.name === CORE_EXTENSIONS.HEADING) return `Heading ${node.attrs.level}`;
+      if (node.type.name === CORE_EXTENSIONS.HEADING)
+        return i18nInstance.t("legacy_ui.heading_value0", { value0: node.attrs.level });
 
       const isUploadInProgress = editor.storage.utility?.uploadInProgress;
 
@@ -48,7 +51,7 @@ export const CustomPlaceholderExtension = (args: TArgs) => {
         else return placeholder(editor.isFocused, editor.getHTML());
       }
 
-      return "Press '/' for commands...";
+      return i18nInstance.t("legacy_ui.press_for_commands");
     },
     includeChildren: true,
   });

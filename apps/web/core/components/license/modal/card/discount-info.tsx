@@ -52,7 +52,7 @@ export function DiscountInfo({ className, currency, frequency, price, subscripti
         <span className={cn("relative", className)}>
           <img
             src={resolvedTheme === "dark" ? ScribbleWhite : ScribbleBlack}
-            alt="scribble"
+            alt=""
             className="absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 scale-x-125"
           />
           {currency}

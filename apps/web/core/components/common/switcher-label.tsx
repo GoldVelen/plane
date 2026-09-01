@@ -27,7 +27,7 @@ export function SwitcherIcon({ logo_props, logo_url, LabelIcon, size = 12, type 
     return (
       <img
         src={getFileURL(logo_url)}
-        alt="logo"
+        alt=""
         className="rounded-xs object-cover"
         style={{ height: size, width: size }}
       />

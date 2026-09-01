@@ -55,12 +55,15 @@ export function SingleExport({ service, refreshing }: Props) {
                       : ""
             }`}
           >
-            {refreshing ? "Refreshing..." : service.status}
+            {refreshing ? t("legacy_ui.refreshing") : service.status}
           </span>
         </h4>
         <div className="mt-2 flex items-center gap-2 text-11 text-secondary">
           <span>{renderFormattedDate(service.created_at)}</span>|
-          <span>Exported by {service?.initiated_by_detail?.display_name}</span>
+          <span>
+            {t("legacy_ui.exported_by")}
+            {service?.initiated_by_detail?.display_name}
+          </span>
         </div>
       </div>
       {checkExpiry(service.created_at) ? (
@@ -69,7 +72,7 @@ export function SingleExport({ service, refreshing }: Props) {
             <div>
               <a target="_blank" href={service?.url} rel="noopener noreferrer">
                 <Button variant="primary" className="w-full">
-                  {isLoading ? "Downloading..." : "Download"}
+                  {isLoading ? t("legacy_ui.downloading") : t("page_navigation_pane.tabs.assets.download_button")}
                 </Button>
               </a>
             </div>

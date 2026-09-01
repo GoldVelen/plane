@@ -9,6 +9,7 @@ import { makeObservable, observable, runInAction, action, reaction, computed } f
 import { computedFn } from "mobx-utils";
 // types
 import { EUserPermissions } from "@plane/constants";
+import { i18nInstance } from "@plane/i18n";
 import type { TPage, TPageFilters, TPageNavigationTabs } from "@plane/types";
 import { EUserProjectRoles } from "@plane/types";
 // helpers
@@ -239,8 +240,8 @@ export class ProjectPageStore implements IProjectPageStore {
       runInAction(() => {
         this.loader = undefined;
         this.error = {
-          title: "Failed",
-          description: "Failed to fetch the pages, Please try again later.",
+          title: String(i18nInstance.t("toast.error")),
+          description: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
       throw error;
@@ -282,8 +283,8 @@ export class ProjectPageStore implements IProjectPageStore {
       runInAction(() => {
         this.loader = undefined;
         this.error = {
-          title: "Failed",
-          description: "Failed to fetch the page, Please try again later.",
+          title: String(i18nInstance.t("toast.error")),
+          description: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
       throw error;
@@ -315,8 +316,8 @@ export class ProjectPageStore implements IProjectPageStore {
       runInAction(() => {
         this.loader = undefined;
         this.error = {
-          title: "Failed",
-          description: "Failed to create a page, Please try again later.",
+          title: String(i18nInstance.t("toast.error")),
+          description: String(i18nInstance.t("wiki_collections.toasts.create_page_error")),
         };
       });
       throw error;
@@ -341,8 +342,8 @@ export class ProjectPageStore implements IProjectPageStore {
       runInAction(() => {
         this.loader = undefined;
         this.error = {
-          title: "Failed",
-          description: "Failed to delete a page, Please try again later.",
+          title: String(i18nInstance.t("toast.error")),
+          description: String(i18nInstance.t("legacy_ui.page_could_not_be_deleted_please_try_again")),
         };
       });
       throw error;

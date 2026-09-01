@@ -11,5 +11,5 @@ import DefaultFileIcon from "@/app/assets/attachment/default-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function DefaultIcon({ width, height }: ImageIconPros) {
-  return <img src={DefaultFileIcon} width={width} height={height} alt="DefaultFileIcon" />;
+  return <img src={DefaultFileIcon} width={width} height={height} alt="" />;
 }

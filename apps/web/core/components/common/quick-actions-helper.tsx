@@ -5,6 +5,7 @@
  */
 
 // types
+import { useTranslation } from "@plane/i18n";
 import type { ICycle, IModule, IProjectView, IWorkspaceView } from "@plane/types";
 import type { TContextMenuItem } from "@plane/ui";
 // hooks
@@ -65,6 +66,7 @@ type MenuResult = {
 };
 
 export const useCycleMenuItems = (props: UseCycleMenuItemsProps): MenuResult => {
+  const { t } = useTranslation();
   const factory = useQuickActionsFactory();
   const { cycleDetails, isEditingAllowed, ...handlers } = props;
 
@@ -79,7 +81,7 @@ export const useCycleMenuItems = (props: UseCycleMenuItemsProps): MenuResult => 
     factory.createArchiveMenuItem(handlers.handleArchive, {
       shouldRender: isEditingAllowed && !isArchived,
       disabled: !isCompleted,
-      description: isCompleted ? undefined : "Only completed cycles can be archived",
+      description: isCompleted ? undefined : t("project_cycles.only_completed_cycles_can_be_archived"),
     }),
     factory.createRestoreMenuItem(handlers.handleRestore, isEditingAllowed && isArchived),
     factory.createDeleteMenuItem(handlers.handleDelete, isEditingAllowed && !isCompleted && !isArchived),
@@ -89,6 +91,7 @@ export const useCycleMenuItems = (props: UseCycleMenuItemsProps): MenuResult => 
 };
 
 export const useModuleMenuItems = (props: UseModuleMenuItemsProps): MenuResult => {
+  const { t } = useTranslation();
   const factory = useQuickActionsFactory();
   const { moduleDetails, isEditingAllowed, ...handlers } = props;
 
@@ -104,7 +107,7 @@ export const useModuleMenuItems = (props: UseModuleMenuItemsProps): MenuResult =
     factory.createArchiveMenuItem(handlers.handleArchive, {
       shouldRender: isEditingAllowed && !isArchived,
       disabled: !isInArchivableGroup,
-      description: isInArchivableGroup ? undefined : "Only completed or cancelled modules can be archived",
+      description: isInArchivableGroup ? undefined : t("legacy_ui.only_completed_or_cancelled_modules_can_be_archived"),
     }),
     factory.createRestoreMenuItem(handlers.handleRestore, isEditingAllowed && isArchived),
     factory.createDeleteMenuItem(handlers.handleDelete, isEditingAllowed && !isArchived),

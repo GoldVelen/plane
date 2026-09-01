@@ -10,6 +10,7 @@ import { usePopper } from "react-popper";
 // headless ui
 import { Popover, Transition } from "@headlessui/react";
 // ui
+import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 
 type Props = {
@@ -25,17 +26,19 @@ type Props = {
 };
 
 export function FiltersDropdown(props: Props) {
+  const { t } = useTranslation();
   const {
     children,
     miniIcon,
     icon,
-    title = "Dropdown",
+    title: titleProp,
     placement,
     disabled = false,
     tabIndex,
     menuButton,
     isFiltersApplied = false,
   } = props;
+  const title = titleProp ?? t("work_item_types.settings.properties.property_type.dropdown.label");
 
   const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | HTMLDivElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);

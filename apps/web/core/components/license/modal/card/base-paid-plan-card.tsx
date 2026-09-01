@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { CheckCircle } from "lucide-react";
@@ -25,6 +26,7 @@ export type TBasePaidPlanCardProps = {
 };
 
 export const BasePaidPlanCard = observer(function BasePaidPlanCard(props: TBasePaidPlanCardProps) {
+  const { t } = useTranslation();
   const {
     planVariant,
     features,
@@ -71,7 +73,9 @@ export const BasePaidPlanCard = observer(function BasePaidPlanCard(props: TBaseP
                 {renderActionButton(price)}
               </div>
               <div className="px-2 pt-6 pb-2">
-                <div className="p-2 text-caption-md-semibold">{`Everything in ${basePlan} +`}</div>
+                <div className="p-2 text-caption-md-semibold">
+                  {t("legacy_ui.everything_in_value0", { value0: basePlan })}
+                </div>
                 <ul className="grid grid-cols-12 gap-x-4">
                   {features.map((feature) => (
                     <li

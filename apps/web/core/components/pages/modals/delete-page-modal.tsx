@@ -55,7 +55,7 @@ export const DeletePageModal = observer(function DeletePageModal(props: TConfirm
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "Page deleted successfully.",
+          message: t("legacy_ui.page_deleted_successfully"),
         });
 
         if (routePageId) {
@@ -66,7 +66,7 @@ export const DeletePageModal = observer(function DeletePageModal(props: TConfirm
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: "Page could not be deleted. Please try again.",
+          message: t("legacy_ui.page_could_not_be_deleted_please_try_again"),
         });
       });
 
@@ -81,12 +81,12 @@ export const DeletePageModal = observer(function DeletePageModal(props: TConfirm
       handleSubmit={handleDelete}
       isSubmitting={isDeleting}
       isOpen={isOpen}
-      title="Delete page"
+      title={t("legacy_ui.delete_page")}
       content={
         <>
-          Are you sure you want to delete page-{" "}
-          <span className="font-medium break-words break-all text-primary">{getPageName(name)}</span> ? The Page will be
-          deleted permanently. This action cannot be undone.
+          {t("legacy_ui.are_you_sure_you_want_to_delete_page")}{" "}
+          <span className="font-medium break-words break-all text-primary">{getPageName(name)}</span>{" "}
+          {t("legacy_ui.the_page_will_be_deleted_permanently_this_action_cannot_be_undone")}
         </>
       }
     />

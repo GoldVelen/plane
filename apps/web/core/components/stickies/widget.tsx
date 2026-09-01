@@ -49,7 +49,7 @@ export const StickiesWidget = observer(function StickiesWidget() {
               <div
                 className="size-4 animate-spin rounded-full border-2 border-accent-strong border-t-transparent"
                 role="status"
-                aria-label="loading"
+                aria-label={t("legacy_ui.loading_14b85fa8")}
               />
             )}
           </button>

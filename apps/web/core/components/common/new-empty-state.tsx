@@ -44,7 +44,7 @@ export function NewEmptyState({ title, description, image, primaryButton, disabl
           <h3 className="text-20 font-semibold">{title}</h3>
           {description && <p className="text-16">{description}</p>}
           <div className="relative w-full max-w-6xl">
-            <img src={image} className="h-full w-full object-contain" alt={primaryButton?.text || "button image"} />
+            <img src={image} className="h-full w-full object-contain" alt={primaryButton?.text || ""} />
           </div>
 
           <div className="relative flex items-start justify-center">

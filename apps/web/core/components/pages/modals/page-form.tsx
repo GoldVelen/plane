@@ -68,7 +68,7 @@ export function PageForm(props: Props) {
   return (
     <form onSubmit={handlePageFormSubmit}>
       <div className="space-y-5 p-5">
-        <h3 className="text-18 font-medium text-secondary">Create page</h3>
+        <h3 className="text-18 font-medium text-secondary">{t("legacy_ui.create_page_9261a3c7")}</h3>
         <div className="flex h-9 w-full items-start gap-2">
           <EmojiPicker
             isOpen={isOpen}
@@ -127,7 +127,7 @@ export function PageForm(props: Props) {
             />
             {isTitleLengthMoreThan255Character && (
               <span className="text-11 text-danger-primary">
-                Max length of the name should be less than 255 characters
+                {t("legacy_ui.max_length_of_the_name_should_be_less_than_255_characters")}
               </span>
             )}
           </div>
@@ -155,7 +155,7 @@ export function PageForm(props: Props) {
             disabled={isTitleLengthMoreThan255Character}
             tabIndex={getIndex("submit")}
           >
-            {isSubmitting ? "Creating" : "Create Page"}
+            {isSubmitting ? t("creating") : t("legacy_ui.create_page")}
           </Button>
         </div>
       </div>

@@ -110,7 +110,7 @@ export const CreateWorkspace = observer(function CreateWorkspace(props: Props) {
             className="flex w-full items-center gap-2 bg-surface-2 text-14"
             onClick={handleCurrentViewChange}
           >
-            I want to join invited workspaces{" "}
+            {t("legacy_ui.i_want_to_join_invited_workspaces")}{" "}
             <span className="flex h-4 w-4 items-center justify-center rounded-xs bg-accent-primary/80 text-11 font-medium text-on-color">
               {invitedWorkspaces}
             </span>

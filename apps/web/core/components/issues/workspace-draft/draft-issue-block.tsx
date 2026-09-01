@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useRef, useState } from "react";
 import { omit } from "lodash-es";
 import { observer } from "mobx-react";
@@ -33,6 +34,7 @@ type Props = {
 };
 
 export const DraftIssueBlock = observer(function DraftIssueBlock(props: Props) {
+  const { t } = useTranslation();
   // props
   const { workspaceSlug, issueId } = props;
   // states
@@ -63,7 +65,7 @@ export const DraftIssueBlock = observer(function DraftIssueBlock(props: Props) {
   const MENU_ITEMS: TContextMenuItem[] = [
     {
       key: "edit",
-      title: "edit",
+      title: t("legacy_ui.edit"),
       icon: EditIcon,
       action: () => {
         setIssueToEdit(issue);
@@ -72,7 +74,7 @@ export const DraftIssueBlock = observer(function DraftIssueBlock(props: Props) {
     },
     {
       key: "make-a-copy",
-      title: "make_a_copy",
+      title: t("make_a_copy"),
       icon: CopyIcon,
       action: () => {
         setCreateUpdateIssueModal(true);
@@ -80,7 +82,7 @@ export const DraftIssueBlock = observer(function DraftIssueBlock(props: Props) {
     },
     {
       key: "move-to-issues",
-      title: "move_to_project",
+      title: t("move_to_project"),
       icon: SquareStackIcon,
       action: () => {
         setMoveToIssue(true);
@@ -90,7 +92,7 @@ export const DraftIssueBlock = observer(function DraftIssueBlock(props: Props) {
     },
     {
       key: "delete",
-      title: "delete",
+      title: t("legacy_ui.delete"),
       icon: TrashIcon,
       action: () => {
         setDeleteIssueModal(true);

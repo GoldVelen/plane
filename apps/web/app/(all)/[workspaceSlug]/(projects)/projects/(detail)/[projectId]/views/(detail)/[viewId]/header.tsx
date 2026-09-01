@@ -158,7 +158,7 @@ export const ProjectViewIssuesHeader = observer(function ProjectViewIssuesHeader
 
         {viewDetails?.access === EViewAccess.PRIVATE ? (
           <div className="cursor-default text-tertiary">
-            <Tooltip tooltipContent={"Private"}>
+            <Tooltip tooltipContent={t("private")}>
               <LockIcon className="h-4 w-4" />
             </Tooltip>
           </div>

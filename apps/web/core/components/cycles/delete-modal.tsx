@@ -50,7 +50,7 @@ export const CycleDeleteModal = observer(function CycleDeleteModal(props: ICycle
           setToast({
             type: TOAST_TYPE.SUCCESS,
             title: t("toast.success"),
-            message: "Cycle deleted successfully.",
+            message: t("legacy_ui.cycle_deleted_successfully"),
           });
         })
         .catch((errors) => {
@@ -68,8 +68,8 @@ export const CycleDeleteModal = observer(function CycleDeleteModal(props: ICycle
     } catch {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Warning!",
-        message: "Something went wrong please try again later.",
+        title: t("legacy_ui.warning"),
+        message: t("legacy_ui.something_went_wrong_please_try_again_later"),
       });
     }
 
@@ -82,12 +82,14 @@ export const CycleDeleteModal = observer(function CycleDeleteModal(props: ICycle
       handleSubmit={formSubmit}
       isSubmitting={loader}
       isOpen={isOpen}
-      title="Delete cycle"
+      title={t("legacy_ui.delete_cycle")}
       content={
         <>
-          Are you sure you want to delete cycle{' "'}
+          {t("legacy_ui.are_you_sure_you_want_to_delete_cycle")}
+          {' "'}
           <span className="font-medium break-words text-primary">{cycle?.name}</span>
-          {'"'}? All of the data related to the cycle will be permanently removed. This action cannot be undone.
+          {'"'}
+          {t("legacy_ui.all_of_the_data_related_to_the_cycle_will_be_permanently_removed_this_action_can")}
         </>
       }
     />

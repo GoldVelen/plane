@@ -7,6 +7,7 @@
 import { useMemo, useCallback } from "react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@plane/propel/icons";
 import type { EUserProjectRoles, IPartialProject } from "@plane/types";
 import type { TNavigationItem } from "@/components/navigation/tab-navigation-root";
@@ -30,6 +31,7 @@ export const useNavigationItems = ({
   project,
   allowPermissions,
 }: UseNavigationItemsProps): TNavigationItem[] => {
+  const { t } = useTranslation();
   // Base navigation items
   const baseNavigation = useCallback(
     // oxlint-disable-next-line no-shadow
@@ -37,7 +39,7 @@ export const useNavigationItems = ({
       {
         i18n_key: "sidebar.work_items",
         key: "work_items",
-        name: "Work items",
+        name: t("sidebar.work_items"),
         href: `/${workspaceSlug}/projects/${projectId}/issues`,
         icon: WorkItemsIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
@@ -47,7 +49,7 @@ export const useNavigationItems = ({
       {
         i18n_key: "sidebar.cycles",
         key: "cycles",
-        name: "Cycles",
+        name: t("sidebar.cycles"),
         href: `/${workspaceSlug}/projects/${projectId}/cycles`,
         icon: CycleIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
@@ -57,7 +59,7 @@ export const useNavigationItems = ({
       {
         i18n_key: "sidebar.modules",
         key: "modules",
-        name: "Modules",
+        name: t("sidebar.modules"),
         href: `/${workspaceSlug}/projects/${projectId}/modules`,
         icon: ModuleIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
@@ -67,7 +69,7 @@ export const useNavigationItems = ({
       {
         i18n_key: "sidebar.views",
         key: "views",
-        name: "Views",
+        name: t("sidebar.views"),
         href: `/${workspaceSlug}/projects/${projectId}/views`,
         icon: ViewsIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
@@ -77,7 +79,7 @@ export const useNavigationItems = ({
       {
         i18n_key: "sidebar.pages",
         key: "pages",
-        name: "Pages",
+        name: t("sidebar.pages"),
         href: `/${workspaceSlug}/projects/${projectId}/pages`,
         icon: PageIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
@@ -87,7 +89,7 @@ export const useNavigationItems = ({
       {
         i18n_key: "sidebar.intake",
         key: "intake",
-        name: "Intake",
+        name: t("sidebar.intake"),
         href: `/${workspaceSlug}/projects/${projectId}/intake`,
         icon: IntakeIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
@@ -95,7 +97,7 @@ export const useNavigationItems = ({
         sortOrder: 6,
       },
     ],
-    [project]
+    [project, t]
   );
 
   // Combine, filter, and sort navigation items

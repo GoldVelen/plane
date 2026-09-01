@@ -266,7 +266,7 @@ export const KanbanGroup = observer(function KanbanGroup(props: IKanbanGroup) {
       className="sticky bottom-0 w-full cursor-pointer p-3 text-13 font-medium text-accent-primary hover:text-accent-secondary hover:underline"
       onClick={loadMoreIssuesInThisGroup}
     >
-      {t("common.load_more")} &darr;
+      {t("common.load_more")} {t("legacy_ui.copy_2d83e069de")}
     </div>
   );
 

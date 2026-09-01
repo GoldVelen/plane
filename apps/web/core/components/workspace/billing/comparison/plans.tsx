@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { Mail, MessageCircle, MessageSquare } from "lucide-react";
 import { EProductSubscriptionEnum } from "@plane/types";
 // plane imports
@@ -16,20 +17,16 @@ export type TPlanePlans = "free" | "one" | "pro" | "business" | "enterprise";
 
 export type TPlanDetail = {
   id: EProductSubscriptionEnum;
-  name: React.ReactNode;
   monthlyPrice?: number;
   yearlyPrice?: number;
-  monthlyPriceSecondaryDescription?: React.ReactNode;
-  yearlyPriceSecondaryDescription?: React.ReactNode;
-  buttonCTA?: React.ReactNode;
+  monthlyPriceSecondaryDescriptionKey?: string;
+  yearlyPriceSecondaryDescriptionKey?: string;
   isActive: boolean;
 };
 
 type TPlanFeatureDetails = {
   title?: React.ReactNode;
   i18nKey?: string;
-  description?: React.ReactNode;
-  selfHostedDescription?: React.ReactNode;
   comingSoon?: boolean;
   selfHostedOnly?: boolean;
   cloud: Record<TPlanePlans, TPlanFeatureData>;
@@ -56,7 +53,13 @@ function ForumIcon({ className }: { className?: string }) {
   return <MessageSquare className={cn(className, "size-5 text-secondary")} />;
 }
 
+function PlanCopy({ i18nKey }: { i18nKey: string }) {
+  const { t } = useTranslation();
+  return <>{t(i18nKey)}</>;
+}
+
 export function ComingSoonBadge({ className }: { className?: string }) {
+  const { t } = useTranslation();
   return (
     <span
       className={cn(
@@ -64,7 +67,7 @@ export function ComingSoonBadge({ className }: { className?: string }) {
         className
       )}
     >
-      COMING SOON
+      {t("legacy_ui.coming_soon")}
     </span>
   );
 }
@@ -74,11 +77,11 @@ export const PLANS_LIST: TPlanePlans[] = ["free", "one", "pro", "business", "ent
 export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   {
     id: "project-work-tracking",
-    title: "Project + work tracking",
+    i18nKey: "legacy_ui.project_work_tracking",
     features: [
       {
         i18nKey: "projects",
-        description: "Add projects to house work items, cycles, and modules.",
+
         cloud: {
           free: true,
           one: true,
@@ -89,7 +92,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "work_items",
-        description: "Add work via work items, set properties for tracking, and add to\ncycles or modules.",
+
         cloud: {
           free: true,
           one: true,
@@ -100,7 +103,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "comments",
-        description: "Respond to work items, @mention members, and brainstorm\ntogether without leaving Plane.",
+
         cloud: {
           free: true,
           one: true,
@@ -111,7 +114,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "cycles",
-        description: "Track work in timeboxes with differing frequency.",
+
         cloud: {
           free: true,
           one: true,
@@ -122,7 +125,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "modules",
-        description: "Group replicable work in modules with their own\nleads.",
+
         cloud: {
           free: true,
           one: true,
@@ -133,8 +136,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "intake",
-        description:
-          "See suggestions and feedback from viewers and\nguests before you decide to add them to your\nproject.",
+
         cloud: {
           free: true,
           one: true,
@@ -145,56 +147,56 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "project_settings.estimates.title",
-        description: "Measure effort in points in a system that works for\nyou.",
+
         cloud: {
-          free: "Basic",
-          one: "Basic",
-          pro: "Advanced",
-          business: "Advanced",
-          enterprise: "Advanced",
+          free: <PlanCopy i18nKey="legacy_ui.basic" />,
+          one: <PlanCopy i18nKey="legacy_ui.basic" />,
+          pro: <PlanCopy i18nKey="legacy_ui.advanced" />,
+          business: <PlanCopy i18nKey="legacy_ui.advanced" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.advanced" />,
         },
       },
     ],
   },
   {
     id: "project-work-management",
-    title: "Project + work management",
+    i18nKey: "legacy_ui.project_work_management",
     features: [
       {
-        title: "Bulk Ops",
-        description: "Add several work items to cycles or modules, transfer\nthem, or edit their properties.",
+        i18nKey: "legacy_ui.bulk_ops",
+
         cloud: {
           free: false,
-          one: "Limited props",
-          pro: "All props",
+          one: <PlanCopy i18nKey="legacy_ui.limited_props" />,
+          pro: <PlanCopy i18nKey="legacy_ui.all_props" />,
           business: (
             <span className="flex flex-col items-end gap-1 lg:items-center">
               <ComingSoonBadge />
-              Work item transfers and conversions
+              <PlanCopy i18nKey="legacy_ui.work_item_transfers_and_conversions" />
             </span>
           ),
           enterprise: (
             <span className="flex flex-col items-end gap-1 lg:items-center">
               <ComingSoonBadge />
-              Work item transfers and conversions
+              <PlanCopy i18nKey="legacy_ui.work_item_transfers_and_conversions" />
             </span>
           ),
         },
       },
       {
-        title: "Time Tracking + Worklogs",
-        description: "Track time per work item, see aggregated reports, and\nfilter by need.",
+        i18nKey: "legacy_ui.time_tracking_worklogs",
+
         cloud: {
           free: false,
-          one: "Basic",
-          pro: "Historical timesheets",
-          business: "Historical timesheets\nand approvals",
-          enterprise: "Historical timesheets\nand approvals",
+          one: <PlanCopy i18nKey="legacy_ui.basic" />,
+          pro: <PlanCopy i18nKey="legacy_ui.historical_timesheets" />,
+          business: <PlanCopy i18nKey="legacy_ui.historical_timesheets_and_approvals" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.historical_timesheets_and_approvals" />,
         },
       },
       {
-        title: "Active Cycles",
-        description: "See all running cycles across all projects, or soon, in\na single project.",
+        i18nKey: "active_cycles",
+
         cloud: {
           free: false,
           one: true,
@@ -205,7 +207,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "work_item_types.label",
-        description: "Create your own work item types with your own\nproperties.",
+
         cloud: {
           free: false,
           one: false,
@@ -215,30 +217,19 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Custom Properties",
-        description: "Create your own properties and apply them to your\nworkspace or project.",
+        i18nKey: "legacy_ui.custom_properties",
+
         cloud: {
           free: false,
           one: false,
-          pro: "Project-level\ncustom properties",
-          business: "Workspace-level\nproperties and roll-ups",
-          enterprise: "Workspace-level\nproperties and roll-ups",
+          pro: <PlanCopy i18nKey="legacy_ui.project_level_custom_properties" />,
+          business: <PlanCopy i18nKey="legacy_ui.workspace_level_properties_and_roll_ups" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.workspace_level_properties_and_roll_ups" />,
         },
       },
       {
-        title: "Dependencies in Gantt",
-        description: "Adjust timelines for dependent work items visually on\nour Gantt layout.",
-        cloud: {
-          free: false,
-          one: false,
-          pro: true,
-          business: true,
-          enterprise: true,
-        },
-      },
-      {
-        title: "Work item Transfers",
-        description: "Move a work item from a project or a cycle to\nanother.",
+        i18nKey: "legacy_ui.dependencies_in_gantt",
+
         cloud: {
           free: false,
           one: false,
@@ -248,9 +239,19 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Auto-transfer Cycle Work items",
-        description:
-          "Transfer incomplete work items from a completed cycle\nto the next cycle or to the default project state. ",
+        i18nKey: "legacy_ui.work_item_transfers",
+
+        cloud: {
+          free: false,
+          one: false,
+          pro: true,
+          business: true,
+          enterprise: true,
+        },
+      },
+      {
+        i18nKey: "legacy_ui.auto_transfer_cycle_work_items",
+
         cloud: {
           free: false,
           one: false,
@@ -261,7 +262,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "common.epics",
-        description: "Organize long-term work in epics that house work items,\ncycles, and modules.",
+
         cloud: {
           free: false,
           one: false,
@@ -271,8 +272,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Initiatives",
-        description: "Create initiatives to roll up several epics.",
+        i18nKey: "legacy_ui.initiatives",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -283,9 +284,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Checkpoints",
-        description:
-          "Add markers to Projects, Epics and Initiatives to keep your\nteam on track and report on progress.",
+        i18nKey: "legacy_ui.checkpoints",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -296,8 +296,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Module Overview",
-        description: "Like Cycle Overviews, see relevant details and\nprogress charts for each module.",
+        i18nKey: "legacy_ui.module_overview",
+
         cloud: {
           free: false,
           one: false,
@@ -307,14 +307,14 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Auto-assignment In Modules",
-        description: "Choose assignment rules for work items in a\nmodule including Linear, Round Robin, or Capacity.",
+        i18nKey: "legacy_ui.auto_assignment_in_modules",
+
         cloud: {
           free: false,
           one: false,
-          pro: "Linear",
-          business: "Round-robin and Capacity",
-          enterprise: "Round-robin and Capacity",
+          pro: <PlanCopy i18nKey="project_settings.estimates.systems.points.linear" />,
+          business: <PlanCopy i18nKey="legacy_ui.round_robin_and_capacity" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.round_robin_and_capacity" />,
         },
       },
       // {
@@ -330,9 +330,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       //   },
       // },
       {
-        title: "Public, Private, and Secret projects",
-        description:
-          "Public projects are visible and accessible to\neveryone. Private ones are visible but need approval\nto join. Secret projects aren't visible or accessible.",
+        i18nKey: "legacy_ui.public_private_and_secret_projects",
+
         cloud: {
           free: false,
           one: false,
@@ -342,9 +341,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "State Of Projects",
-        description:
-          "See all projects laid across states that highlight\nthose that need attention and those on track.",
+        i18nKey: "legacy_ui.state_of_projects",
+
         cloud: {
           free: false,
           one: false,
@@ -367,9 +365,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       //   },
       // },
       {
-        title: "Pre-defined work item Templates",
-        description:
-          "Choose from our available work item templates that\ncustomize work item types and properties for several\nuse cases.",
+        i18nKey: "legacy_ui.pre_defined_work_item_templates",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -380,8 +377,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Teamspace Cycles",
-        description: "See multiple cycles in multiple projects at once.",
+        i18nKey: "legacy_ui.teamspace_cycles",
+
         cloud: {
           free: false,
           one: false,
@@ -391,8 +388,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Project Templates",
-        description: "Save states, workflows, automation, and other project\nsettings into templates.",
+        i18nKey: "legacy_ui.project_templates",
+
         cloud: {
           free: false,
           one: false,
@@ -402,8 +399,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Baselines And Deviations",
-        description: "Declare baselines for how your projects progress\nand zoom in on deviations.",
+        i18nKey: "legacy_ui.baselines_and_deviations",
+
         cloud: {
           free: false,
           one: false,
@@ -413,8 +410,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Scheduled Comms",
-        description: "Schedule reports, notifications, and messages to\nthird-party tools.",
+        i18nKey: "legacy_ui.scheduled_comms",
+
         cloud: {
           free: false,
           one: false,
@@ -424,8 +421,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Intake Assignees",
-        description: "Assign approved Intake work items to a member by\ndefault.",
+        i18nKey: "legacy_ui.intake_assignees",
+
         cloud: {
           free: false,
           one: false,
@@ -435,8 +432,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Custom SLAs",
-        description: "Set SLA matrices for time-sensitive work items.",
+        i18nKey: "legacy_ui.custom_slas",
+
         cloud: {
           free: false,
           one: false,
@@ -446,8 +443,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Intake Forms",
-        description: "Take Intake work items from externally accessible web\nforms.",
+        i18nKey: "legacy_ui.intake_forms",
+
         cloud: {
           free: false,
           one: false,
@@ -457,8 +454,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Emails For Intake",
-        description: "Get an email address for reporting work items\ndirectly into a project's Intake.",
+        i18nKey: "legacy_ui.emails_for_intake",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -472,12 +469,11 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   },
   {
     id: "visualization",
-    title: "Visualization",
+    i18nKey: "legacy_ui.visualization",
     features: [
       {
-        title: "Layouts",
-        description:
-          "Choose from the List, the Board, the Calendar, the\nGantt, or the Spreadsheet layout for your work items.",
+        i18nKey: "legacy_ui.layouts",
+
         cloud: {
           free: true,
           one: true,
@@ -488,7 +484,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "views",
-        description: "Save sort, filter, and display options on a layout to a\nview.",
+
         cloud: {
           free: true,
           one: true,
@@ -498,8 +494,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Shared Views",
-        description: "Choose a few members to share a view with.",
+        i18nKey: "legacy_ui.shared_views",
+
         cloud: {
           free: false,
           one: false,
@@ -509,8 +505,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Publish Views",
-        description: "Put a view on the Internet and let your customers\ninteract with them.",
+        i18nKey: "legacy_ui.publish_views",
+
         cloud: {
           free: false,
           one: false,
@@ -520,8 +516,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Dashboards and Widgets",
-        description: "Create your own dashboards with custom widgets\nand data types.",
+        i18nKey: "legacy_ui.dashboards_and_widgets",
+
         cloud: {
           free: false,
           one: false,
@@ -534,12 +530,11 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   },
   {
     id: "analytics-reports",
-    title: "Analytics + reports",
+    i18nKey: "legacy_ui.analytics_reports",
     features: [
       {
-        title: "Progress Charts",
-        description:
-          "Track progress in cycles, modules, and overviews\nthroughout Plane without switching to dashboards\nor Analytics.",
+        i18nKey: "legacy_ui.progress_charts",
+
         cloud: {
           free: false,
           one: false,
@@ -549,8 +544,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Cycle Reports",
-        description: "Get on-demand cycle reports during and after a\ncycle. Revisit reports anytime from permalinks.",
+        i18nKey: "legacy_ui.cycle_reports",
+
         cloud: {
           free: false,
           one: false,
@@ -560,8 +555,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Insights",
-        description: "Hindsight, On-demand insights, Foresights.",
+        i18nKey: "legacy_ui.insights",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -584,8 +579,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       //   },
       // },
       {
-        title: "Advanced Pages Analytics",
-        description: "See who's viewing, sharing, and commenting on\nyour pages along with other useful info.",
+        i18nKey: "legacy_ui.advanced_pages_analytics",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -596,8 +591,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Custom Reports",
-        description: "Generate reports by any dimension and metric\nacross your project or workspace.",
+        i18nKey: "legacy_ui.custom_reports",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -611,11 +606,11 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   },
   {
     id: "navigation",
-    title: "Navigation",
+    i18nKey: "legacy_ui.navigation",
     features: [
       {
-        title: "Power K",
-        description: "Access a keyboard-first gateway to almost anything\nin Plane.",
+        i18nKey: "legacy_ui.power_k",
+
         cloud: {
           free: true,
           one: true,
@@ -658,8 +653,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       // },
       {
         title: "PQL",
-        description:
-          "Write Plane Query Language in search with support\nfor Boolean operators. Soon, you can write natural\nlanguage queries.",
+
         cloud: {
           free: false,
           one: false,
@@ -672,52 +666,51 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   },
   {
     id: "workspace-user-management",
-    title: "Workspace and user management",
+    i18nKey: "legacy_ui.workspace_and_user_management",
     features: [
       {
-        title: "Member limit",
-        description: "Number of seats that can use project and work management features",
-        selfHostedDescription: "Number of users that our standard infra supports\nIncrease infra to get more users",
+        i18nKey: "legacy_ui.member_limit",
+
         cloud: {
           free: "12",
           one: "",
-          pro: "Unlimited",
-          business: "Unlimited",
-          enterprise: "Unlimited",
+          pro: <PlanCopy i18nKey="legacy_ui.unlimited" />,
+          business: <PlanCopy i18nKey="legacy_ui.unlimited" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.unlimited" />,
         },
         "self-hosted": {
           free: "~50",
           one: "~50",
           pro: "~200",
           business: "~200",
-          enterprise: "Unlimited",
+          enterprise: <PlanCopy i18nKey="legacy_ui.unlimited" />,
         },
       },
       {
-        title: "Roles",
-        description: "Choose from one of four pre-defined roles or create\ncustom ones with RBAC.",
+        i18nKey: "legacy_ui.roles",
+
         cloud: {
-          free: "Basic",
-          one: "Basic",
-          pro: "Pre-defined roles",
+          free: <PlanCopy i18nKey="legacy_ui.basic" />,
+          one: <PlanCopy i18nKey="legacy_ui.basic" />,
+          pro: <PlanCopy i18nKey="legacy_ui.pre_defined_roles" />,
           business: "RBAC",
-          enterprise: "GAC",
+          enterprise: <PlanCopy i18nKey="legacy_ui.gac" />,
         },
       },
       {
         i18nKey: "common.roles.guests",
-        description: "Let some users see everything or just their work items in\na project.",
+
         cloud: {
           free: false,
-          one: "5 per paid member",
-          pro: "5 per paid member",
-          business: "5 per paid member",
-          enterprise: "5 per paid member",
+          one: <PlanCopy i18nKey="legacy_ui.5_per_paid_member" />,
+          pro: <PlanCopy i18nKey="legacy_ui.5_per_paid_member" />,
+          business: <PlanCopy i18nKey="legacy_ui.5_per_paid_member" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.5_per_paid_member" />,
         },
       },
       {
-        title: "Approvals",
-        description: "Set workspace, project, and work item type approvals to\ndesignated admins.",
+        i18nKey: "legacy_ui.approvals",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -728,8 +721,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Admin Interface",
-        description: "Get an admin overview to manage workspace and\nproject settings.",
+        i18nKey: "legacy_ui.admin_interface",
+
         cloud: {
           free: false,
           one: false,
@@ -739,8 +732,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Workspace Activity Logs",
-        description: "See filterable activity logs for your entire\nworkspace.",
+        i18nKey: "legacy_ui.workspace_activity_logs",
+
         cloud: {
           free: false,
           one: false,
@@ -750,8 +743,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "API-enabled Audit Logs",
-        description: "See a full-workspace audit log and use APIs to flag\nPlane activity in compliance systems.",
+        i18nKey: "legacy_ui.api_enabled_audit_logs",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -765,11 +758,11 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   },
   {
     id: "automations-workflows",
-    title: "Automations and workflows",
+    i18nKey: "legacy_ui.automations_and_workflows",
     features: [
       {
-        title: "Trigger And Action",
-        description: "Choose a trigger and a corresponding action per\nautomation flow.",
+        i18nKey: "legacy_ui.trigger_and_action",
+
         cloud: {
           free: false,
           one: false,
@@ -779,8 +772,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Decisions And Loops Automation",
-        description: "Use actions as triggers indefinitely in an\nautomation flow.",
+        i18nKey: "legacy_ui.decisions_and_loops_automation",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -791,25 +784,25 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Number of automations",
-        description: "Total number of automation flows in your\nworkspace",
+        i18nKey: "legacy_ui.number_of_automations",
+
         cloud: {
           free: false,
           one: false,
           pro: "5,000",
           business: "10,000",
-          enterprise: "Unlimited",
+          enterprise: <PlanCopy i18nKey="legacy_ui.unlimited" />,
         },
       },
     ],
   },
   {
     id: "knowledge-management",
-    title: "Knowledge management",
+    i18nKey: "legacy_ui.knowledge_management",
     features: [
       {
         i18nKey: "pages",
-        description: "Build knowledge bases for your teams which are\naccessible & shareable.",
+
         cloud: {
           free: true,
           one: true,
@@ -819,8 +812,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Real-time Collab",
-        description: "Edit a page together with members in your project,\nteam, or workspace.",
+        i18nKey: "legacy_ui.real_time_collab",
+
         cloud: {
           free: false,
           one: true,
@@ -830,8 +823,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Work item Embeds",
-        description: "Embed work items from any project you are a member\nof.",
+        i18nKey: "legacy_ui.work_item_embeds",
+
         cloud: {
           free: false,
           one: true,
@@ -841,8 +834,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Link-to-work items",
-        description: "Link pages in work items in a separate section in work item\ndetails.",
+        i18nKey: "legacy_ui.link_to_work_items",
+
         cloud: {
           free: false,
           one: true,
@@ -853,8 +846,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "publish",
-        description:
-          "Put your pages on the web for external users and let\nthem comment without signing into your workspace.",
+
         cloud: {
           free: false,
           one: true,
@@ -864,8 +856,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Wiki",
-        description: "Create company-wide wikis or knowledge bases\nwithout creating a project.",
+        i18nKey: "legacy_ui.wiki",
+
         cloud: {
           free: false,
           one: true,
@@ -876,18 +868,18 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "workspace_settings.settings.exports.title",
-        description: "Export page content into PDFs or Word-compatible\ndocs.",
+
         cloud: {
           free: false,
           one: false,
-          pro: "One download\nat a time",
-          business: "Queued downloads",
-          enterprise: "Queued downloads",
+          pro: <PlanCopy i18nKey="legacy_ui.one_download_at_a_time" />,
+          business: <PlanCopy i18nKey="legacy_ui.queued_downloads" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.queued_downloads" />,
         },
       },
       {
         i18nKey: "templates.settings.title",
-        description: "Use pages as templates for your project, team, or\nworkspace.",
+
         cloud: {
           free: false,
           one: false,
@@ -897,20 +889,19 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Versions",
-        description: "See restorable version of edits to your pages.",
+        i18nKey: "legacy_ui.versions",
+
         cloud: {
           free: false,
           one: false,
-          pro: "2 days",
-          business: "3 months",
-          enterprise: "Unlimited",
+          pro: <PlanCopy i18nKey="legacy_ui.2_days" />,
+          business: <PlanCopy i18nKey="workspace_settings.settings.api_tokens.expiration_options.three_months" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.unlimited" />,
         },
       },
       {
-        title: "Databases + Formulas",
-        description:
-          "Put databases and formulas into a page without\nworrying about losing text, images, or other content\ntypes.",
+        i18nKey: "legacy_ui.databases_formulas",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -922,42 +913,42 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         i18nKey: "wiki.upgrade_flow.tabs.nested_pages",
-        description: "Pages inside a page, organize your pages\nas you see fit for the progressive\ndisclosure.",
+
         comingSoon: true,
         cloud: {
           free: false,
           one: false,
           pro: false,
-          business: "Word-compatible + other format downloads",
-          enterprise: "Word-compatible + other format downloads",
+          business: <PlanCopy i18nKey="legacy_ui.word_compatible_other_format_downloads" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.word_compatible_other_format_downloads" />,
         },
       },
     ],
   },
   {
     id: "importers",
-    title: "Importers",
+    i18nKey: "legacy_ui.importers",
     features: [
       {
         title: "Jira",
-        description: "Import your work items and members from Jira.",
+
         cloud: {
-          free: "Without custom props",
-          one: "Without custom props",
-          pro: "With custom props",
-          business: "With custom props",
-          enterprise: "With custom props",
+          free: <PlanCopy i18nKey="legacy_ui.without_custom_props" />,
+          one: <PlanCopy i18nKey="legacy_ui.without_custom_props" />,
+          pro: <PlanCopy i18nKey="legacy_ui.with_custom_props" />,
+          business: <PlanCopy i18nKey="legacy_ui.with_custom_props" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.with_custom_props" />,
         },
       },
       {
         title: "GitHub",
-        description: "Import your work items and members from GitHub.",
+
         cloud: {
-          free: "Without custom props",
-          one: "Without custom props",
-          pro: "With custom props",
-          business: "With custom props",
-          enterprise: "With custom props",
+          free: <PlanCopy i18nKey="legacy_ui.without_custom_props" />,
+          one: <PlanCopy i18nKey="legacy_ui.without_custom_props" />,
+          pro: <PlanCopy i18nKey="legacy_ui.with_custom_props" />,
+          business: <PlanCopy i18nKey="legacy_ui.with_custom_props" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.with_custom_props" />,
         },
       },
     ],
@@ -969,8 +960,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
     features: [
       {
         title: "GitHub",
-        description:
-          "Sync Plane work items and states to GitHub work items and\nstates. Update GitHub automatically with activity\nfrom Plane and vice-versa.",
+
         cloud: {
           free: false,
           one: false,
@@ -981,7 +971,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         title: "Slack",
-        description: "Get Plane activity in Slack and use / commands in\nSlack to make changes in Plane.",
+
         cloud: {
           free: false,
           one: false,
@@ -992,7 +982,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         title: "Zapier",
-        description: "Run if-then-else automations using Zapier.",
+
         cloud: {
           free: false,
           one: false,
@@ -1003,7 +993,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         title: "Zendesk",
-        description: "Create Plane work items from Zendesk tickets.",
+
         cloud: {
           free: false,
           one: false,
@@ -1014,7 +1004,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         title: "Freshdesk",
-        description: "Create Plane work items from Freshdesk tickets.",
+
         cloud: {
           free: false,
           one: false,
@@ -1027,29 +1017,29 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   },
   {
     id: "storage",
-    title: "Storage",
+    i18nKey: "legacy_ui.storage",
     cloudOnly: true,
     features: [
       {
-        title: "Space",
-        description: "Total storage allowed per workspace",
+        i18nKey: "legacy_ui.space",
+
         cloud: {
-          free: "5GB",
+          free: <PlanCopy i18nKey="legacy_ui.5gb" />,
           one: false,
-          pro: "1 TB",
-          business: "5 TB",
-          enterprise: "Custom",
+          pro: <PlanCopy i18nKey="legacy_ui.1_tb" />,
+          business: <PlanCopy i18nKey="legacy_ui.5_tb" />,
+          enterprise: <PlanCopy i18nKey="notification.snooze.custom" />,
         },
       },
       {
-        title: "Max file size",
-        description: "Limit for uploads to your workspace",
+        i18nKey: "legacy_ui.max_file_size",
+
         cloud: {
-          free: "5 MB",
+          free: <PlanCopy i18nKey="legacy_ui.5_mb" />,
           one: false,
-          pro: "100 MB",
-          business: "200 MB",
-          enterprise: "Custom",
+          pro: <PlanCopy i18nKey="legacy_ui.100_mb" />,
+          business: <PlanCopy i18nKey="legacy_ui.200_mb" />,
+          enterprise: <PlanCopy i18nKey="notification.snooze.custom" />,
         },
       },
     ],
@@ -1060,7 +1050,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
     features: [
       {
         title: "SAML",
-        description: "Get the officially supported SAML implementation\nand make Plane secure with any IdP.",
+
         cloud: {
           free: false,
           one: true,
@@ -1071,7 +1061,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         title: "OIDC",
-        description: "Get the officially supported OIDC implementation\nand make Plane secure with any IdP.",
+
         selfHostedOnly: true,
         cloud: {
           free: false,
@@ -1082,9 +1072,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Domain Security",
-        description:
-          "Choose other domains that can authenticate into\nyour Plane workspace or restrict all but one domain.",
+        i18nKey: "legacy_ui.domain_security",
+
         cloud: {
           free: false,
           one: false,
@@ -1094,8 +1083,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Two-factor authentication and passkeys",
-        description: "Secure your Plane workspace with device-\ndependent two-factor authentication and passkeys. ",
+        i18nKey: "legacy_ui.two_factor_authentication_and_passkeys",
+
         cloud: {
           free: false,
           one: false,
@@ -1105,8 +1094,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Password Policy",
-        description: "Set custom password policies in line with your\ncompliance requirements.",
+        i18nKey: "legacy_ui.password_policy",
+
         cloud: {
           free: false,
           one: false,
@@ -1116,8 +1105,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "LDAP",
-        description: "Get our official LDAP implementation and secure\nyour Plane workspace with your LDAP server.",
+        i18nKey: "legacy_ui.ldap",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -1131,12 +1120,12 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   },
   {
     id: "self-hosted",
-    title: "Self-hosted",
+    i18nKey: "legacy_ui.self_hosted",
     selfHostedOnly: true,
     features: [
       {
-        title: "God Mode",
-        description: "Manage your self-hosted Plane instance better with\nan instance admin interface.",
+        i18nKey: "legacy_ui.god_mode",
+
         cloud: {
           free: true,
           one: true,
@@ -1146,8 +1135,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "One-click Deployment",
-        description: "Install and deploy your self-hosted Plane to any\nprivate cloud with a single-line command.",
+        i18nKey: "legacy_ui.one_click_deployment",
+
         cloud: {
           free: false,
           one: true,
@@ -1157,8 +1146,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Digital Ocean Marketplace app",
-        description: "Get our Digital Ocean-compatible app on their\nmarketplace.",
+        i18nKey: "legacy_ui.digital_ocean_marketplace_app",
+
         cloud: {
           free: false,
           one: true,
@@ -1168,8 +1157,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Heroku Platform app",
-        description: "Get our Heroku Platform-compatible app and deploy\nto Heroku easily.",
+        i18nKey: "legacy_ui.heroku_platform_app",
+
         cloud: {
           free: false,
           one: true,
@@ -1180,7 +1169,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
       },
       {
         title: "AWS AMI",
-        description: "Get our AMI-compatible app from the AWS\nmarketplace.",
+
         cloud: {
           free: false,
           one: true,
@@ -1190,8 +1179,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Private deployments",
-        description: "Get our hosted Cloud app on a private Cloud\nmanaged by us.",
+        i18nKey: "legacy_ui.private_deployments",
+
         comingSoon: true,
         cloud: {
           free: false,
@@ -1208,8 +1197,8 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
     i18nKey: "support",
     features: [
       {
-        title: "Channels",
-        description: "Get access to one or more Support channels\nby your plan.",
+        i18nKey: "legacy_ui.channels",
+
         cloud: {
           free: (
             <>
@@ -1229,21 +1218,13 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
               <MessageCircle className="size-4 flex-shrink-0" />
             </div>
           ),
-          business: "Full-suite\nprofessional services",
-          enterprise: "Full-suite\nprofessional services",
+          business: <PlanCopy i18nKey="legacy_ui.full_suite_professional_services" />,
+          enterprise: <PlanCopy i18nKey="legacy_ui.full_suite_professional_services" />,
         },
       },
       {
         title: "SLA",
-        description: (
-          <>
-            Get business-friendly SLAs with higher plans. SLAs are by priority of work item and tiers{" "}
-            <a href="https://plane.so/talk-to-sales" target="_blank" rel="noopener noreferrer" className="underline">
-              can be requested
-            </a>
-            .
-          </>
-        ),
+
         cloud: {
           free: false,
           one: false,
@@ -1260,54 +1241,69 @@ export const PLANE_PLANS: PlanePlans = {
   planDetails: {
     free: {
       id: EProductSubscriptionEnum.FREE,
-      name: "Free",
+
       monthlyPrice: 0,
       yearlyPrice: 0,
       isActive: true,
     },
     one: {
       id: EProductSubscriptionEnum.ONE,
-      name: "One",
+
       monthlyPrice: 799,
       yearlyPrice: 799,
-      monthlyPriceSecondaryDescription: "per workspace",
-      yearlyPriceSecondaryDescription: "per workspace",
-      buttonCTA: "Upgrade",
+      monthlyPriceSecondaryDescriptionKey: "legacy_ui.per_workspace",
+      yearlyPriceSecondaryDescriptionKey: "legacy_ui.per_workspace",
+
       isActive: false,
     },
     pro: {
       id: EProductSubscriptionEnum.PRO,
-      name: "Pro",
+
       monthlyPrice: 8,
       yearlyPrice: 6,
-      monthlyPriceSecondaryDescription: "billed monthly",
-      yearlyPriceSecondaryDescription: "billed yearly",
-      buttonCTA: "Upgrade",
+      monthlyPriceSecondaryDescriptionKey: "legacy_ui.billed_monthly",
+      yearlyPriceSecondaryDescriptionKey: "legacy_ui.billed_yearly",
+
       isActive: true,
     },
     business: {
       id: EProductSubscriptionEnum.BUSINESS,
-      name: "Business",
-      monthlyPriceSecondaryDescription: "billed monthly",
-      yearlyPriceSecondaryDescription: "billed yearly",
-      buttonCTA: "Talk to Sales",
+
+      monthlyPriceSecondaryDescriptionKey: "legacy_ui.billed_monthly",
+      yearlyPriceSecondaryDescriptionKey: "legacy_ui.billed_yearly",
+
       isActive: false,
     },
     enterprise: {
       id: EProductSubscriptionEnum.ENTERPRISE,
-      name: "Enterprise",
-      monthlyPriceSecondaryDescription: "billed monthly",
-      yearlyPriceSecondaryDescription: "billed yearly",
-      buttonCTA: "Talk to Sales",
+
+      monthlyPriceSecondaryDescriptionKey: "legacy_ui.billed_monthly",
+      yearlyPriceSecondaryDescriptionKey: "legacy_ui.billed_yearly",
+
       isActive: false,
     },
   },
   planHighlights: {
-    free: ["Upto 12 users", "Pages", "Unlimited projects", "Unlimited cycles and modules"],
-    one: ["Upto 50 users", "OIDC and SAML", "Active cycles", "Limited time tracking"],
-    pro: ["Unlimited users", "Custom work items + Properties", "Work item templates", "Full Time Tracking"],
-    business: ["RBAC", "Project Templates", "Baselines And Deviations", "Custom Reports"],
-    enterprise: ["Private + managed deployments", "GAC", "LDAP support", "Databases + Formulas"],
+    free: [
+      "legacy_ui.upto_12_users",
+      "pages",
+      "legacy_ui.unlimited_projects",
+      "legacy_ui.unlimited_cycles_and_modules",
+    ],
+    one: ["legacy_ui.upto_50_users", "legacy_ui.oidc_and_saml", "active_cycles", "legacy_ui.limited_time_tracking"],
+    pro: [
+      "legacy_ui.unlimited_users",
+      "legacy_ui.custom_work_items_properties",
+      "templates.settings.options.work_item.label",
+      "legacy_ui.full_time_tracking",
+    ],
+    business: ["RBAC", "legacy_ui.project_templates", "legacy_ui.baselines_and_deviations", "legacy_ui.custom_reports"],
+    enterprise: [
+      "legacy_ui.private_managed_deployments",
+      "legacy_ui.gac",
+      "legacy_ui.ldap_support",
+      "legacy_ui.databases_formulas",
+    ],
   },
   planComparison: PLANS_COMPARISON_LIST,
 };

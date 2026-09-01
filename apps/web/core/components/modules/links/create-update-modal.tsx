@@ -57,14 +57,14 @@ export function CreateUpdateModuleLinkModal(props: Props) {
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "Module link created successfully.",
+          message: t("legacy_ui.module_link_created_successfully"),
         });
       } else {
         await updateLink(payload, data.id);
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "Module link updated successfully.",
+          message: t("legacy_ui.module_link_updated_successfully"),
         });
       }
       onClose();
@@ -72,7 +72,7 @@ export function CreateUpdateModuleLinkModal(props: Props) {
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: error?.data?.error ?? "Some error occurred. Please try again.",
+        message: error?.data?.error ?? t("common.error.message"),
       });
     }
   };
@@ -88,17 +88,19 @@ export function CreateUpdateModuleLinkModal(props: Props) {
     <ModalCore isOpen={isOpen} handleClose={onClose}>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="space-y-5 p-5">
-          <h3 className="text-18 font-medium text-secondary">{data ? "Update" : "Add"} link</h3>
+          <h3 className="text-18 font-medium text-secondary">
+            {data ? t("update") : t("add")} {t("legacy_ui.link")}
+          </h3>
           <div className="mt-2 space-y-3">
             <div>
               <label htmlFor="url" className="mb-2 text-secondary">
-                URL
+                {t("legacy_ui.url")}
               </label>
               <Controller
                 control={control}
                 name="url"
                 rules={{
-                  required: "URL is required",
+                  required: t("workspace_settings.settings.webhooks.modal.error"),
                 }}
                 render={({ field: { value, onChange, ref } }) => (
                   <Input
@@ -143,7 +145,13 @@ export function CreateUpdateModuleLinkModal(props: Props) {
             {t("cancel")}
           </Button>
           <Button variant="primary" size="lg" type="submit" loading={isSubmitting}>
-            {data ? (isSubmitting ? "Updating link" : "Update link") : isSubmitting ? "Adding link" : "Add link"}
+            {data
+              ? isSubmitting
+                ? t("legacy_ui.updating_link")
+                : t("common.update_link")
+              : isSubmitting
+                ? t("legacy_ui.adding_link")
+                : t("add_link")}
           </Button>
         </div>
       </form>

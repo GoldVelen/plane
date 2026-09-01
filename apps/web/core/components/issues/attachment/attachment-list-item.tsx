@@ -75,9 +75,10 @@ export const IssueAttachmentsListItem = observer(function IssueAttachmentsListIt
               <>
                 <Tooltip
                   isMobile={isMobile}
-                  tooltipContent={`${
-                    getUserDetails(attachment?.created_by)?.display_name ?? ""
-                  } uploaded on ${renderFormattedDate(attachment.updated_at)}`}
+                  tooltipContent={t("legacy_ui.value0_uploaded_on_value1", {
+                    value0: getUserDetails(attachment?.created_by)?.display_name ?? "",
+                    value1: renderFormattedDate(attachment.updated_at),
+                  })}
                 >
                   <div className="flex items-center justify-center">
                     <ButtonAvatars showTooltip userIds={attachment?.created_by} />

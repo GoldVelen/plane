@@ -6,6 +6,7 @@
 
 import React, { useState } from "react";
 import type { E_PASSWORD_STRENGTH } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import { cn, getPasswordStrength } from "@plane/utils";
 import { PasswordStrengthIndicator } from "../form-fields/password/indicator";
 import { AuthInput } from "./auth-input";
@@ -22,7 +23,7 @@ export type TAuthPasswordInputProps = React.InputHTMLAttributes<HTMLInputElement
 };
 
 export function AuthPasswordInput({
-  label = "Password",
+  label: labelProp,
   error,
   showPasswordStrength = true,
   showPasswordToggle = true,
@@ -35,7 +36,9 @@ export function AuthPasswordInput({
   onPasswordStrengthChange,
   ...props
 }: TAuthPasswordInputProps) {
+  const { t } = useTranslation();
   const [isFocused, setIsFocused] = useState(false);
+  const label = labelProp ?? t("auth.common.password.label");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;

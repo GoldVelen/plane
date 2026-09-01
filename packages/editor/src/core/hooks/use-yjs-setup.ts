@@ -5,6 +5,7 @@
  */
 
 import { HocuspocusProvider } from "@hocuspocus/provider";
+import { i18nInstance } from "@plane/i18n";
 // react
 import { useCallback, useEffect, useRef, useState } from "react";
 // indexeddb
@@ -65,7 +66,10 @@ export const useYjsSetup = ({ docId, serverUrl, authToken, onStateChange }: UseY
       url: serverUrl,
       onAuthenticationFailed: () => {
         if (isDisposedRef.current) return;
-        const error: CollaborationError = { type: "auth-failed", message: "Authentication failed" };
+        const error: CollaborationError = {
+          type: "auth-failed",
+          message: String(i18nInstance.t("legacy_ui.authentication_failed")),
+        };
         const newStage = { kind: "disconnected" as const, error };
         stageRef.current = newStage;
         setStage(newStage);
@@ -153,7 +157,11 @@ export const useYjsSetup = ({ docId, serverUrl, authToken, onStateChange }: UseY
         const error: CollaborationError = {
           type: "forced-close",
           code: closeCode || 0,
-          message: isManualDisconnect ? "Manually disconnected" : "Server forced connection close",
+          message: String(
+            i18nInstance.t(
+              isManualDisconnect ? "legacy_ui.manually_disconnected" : "legacy_ui.server_forced_connection_close"
+            )
+          ),
         };
         const newStage = { kind: "disconnected" as const, error };
         stageRef.current = newStage;
@@ -175,7 +183,11 @@ export const useYjsSetup = ({ docId, serverUrl, authToken, onStateChange }: UseY
           // Exceeded max retry attempts
           const error: CollaborationError = {
             type: "max-retries",
-            message: `Failed to connect after ${DEFAULT_MAX_RETRIES} attempts`,
+            message: String(
+              i18nInstance.t("legacy_ui.failed_to_connect_after_value0_attempts", {
+                value0: DEFAULT_MAX_RETRIES,
+              })
+            ),
           };
           const newStage = { kind: "disconnected" as const, error };
           stageRef.current = newStage;

@@ -59,7 +59,7 @@ export function SelectMonthModal({ type, initialValues, isOpen, handleClose, han
                     control={control}
                     name="close_in"
                     rules={{
-                      required: "Select a month between 1 and 12.",
+                      required: t("legacy_ui.select_a_month_between_1_and_12"),
                       min: 1,
                       max: 12,
                     }}
@@ -73,18 +73,20 @@ export function SelectMonthModal({ type, initialValues, isOpen, handleClose, han
                           onChange={onChange}
                           ref={ref}
                           hasError={Boolean(errors.close_in)}
-                          placeholder="Enter Months"
+                          placeholder={t("legacy_ui.enter_months")}
                           className="w-full border-subtle"
                           min={1}
                           max={12}
                         />
-                        <span className="absolute top-2.5 right-8 text-13 text-secondary">Months</span>
+                        <span className="absolute top-2.5 right-8 text-13 text-secondary">{t("legacy_ui.months")}</span>
                       </div>
                     )}
                   />
 
                   {errors.close_in && (
-                    <span className="px-1 text-13 text-danger-primary">Select a month between 1 and 12.</span>
+                    <span className="px-1 text-13 text-danger-primary">
+                      {t("legacy_ui.select_a_month_between_1_and_12")}
+                    </span>
                   )}
                 </>
               ) : (
@@ -93,7 +95,7 @@ export function SelectMonthModal({ type, initialValues, isOpen, handleClose, han
                     control={control}
                     name="archive_in"
                     rules={{
-                      required: "Select a month between 1 and 12.",
+                      required: t("legacy_ui.select_a_month_between_1_and_12"),
                       min: 1,
                       max: 12,
                     }}
@@ -107,17 +109,19 @@ export function SelectMonthModal({ type, initialValues, isOpen, handleClose, han
                           onChange={onChange}
                           ref={ref}
                           hasError={Boolean(errors.archive_in)}
-                          placeholder="Enter Months"
+                          placeholder={t("legacy_ui.enter_months")}
                           className="w-full border-subtle"
                           min={1}
                           max={12}
                         />
-                        <span className="absolute top-2.5 right-8 text-13 text-secondary">Months</span>
+                        <span className="absolute top-2.5 right-8 text-13 text-secondary">{t("legacy_ui.months")}</span>
                       </div>
                     )}
                   />
                   {errors.archive_in && (
-                    <span className="px-1 text-13 text-danger-primary">Select a month between 1 and 12.</span>
+                    <span className="px-1 text-13 text-danger-primary">
+                      {t("legacy_ui.select_a_month_between_1_and_12")}
+                    </span>
                   )}
                 </>
               )}
@@ -129,7 +133,7 @@ export function SelectMonthModal({ type, initialValues, isOpen, handleClose, han
             {t("cancel")}
           </Button>
           <Button variant="primary" size="lg" type="submit" loading={isSubmitting}>
-            {isSubmitting ? "Submitting..." : "Submit"}
+            {isSubmitting ? t("legacy_ui.submitting") : t("submit")}
           </Button>
         </div>
       </form>

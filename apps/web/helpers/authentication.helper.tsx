@@ -8,6 +8,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 // plane imports
 import { SUPPORT_EMAIL } from "@plane/constants";
+import { i18nInstance } from "@plane/i18n";
 
 export enum EPageTypes {
   PUBLIC = "PUBLIC",
@@ -109,271 +110,279 @@ export type TAuthErrorInfo = {
   message: ReactNode;
 };
 
-// TODO: move all error messages to translation files
+const tx = (key: string, params?: Record<string, unknown>): string => {
+  const value = params === undefined ? i18nInstance.t(key) : i18nInstance.t(key, params);
+  return typeof value === "string" ? value : key;
+};
+
 const errorCodeMessages: {
-  [key in EAuthenticationErrorCodes]: { title: string; message: (email?: string) => ReactNode };
+  [key in EAuthenticationErrorCodes]: { title: () => string; message: (email?: string) => ReactNode };
 } = {
   // global
   [EAuthenticationErrorCodes.INSTANCE_NOT_CONFIGURED]: {
-    title: `Instance not configured`,
-    message: () => `Instance not configured. Please contact your administrator.`,
+    title: () => tx("legacy_ui.instance_not_configured"),
+    message: () => tx("legacy_ui.instance_not_configured_please_contact_your_administrator"),
   },
   [EAuthenticationErrorCodes.INVALID_EMAIL]: {
-    title: `Invalid email`,
-    message: () => `Invalid email. Please try again.`,
+    title: () => tx("legacy_ui.invalid_email"),
+    message: () => tx("legacy_ui.invalid_email_please_try_again"),
   },
   [EAuthenticationErrorCodes.EMAIL_REQUIRED]: {
-    title: `Email required`,
-    message: () => `Email required. Please try again.`,
+    title: () => tx("legacy_ui.email_required"),
+    message: () => tx("legacy_ui.email_required_please_try_again"),
   },
   [EAuthenticationErrorCodes.SIGNUP_DISABLED]: {
-    title: `Sign up disabled`,
-    message: () => `Sign up disabled. Please contact your administrator.`,
+    title: () => tx("legacy_ui.sign_up_disabled"),
+    message: () => tx("legacy_ui.sign_up_disabled_please_contact_your_administrator"),
   },
   [EAuthenticationErrorCodes.MAGIC_LINK_LOGIN_DISABLED]: {
-    title: `Magic link login disabled`,
-    message: () => `Magic link login disabled. Please contact your administrator.`,
+    title: () => tx("legacy_ui.magic_link_login_disabled"),
+    message: () => tx("legacy_ui.magic_link_login_disabled_please_contact_your_administrator"),
   },
   [EAuthenticationErrorCodes.PASSWORD_LOGIN_DISABLED]: {
-    title: `Password login disabled`,
-    message: () => `Password login disabled. Please contact your administrator.`,
+    title: () => tx("legacy_ui.password_login_disabled"),
+    message: () => tx("legacy_ui.password_login_disabled_please_contact_your_administrator"),
   },
   [EAuthenticationErrorCodes.USER_ACCOUNT_DEACTIVATED]: {
-    title: `User account deactivated`,
-    message: () => `User account deactivated. Please contact ${SUPPORT_EMAIL ? SUPPORT_EMAIL : "administrator"}.`,
+    title: () => tx("legacy_ui.user_account_deactivated"),
+    message: () => (
+      <>
+        {tx("legacy_ui.user_account_deactivated_please_contact")} {SUPPORT_EMAIL || tx("role_details.admin.title")}.
+      </>
+    ),
   },
   [EAuthenticationErrorCodes.BOT_USER_LOGIN_FORBIDDEN]: {
-    title: `Sign in not allowed`,
-    message: () => `This account cannot be used to sign in. Please use a personal account.`,
+    title: () => tx("legacy_ui.sign_in_not_allowed"),
+    message: () => tx("legacy_ui.this_account_cannot_be_used_to_sign_in_please_use_a_personal_account"),
   },
   [EAuthenticationErrorCodes.INVALID_PASSWORD]: {
-    title: `Invalid password`,
-    message: () => `Invalid password. Please try again.`,
+    title: () => tx("legacy_ui.invalid_password"),
+    message: () => tx("legacy_ui.invalid_password_please_try_again"),
   },
   [EAuthenticationErrorCodes.PASSWORD_TOO_WEAK]: {
-    title: `Password too weak`,
-    message: () => `Please use a stronger password.`,
+    title: () => tx("legacy_ui.password_too_weak"),
+    message: () => tx("legacy_ui.please_use_a_stronger_password"),
   },
   [EAuthenticationErrorCodes.SMTP_NOT_CONFIGURED]: {
-    title: `SMTP not configured`,
-    message: () => `SMTP not configured. Please contact your administrator.`,
+    title: () => tx("legacy_ui.smtp_not_configured"),
+    message: () => tx("legacy_ui.smtp_not_configured_please_contact_your_administrator"),
   },
 
   // sign up
   [EAuthenticationErrorCodes.USER_ALREADY_EXIST]: {
-    title: `User already exists`,
+    title: () => tx("legacy_ui.user_already_exists"),
     message: (email = undefined) => (
       <div>
-        Your account is already registered.&nbsp;
+        {tx("legacy_ui.your_account_is_already_registered")}{" "}
         <Link
           className="font-medium underline underline-offset-4 transition-all hover:font-bold"
           href={`/sign-in${email ? `?email=${encodeURIComponent(email)}` : ``}`}
         >
-          Sign In
-        </Link>
-        &nbsp;now.
+          {tx("legacy_ui.sign_in")}
+        </Link>{" "}
+        {tx("legacy_ui.now")}
       </div>
     ),
   },
   [EAuthenticationErrorCodes.REQUIRED_EMAIL_PASSWORD_SIGN_UP]: {
-    title: `Email and password required`,
-    message: () => `Email and password required. Please try again.`,
+    title: () => tx("legacy_ui.email_and_password_required"),
+    message: () => tx("legacy_ui.email_and_password_required_please_try_again"),
   },
   [EAuthenticationErrorCodes.AUTHENTICATION_FAILED_SIGN_UP]: {
-    title: `Authentication failed`,
-    message: () => `Authentication failed. Please try again.`,
+    title: () => tx("legacy_ui.authentication_failed"),
+    message: () => tx("legacy_ui.authentication_failed_please_try_again"),
   },
   [EAuthenticationErrorCodes.INVALID_EMAIL_SIGN_UP]: {
-    title: `Invalid email`,
-    message: () => `Invalid email. Please try again.`,
+    title: () => tx("legacy_ui.invalid_email"),
+    message: () => tx("legacy_ui.invalid_email_please_try_again"),
   },
   [EAuthenticationErrorCodes.MAGIC_SIGN_UP_EMAIL_CODE_REQUIRED]: {
-    title: `Email and code required`,
-    message: () => `Email and code required. Please try again.`,
+    title: () => tx("legacy_ui.email_and_code_required"),
+    message: () => tx("legacy_ui.email_and_code_required_please_try_again"),
   },
   [EAuthenticationErrorCodes.INVALID_EMAIL_MAGIC_SIGN_UP]: {
-    title: `Invalid email`,
-    message: () => `Invalid email. Please try again.`,
+    title: () => tx("legacy_ui.invalid_email"),
+    message: () => tx("legacy_ui.invalid_email_please_try_again"),
   },
 
   [EAuthenticationErrorCodes.USER_DOES_NOT_EXIST]: {
-    title: `User does not exist`,
+    title: () => tx("legacy_ui.user_does_not_exist"),
     message: (email = undefined) => (
       <div>
-        No account found.&nbsp;
+        {tx("legacy_ui.no_account_found")}{" "}
         <Link
           className="font-medium underline underline-offset-4 transition-all hover:font-bold"
           href={`/${email ? `?email=${encodeURIComponent(email)}` : ``}`}
         >
-          Create one
-        </Link>
-        &nbsp;to get started.
+          {tx("legacy_ui.create_one")}
+        </Link>{" "}
+        {tx("legacy_ui.to_get_started")}
       </div>
     ),
   },
   [EAuthenticationErrorCodes.REQUIRED_EMAIL_PASSWORD_SIGN_IN]: {
-    title: `Email and password required`,
-    message: () => `Email and password required. Please try again.`,
+    title: () => tx("legacy_ui.email_and_password_required"),
+    message: () => tx("legacy_ui.email_and_password_required_please_try_again"),
   },
   [EAuthenticationErrorCodes.AUTHENTICATION_FAILED_SIGN_IN]: {
-    title: `Authentication failed`,
-    message: () => `Authentication failed. Please try again.`,
+    title: () => tx("legacy_ui.authentication_failed"),
+    message: () => tx("legacy_ui.authentication_failed_please_try_again"),
   },
   [EAuthenticationErrorCodes.INVALID_EMAIL_SIGN_IN]: {
-    title: `Invalid email`,
-    message: () => `Invalid email. Please try again.`,
+    title: () => tx("legacy_ui.invalid_email"),
+    message: () => tx("legacy_ui.invalid_email_please_try_again"),
   },
   [EAuthenticationErrorCodes.MAGIC_SIGN_IN_EMAIL_CODE_REQUIRED]: {
-    title: `Email and code required`,
-    message: () => `Email and code required. Please try again.`,
+    title: () => tx("legacy_ui.email_and_code_required"),
+    message: () => tx("legacy_ui.email_and_code_required_please_try_again"),
   },
   [EAuthenticationErrorCodes.INVALID_EMAIL_MAGIC_SIGN_IN]: {
-    title: `Invalid email`,
-    message: () => `Invalid email. Please try again.`,
+    title: () => tx("legacy_ui.invalid_email"),
+    message: () => tx("legacy_ui.invalid_email_please_try_again"),
   },
 
   // Both Sign in and Sign up
   [EAuthenticationErrorCodes.INVALID_MAGIC_CODE_SIGN_IN]: {
-    title: `Authentication failed`,
-    message: () => `Invalid magic code. Please try again.`,
+    title: () => tx("legacy_ui.authentication_failed"),
+    message: () => tx("legacy_ui.invalid_magic_code_please_try_again"),
   },
   [EAuthenticationErrorCodes.INVALID_MAGIC_CODE_SIGN_UP]: {
-    title: `Authentication failed`,
-    message: () => `Invalid magic code. Please try again.`,
+    title: () => tx("legacy_ui.authentication_failed"),
+    message: () => tx("legacy_ui.invalid_magic_code_please_try_again"),
   },
   [EAuthenticationErrorCodes.EXPIRED_MAGIC_CODE_SIGN_IN]: {
-    title: `Expired magic code`,
-    message: () => `Expired magic code. Please try again.`,
+    title: () => tx("legacy_ui.expired_magic_code"),
+    message: () => tx("legacy_ui.expired_magic_code_please_try_again"),
   },
   [EAuthenticationErrorCodes.EXPIRED_MAGIC_CODE_SIGN_UP]: {
-    title: `Expired magic code`,
-    message: () => `Expired magic code. Please try again.`,
+    title: () => tx("legacy_ui.expired_magic_code"),
+    message: () => tx("legacy_ui.expired_magic_code_please_try_again"),
   },
   [EAuthenticationErrorCodes.EMAIL_CODE_ATTEMPT_EXHAUSTED_SIGN_IN]: {
-    title: `Expired magic code`,
-    message: () => `Expired magic code. Please try again.`,
+    title: () => tx("legacy_ui.expired_magic_code"),
+    message: () => tx("legacy_ui.expired_magic_code_please_try_again"),
   },
   [EAuthenticationErrorCodes.EMAIL_CODE_ATTEMPT_EXHAUSTED_SIGN_UP]: {
-    title: `Expired magic code`,
-    message: () => `Expired magic code. Please try again.`,
+    title: () => tx("legacy_ui.expired_magic_code"),
+    message: () => tx("legacy_ui.expired_magic_code_please_try_again"),
   },
 
   // Oauth
   [EAuthenticationErrorCodes.OAUTH_NOT_CONFIGURED]: {
-    title: `OAuth not configured`,
-    message: () => `OAuth not configured. Please contact your administrator.`,
+    title: () => tx("legacy_ui.oauth_not_configured"),
+    message: () => tx("legacy_ui.oauth_not_configured_please_contact_your_administrator"),
   },
   [EAuthenticationErrorCodes.GOOGLE_NOT_CONFIGURED]: {
-    title: `Google not configured`,
-    message: () => `Google not configured. Please contact your administrator.`,
+    title: () => tx("legacy_ui.google_not_configured"),
+    message: () => tx("legacy_ui.google_not_configured_please_contact_your_administrator"),
   },
   [EAuthenticationErrorCodes.GITHUB_NOT_CONFIGURED]: {
-    title: `GitHub not configured`,
-    message: () => `GitHub not configured. Please contact your administrator.`,
+    title: () => tx("legacy_ui.github_not_configured"),
+    message: () => tx("legacy_ui.github_not_configured_please_contact_your_administrator"),
   },
   [EAuthenticationErrorCodes.GITLAB_NOT_CONFIGURED]: {
-    title: `GitLab not configured`,
-    message: () => `GitLab not configured. Please contact your administrator.`,
+    title: () => tx("legacy_ui.gitlab_not_configured"),
+    message: () => tx("legacy_ui.gitlab_not_configured_please_contact_your_administrator"),
   },
   [EAuthenticationErrorCodes.GOOGLE_OAUTH_PROVIDER_ERROR]: {
-    title: `Google OAuth provider error`,
-    message: () => `Google OAuth provider error. Please try again.`,
+    title: () => tx("legacy_ui.google_oauth_provider_error"),
+    message: () => tx("legacy_ui.google_oauth_provider_error_please_try_again"),
   },
   [EAuthenticationErrorCodes.GITHUB_OAUTH_PROVIDER_ERROR]: {
-    title: `GitHub OAuth provider error`,
-    message: () => `GitHub OAuth provider error. Please try again.`,
+    title: () => tx("legacy_ui.github_oauth_provider_error"),
+    message: () => tx("legacy_ui.github_oauth_provider_error_please_try_again"),
   },
   [EAuthenticationErrorCodes.GITLAB_OAUTH_PROVIDER_ERROR]: {
-    title: `GitLab OAuth provider error`,
-    message: () => `GitLab OAuth provider error. Please try again.`,
+    title: () => tx("legacy_ui.gitlab_oauth_provider_error"),
+    message: () => tx("legacy_ui.gitlab_oauth_provider_error_please_try_again"),
   },
 
   // Reset Password
   [EAuthenticationErrorCodes.INVALID_PASSWORD_TOKEN]: {
-    title: `Invalid password token`,
-    message: () => `Invalid password token.`,
+    title: () => tx("legacy_ui.invalid_password_token"),
+    message: () => tx("legacy_ui.invalid_password_token_ab8a0fd8"),
   },
   [EAuthenticationErrorCodes.EXPIRED_PASSWORD_TOKEN]: {
-    title: `Expired password token`,
-    message: () => `Expired password token. Please try again.`,
+    title: () => tx("legacy_ui.expired_password_token"),
+    message: () => tx("legacy_ui.expired_password_token_please_try_again"),
   },
 
   // Change password
   [EAuthenticationErrorCodes.MISSING_PASSWORD]: {
-    title: `Password required`,
-    message: () => `Password required. Please try again.`,
+    title: () => tx("legacy_ui.password_required"),
+    message: () => tx("legacy_ui.password_required_please_try_again"),
   },
   [EAuthenticationErrorCodes.INCORRECT_OLD_PASSWORD]: {
-    title: `Incorrect old password`,
-    message: () => `Incorrect old password. Please try again.`,
+    title: () => tx("legacy_ui.incorrect_old_password"),
+    message: () => tx("legacy_ui.incorrect_old_password_please_try_again"),
   },
   [EAuthenticationErrorCodes.INVALID_NEW_PASSWORD]: {
-    title: `Invalid new password`,
-    message: () => `Invalid new password. Please try again.`,
+    title: () => tx("legacy_ui.invalid_new_password"),
+    message: () => tx("legacy_ui.invalid_new_password_please_try_again"),
   },
 
   // set password
   [EAuthenticationErrorCodes.PASSWORD_ALREADY_SET]: {
-    title: `Password already set`,
-    message: () => `Password already set. Please try again.`,
+    title: () => tx("legacy_ui.password_already_set"),
+    message: () => tx("legacy_ui.password_already_set_please_try_again"),
   },
 
   // admin
   [EAuthenticationErrorCodes.ADMIN_ALREADY_EXIST]: {
-    title: `Admin already exists`,
-    message: () => `Admin already exists. Please try again.`,
+    title: () => tx("legacy_ui.admin_already_exists"),
+    message: () => tx("legacy_ui.admin_already_exists_please_try_again"),
   },
   [EAuthenticationErrorCodes.REQUIRED_ADMIN_EMAIL_PASSWORD_FIRST_NAME]: {
-    title: `Email, password and first name required`,
-    message: () => `Email, password and first name required. Please try again.`,
+    title: () => tx("legacy_ui.email_password_and_first_name_required"),
+    message: () => tx("legacy_ui.email_password_and_first_name_required_please_try_again"),
   },
   [EAuthenticationErrorCodes.INVALID_ADMIN_EMAIL]: {
-    title: `Invalid admin email`,
-    message: () => `Invalid admin email. Please try again.`,
+    title: () => tx("legacy_ui.invalid_admin_email"),
+    message: () => tx("legacy_ui.invalid_admin_email_please_try_again"),
   },
   [EAuthenticationErrorCodes.INVALID_ADMIN_PASSWORD]: {
-    title: `Invalid admin password`,
-    message: () => `Invalid admin password. Please try again.`,
+    title: () => tx("legacy_ui.invalid_admin_password"),
+    message: () => tx("legacy_ui.invalid_admin_password_please_try_again"),
   },
   [EAuthenticationErrorCodes.REQUIRED_ADMIN_EMAIL_PASSWORD]: {
-    title: `Email and password required`,
-    message: () => `Email and password required. Please try again.`,
+    title: () => tx("legacy_ui.email_and_password_required"),
+    message: () => tx("legacy_ui.email_and_password_required_please_try_again"),
   },
   [EAuthenticationErrorCodes.ADMIN_AUTHENTICATION_FAILED]: {
-    title: `Authentication failed`,
-    message: () => `Authentication failed. Please try again.`,
+    title: () => tx("legacy_ui.authentication_failed"),
+    message: () => tx("legacy_ui.authentication_failed_please_try_again"),
   },
   [EAuthenticationErrorCodes.ADMIN_USER_ALREADY_EXIST]: {
-    title: `Admin user already exists`,
+    title: () => tx("legacy_ui.admin_user_already_exists"),
     message: () => (
       <div>
-        Admin user already exists.&nbsp;
+        {tx("legacy_ui.admin_user_already_exists")}{" "}
         <Link className="font-medium underline underline-offset-4 transition-all hover:font-bold" href={`/admin`}>
-          Sign In
-        </Link>
-        &nbsp;now.
+          {tx("legacy_ui.sign_in")}
+        </Link>{" "}
+        {tx("legacy_ui.now")}
       </div>
     ),
   },
   [EAuthenticationErrorCodes.ADMIN_USER_DOES_NOT_EXIST]: {
-    title: `Admin user does not exist`,
+    title: () => tx("legacy_ui.admin_user_does_not_exist"),
     message: () => (
       <div>
-        Admin user does not exist.&nbsp;
+        {tx("legacy_ui.admin_user_does_not_exist")}{" "}
         <Link className="font-medium underline underline-offset-4 transition-all hover:font-bold" href={`/admin`}>
-          Sign In
-        </Link>
-        &nbsp;now.
+          {tx("legacy_ui.sign_in")}
+        </Link>{" "}
+        {tx("legacy_ui.now")}
       </div>
     ),
   },
   [EAuthenticationErrorCodes.ADMIN_USER_DEACTIVATED]: {
-    title: `Admin user deactivated`,
-    message: () => <div>Your account is deactivated</div>,
+    title: () => tx("legacy_ui.admin_user_deactivated"),
+    message: () => <div>{tx("legacy_ui.your_account_is_deactivated")}</div>,
   },
   [EAuthenticationErrorCodes.RATE_LIMIT_EXCEEDED]: {
-    title: "",
-    message: () => `Rate limit exceeded. Please try again later.`,
+    title: () => "",
+    message: () => tx("legacy_ui.rate_limit_exceeded_please_try_again_later"),
   },
 };
 
@@ -437,8 +446,8 @@ export const authErrorHandler = (errorCode: EAuthenticationErrorCodes, email?: s
     return {
       type: EErrorAlertType.BANNER_ALERT,
       code: errorCode,
-      title: errorCodeMessages[errorCode]?.title || "Error",
-      message: errorCodeMessages[errorCode]?.message(email) || "Something went wrong. Please try again.",
+      title: errorCodeMessages[errorCode]?.title() || tx("error"),
+      message: errorCodeMessages[errorCode]?.message(email) || tx("something_went_wrong_please_try_again"),
     };
 
   return undefined;

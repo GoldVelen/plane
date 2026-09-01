@@ -114,7 +114,7 @@ export const IssueDetailWidgetModals = observer(function IssueDetailWidgetModals
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: "Please select at least one work item.",
+        message: t("legacy_ui.please_select_at_least_one_work_item"),
       });
       return;
     }

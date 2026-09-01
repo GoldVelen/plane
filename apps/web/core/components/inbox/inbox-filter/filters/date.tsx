@@ -70,7 +70,7 @@ export const FilterDate = observer(function FilterDate(props: Props) {
         />
       )}
       <FilterHeader
-        title={`${label || "Created date"}${appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : ""}`}
+        title={`${label || t("workspace_projects.sort.created_at")}${appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : ""}`}
         isPreviewEnabled={previewEnabled}
         handleIsPreviewEnabled={() => setPreviewEnabled(!previewEnabled)}
       />

@@ -49,7 +49,9 @@ export const FilterStatus = observer(function FilterStatus(props: Props) {
   return (
     <>
       <FilterHeader
-        title={`Work item Status ${appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : ""}`}
+        title={t("legacy_ui.work_item_status_value0", {
+          value0: appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : "",
+        })}
         isPreviewEnabled={previewEnabled}
         handleIsPreviewEnabled={() => setPreviewEnabled(!previewEnabled)}
       />

@@ -47,7 +47,7 @@ export const OnboardingRoot = observer(function OnboardingRoot({ invitations = [
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("workspace.members_import.summary.stats.failed"),
-        message: "Failed to finish onboarding, Please try again later.",
+        message: t("legacy_ui.failed_to_finish_onboarding_please_try_again_later"),
       });
     }
   }, [user, finishUserOnboarding, t]);

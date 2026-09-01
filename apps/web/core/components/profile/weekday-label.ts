@@ -6,7 +6,7 @@
 
 const SUNDAY_ANCHOR_UTC = Date.UTC(2024, 0, 7);
 
-export function getLocalizedWeekdayLabel(weekday: number, locale: string): string {
+export function getLocalizedWeekdayLabel(weekday: number, locale: string, width: "long" | "short" = "long"): string {
   const date = new Date(SUNDAY_ANCHOR_UTC + weekday * 24 * 60 * 60 * 1000);
-  return new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: "UTC" }).format(date);
+  return new Intl.DateTimeFormat(locale, { weekday: width, timeZone: "UTC" }).format(date);
 }

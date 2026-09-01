@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useCallback, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
@@ -30,6 +31,7 @@ type TProps = {
 };
 
 export function StickyInput(props: TProps) {
+  const { t } = useTranslation();
   const { stickyData, workspaceSlug, handleUpdate, stickyId, handleDelete, handleChange, showToolbar } = props;
   // refs
   const editorRef = useRef<EditorRefApi>(null);
@@ -83,7 +85,7 @@ export function StickyInput(props: TProps) {
             placeholder={(_, value) => {
               const isContentEmpty = isCommentEmpty(value);
               if (!isContentEmpty) return "";
-              return "Click to type here";
+              return t("legacy_ui.click_to_type_here");
             }}
             containerClassName={cn(
               "vertical-scrollbar scrollbar-sm max-h-[540px] min-h-[256px] w-full overflow-y-scroll p-4 text-14",

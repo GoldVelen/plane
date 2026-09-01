@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 import { PriorityPropertyIcon } from "@plane/propel/icons";
 // hooks
@@ -14,6 +15,7 @@ import { IssueActivityBlockComponent, IssueLink } from "./";
 type TIssuePriorityActivity = { activityId: string; showIssue?: boolean; ends: "top" | "bottom" | undefined };
 
 export const IssuePriorityActivity = observer(function IssuePriorityActivity(props: TIssuePriorityActivity) {
+  const { t } = useTranslation();
   const { activityId, showIssue = true, ends } = props;
   // hooks
   const {
@@ -30,8 +32,9 @@ export const IssuePriorityActivity = observer(function IssuePriorityActivity(pro
       ends={ends}
     >
       <>
-        set the priority to <span className="font-medium text-primary">{activity.new_value}</span>
-        {showIssue ? ` for ` : ``}
+        {t("legacy_ui.set_the_priority_to")}
+        <span className="font-medium text-primary">{activity.new_value}</span>
+        {showIssue ? t("legacy_ui.for") : ``}
         {showIssue && <IssueLink activityId={activityId} />}.
       </>
     </IssueActivityBlockComponent>

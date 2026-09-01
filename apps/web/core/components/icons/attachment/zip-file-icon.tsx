@@ -11,5 +11,5 @@ import ZipFileIcon from "@/app/assets/attachment/zip-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function ZipIcon({ width, height }: ImageIconPros) {
-  return <img src={ZipFileIcon} width={width} height={height} alt="ZipFileIcon" />;
+  return <img src={ZipFileIcon} width={width} height={height} alt="" />;
 }

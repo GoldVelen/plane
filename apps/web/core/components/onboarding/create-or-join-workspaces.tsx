@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { OctagonAlert } from "lucide-react";
@@ -32,6 +33,7 @@ type Props = {
 };
 
 export const CreateOrJoinWorkspaces = observer(function CreateOrJoinWorkspaces(props: Props) {
+  const { t } = useTranslation();
   const { invitations, stepChange, finishOnboarding } = props;
   // states
   const [currentView, setCurrentView] = useState<ECreateOrJoinWorkspaceViews | null>(null);
@@ -78,9 +80,7 @@ export const CreateOrJoinWorkspaces = observer(function CreateOrJoinWorkspaces(p
                 <div className="mt-4 flex w-full items-start justify-center gap-2.5 rounded-sm border border-accent-strong/20 bg-accent-primary/10 px-6 py-4 text-13 leading-5 text-accent-secondary">
                   <OctagonAlert className="mt-1 size-5 flex-shrink-0" />
                   <span>
-                    You don&apos;t seem to have any invites to a workspace and your instance admin has restricted
-                    creation of new workspaces. Please ask a workspace owner or admin to invite you to a workspace first
-                    and come back to this screen to join.
+                    {t("legacy_ui.you_don_t_seem_to_have_any_invites_to_a_workspace_and_your_instance_admin_has_re")}
                   </span>
                 </div>
               </div>

@@ -5,10 +5,11 @@
  */
 
 import { Outlet } from "react-router";
+import { i18nInstance } from "@plane/i18n";
 import type { Route } from "./+types/layout";
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Sign up - Plane" },
+  { title: i18nInstance.t("legacy_ui.sign_up_plane") },
   { name: "robots", content: "index, nofollow" },
 ];
 

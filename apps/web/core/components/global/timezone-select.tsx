@@ -6,6 +6,7 @@
 
 import { observer } from "mobx-react";
 // plane imports
+import { useTranslation } from "@plane/i18n";
 import { CustomSearchSelect } from "@plane/ui";
 import { cn } from "@plane/utils";
 // hooks
@@ -23,17 +24,19 @@ type TTimezoneSelect = {
 };
 
 export const TimezoneSelect = observer(function TimezoneSelect(props: TTimezoneSelect) {
+  const { t } = useTranslation();
   // props
   const {
     value,
     onChange,
     error = false,
-    label = "Select a timezone",
+    label: labelProp,
     buttonClassName = "",
     className = "",
     optionsClassName = "",
     disabled = false,
   } = props;
+  const label = labelProp ?? t("automations.trigger.schedule.timezone_placeholder");
   // hooks
   const { disabled: isDisabled, timezones, selectedValue } = useTimezone();
 

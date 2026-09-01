@@ -117,7 +117,8 @@ export function IssueLinkDetail(props: TIssueLinkDetail) {
             <br />
             {createdByDetails && (
               <>
-                by {createdByDetails?.is_bot ? createdByDetails?.first_name + " Bot" : createdByDetails?.display_name}
+                {t("legacy_ui.by")}
+                {createdByDetails?.is_bot ? createdByDetails?.first_name + t("bot") : createdByDetails?.display_name}
               </>
             )}
           </p>

@@ -57,7 +57,7 @@ export function ArchiveModuleModal(props: Props) {
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: "Module could not be archived. Please try again.",
+          message: t("legacy_ui.module_could_not_be_archived_please_try_again"),
         })
       )
       .finally(() => setIsArchiving(false));
@@ -71,14 +71,14 @@ export function ArchiveModuleModal(props: Props) {
           {moduleName}
         </h3>
         <p className="mt-3 text-13 text-secondary">
-          Are you sure you want to archive the module? All your archives can be restored later.
+          {t("legacy_ui.are_you_sure_you_want_to_archive_the_module_all_your_archives_can_be_restored_la")}
         </p>
         <div className="mt-3 flex justify-end gap-2">
           <Button variant="secondary" size="lg" onClick={onClose}>
             {t("cancel")}
           </Button>
           <Button variant="primary" size="lg" tabIndex={1} onClick={handleArchiveModule} loading={isArchiving}>
-            {isArchiving ? "Archiving" : "Archive"}
+            {isArchiving ? t("common.archiving") : t("archive")}
           </Button>
         </div>
       </div>

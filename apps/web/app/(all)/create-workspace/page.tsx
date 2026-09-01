@@ -74,11 +74,7 @@ const CreateWorkspacePage = observer(function CreateWorkspacePage() {
         <div className="relative flex h-full justify-center px-8 pb-8 sm:w-10/12 sm:items-center sm:justify-start sm:p-0 sm:pr-[8.33%] md:w-9/12 lg:w-4/5">
           {isWorkspaceCreationDisabled ? (
             <div className="flex h-full w-4/5 flex-col items-center justify-center gap-1 text-16 font-medium">
-              <img
-                src={WorkspaceCreationDisabled}
-                className="mb-4 h-full w-full object-contain"
-                alt="Workspace creation disabled"
-              />
+              <img src={WorkspaceCreationDisabled} className="mb-4 h-full w-full object-contain" alt="" />
               <div className="text-center text-16 font-medium">
                 {t("workspace_creation.errors.creation_disabled.title")}
               </div>

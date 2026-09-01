@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { createPortal } from "react-dom";
@@ -45,6 +46,7 @@ type Props = TDropdownProps & {
 };
 
 export const DateDropdown = observer(function DateDropdown(props: Props) {
+  const { t } = useTranslation();
   const {
     buttonClassName = "",
     buttonContainerClassName,
@@ -62,7 +64,7 @@ export const DateDropdown = observer(function DateDropdown(props: Props) {
     maxDate,
     onChange,
     onClose,
-    placeholder = "Date",
+    placeholder: placeholderProp,
     placement,
     showTooltip = false,
     tabIndex,
@@ -71,6 +73,7 @@ export const DateDropdown = observer(function DateDropdown(props: Props) {
     renderByDefault = true,
     labelClassName = "",
   } = props;
+  const placeholder = placeholderProp ?? t("date");
   // states
   const [isOpen, setIsOpen] = useState(defaultOpen);
   // refs
@@ -139,7 +142,7 @@ export const DateDropdown = observer(function DateDropdown(props: Props) {
         className={buttonClassName}
         isActive={isOpen}
         tooltipHeading={placeholder}
-        tooltipContent={value ? renderFormattedDate(value, formatToken) : "None"}
+        tooltipContent={value ? renderFormattedDate(value, formatToken) : t("none")}
         showTooltip={showTooltip}
         variant={buttonVariant}
         renderToolTipByDefault={renderByDefault}

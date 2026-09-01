@@ -15,6 +15,7 @@ export const STATE_GROUPS: {
   [key in TStateGroups]: {
     key: TStateGroups;
     label: string;
+    labelTranslationKey: string;
     defaultStateName: string;
     color: string;
   };
@@ -22,30 +23,35 @@ export const STATE_GROUPS: {
   backlog: {
     key: "backlog",
     label: "Backlog",
+    labelTranslationKey: "workspace.project.state.backlog",
     defaultStateName: "Backlog",
     color: "#d9d9d9",
   },
   unstarted: {
     key: "unstarted",
     label: "Unstarted",
+    labelTranslationKey: "workspace.project.state.unstarted",
     defaultStateName: "Todo",
     color: "#3f76ff",
   },
   started: {
     key: "started",
     label: "Started",
+    labelTranslationKey: "workspace.project.state.started",
     defaultStateName: "In Progress",
     color: "#f59e0b",
   },
   completed: {
     key: "completed",
     label: "Completed",
+    labelTranslationKey: "workspace.project.state.completed",
     defaultStateName: "Done",
     color: "#16a34a",
   },
   cancelled: {
     key: "cancelled",
     label: "Canceled",
+    labelTranslationKey: "workspace.project.state.cancelled",
     defaultStateName: "Cancelled",
     color: "#dc2626",
   },
@@ -92,21 +98,25 @@ export const PROGRESS_STATE_GROUPS_DETAILS = [
   {
     key: "completed_issues",
     title: "Completed",
+    titleTranslationKey: "workspace.project.state.completed",
     color: "#16A34A",
   },
   {
     key: "started_issues",
     title: "Started",
+    titleTranslationKey: "workspace.project.state.started",
     color: "#F59E0B",
   },
   {
     key: "unstarted_issues",
     title: "Unstarted",
+    titleTranslationKey: "workspace.project.state.unstarted",
     color: "#3A3A3A",
   },
   {
     key: "backlog_issues",
     title: "Backlog",
+    titleTranslationKey: "workspace.project.state.backlog",
     color: "#A3A3A3",
   },
 ];

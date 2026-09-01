@@ -7,7 +7,7 @@
 import { useMemo } from "react";
 import { XCircle, ArchiveRestoreIcon } from "lucide-react";
 // plane imports
-import { useTranslation } from "@plane/i18n";
+import { i18nInstance, useTranslation } from "@plane/i18n";
 import { LinkIcon, CopyIcon, NewTabIcon, EditIcon, ArchiveIcon, TrashIcon } from "@plane/propel/icons";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { EIssuesStoreType, TIssue } from "@plane/types";
@@ -44,8 +44,8 @@ export function handleOptionalAction<T>(
   } else {
     setToast({
       type: TOAST_TYPE.ERROR,
-      title: "Action not available",
-      message: `${actionName} action is not implemented.`,
+      title: i18nInstance.t("legacy_ui.action_not_available"),
+      message: i18nInstance.t("legacy_ui.value0_action_is_not_implemented", { value0: actionName }),
     });
   }
 }
@@ -109,7 +109,7 @@ export const useIssueActionHandlers = (props: MenuItemFactoryProps) => {
 
   const handleIssueRestore = async () => {
     if (!handleRestore) {
-      handleOptionalAction(handleRestore, "Restore");
+      handleOptionalAction(handleRestore, t("common.actions.restore"));
       return;
     }
     await handleRestore()
@@ -208,17 +208,17 @@ export const useMenuItemFactory = (props: MenuItemFactoryProps) => {
 
   const createRemoveFromCycleMenuItem = (): TContextMenuItem => ({
     key: "remove-from-cycle",
-    title: "Remove from cycle",
+    title: t("legacy_ui.remove_from_cycle"),
     icon: XCircle,
-    action: () => handleOptionalAction(handleRemoveFromView, "Remove from cycle"),
+    action: () => handleOptionalAction(handleRemoveFromView, t("legacy_ui.remove_from_cycle")),
     shouldRender: isEditingAllowed,
   });
 
   const createRemoveFromModuleMenuItem = (): TContextMenuItem => ({
     key: "remove-from-module",
-    title: "Remove from module",
+    title: t("legacy_ui.remove_from_module"),
     icon: XCircle,
-    action: () => handleOptionalAction(handleRemoveFromView, "Remove from module"),
+    action: () => handleOptionalAction(handleRemoveFromView, t("legacy_ui.remove_from_module")),
     shouldRender: isEditingAllowed,
   });
 
@@ -229,7 +229,7 @@ export const useMenuItemFactory = (props: MenuItemFactoryProps) => {
     icon: ArchiveIcon,
     className: "items-start",
     iconClassName: "mt-1",
-    action: () => handleOptionalAction(setArchiveIssueModal, "Archive", true),
+    action: () => handleOptionalAction(setArchiveIssueModal, t("common.actions.archive"), true),
     disabled: !isInArchivableGroup,
     shouldRender: isArchivingAllowed,
   });

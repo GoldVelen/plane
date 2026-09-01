@@ -56,7 +56,7 @@ export const PageOptionsDropdown = observer(function PageOptionsDropdown(props: 
           action: () => handleFullWidth(!isFullWidth),
           customContent: (
             <>
-              Full width
+              {t("legacy_ui.full_width")}
               <ToggleSwitch value={isFullWidth} onChange={() => {}} />
             </>
           ),
@@ -67,7 +67,7 @@ export const PageOptionsDropdown = observer(function PageOptionsDropdown(props: 
           action: () => handleStickyToolbar(!isStickyToolbarEnabled),
           customContent: (
             <>
-              Sticky toolbar
+              {t("legacy_ui.sticky_toolbar")}
               <ToggleSwitch value={isStickyToolbarEnabled} onChange={() => {}} />
             </>
           ),
@@ -82,7 +82,7 @@ export const PageOptionsDropdown = observer(function PageOptionsDropdown(props: 
             setToast({
               type: TOAST_TYPE.SUCCESS,
               title: t("toast.success"),
-              message: "Markdown copied to clipboard.",
+              message: t("legacy_ui.markdown_copied_to_clipboard"),
             });
           },
           title: t("common.actions.copy_markdown"),

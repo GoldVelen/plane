@@ -118,7 +118,7 @@ export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
     <ModalCore isOpen={isOpen} handleClose={handleClose} position={EModalPosition.CENTER} width={EModalWidth.XXL}>
       <form onSubmit={handleSubmit(onSubmit)} className="p-5">
         <div className="flex items-center justify-between">
-          <h3 className="text-h5-medium leading-6 text-primary">Customize Snooze Time</h3>
+          <h3 className="text-h5-medium leading-6 text-primary">{t("legacy_ui.customize_snooze_time")}</h3>
 
           <div>
             <button type="button" onClick={handleClose}>
@@ -129,11 +129,11 @@ export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
 
         <div className="mt-5 flex flex-col gap-3 md:!flex-row md:items-center">
           <div className="flex-1 pb-3 md:pb-0">
-            <h6 className="mb-2 block text-body-xs-medium text-placeholder">Pick a date</h6>
+            <h6 className="mb-2 block text-body-xs-medium text-placeholder">{t("legacy_ui.pick_a_date")}</h6>
             <Controller
               name="date"
               control={control}
-              rules={{ required: "Please select a date" }}
+              rules={{ required: t("legacy_ui.please_select_a_date") }}
               render={({ field: { value, onChange } }) => (
                 <DateDropdown
                   value={value || null}
@@ -154,11 +154,11 @@ export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
             />
           </div>
           <div className="flex-1">
-            <h6 className="mb-2 block text-body-xs-medium text-placeholder">Pick a time</h6>
+            <h6 className="mb-2 block text-body-xs-medium text-placeholder">{t("legacy_ui.pick_a_time")}</h6>
             <Controller
               control={control}
               name="time"
-              rules={{ required: "Please select a time" }}
+              rules={{ required: t("legacy_ui.please_select_a_time") }}
               render={({ field: { value, onChange } }) => (
                 <CustomSelect
                   value={value}
@@ -170,7 +170,7 @@ export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
                           {value} {watch("period").toLowerCase()}
                         </span>
                       ) : (
-                        <span className="text-body-xs-medium text-placeholder">Select a time</span>
+                        <span className="text-body-xs-medium text-placeholder">{t("legacy_ui.select_a_time")}</span>
                       )}
                     </div>
                   }
@@ -186,7 +186,7 @@ export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
                         "bg-layer-1": watch("period") !== "AM",
                       })}
                     >
-                      AM
+                      {t("legacy_ui.am")}
                     </div>
                     <div
                       onClick={() => {
@@ -197,7 +197,7 @@ export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
                         "bg-layer-1": watch("period") !== "PM",
                       })}
                     >
-                      PM
+                      {t("legacy_ui.pm")}
                     </div>
                   </div>
                   {getTimeStamp().length > 0 ? (
@@ -209,7 +209,7 @@ export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
                       </CustomSelect.Option>
                     ))
                   ) : (
-                    <p className="p-3 text-center text-secondary">No available time for this date.</p>
+                    <p className="p-3 text-center text-secondary">{t("legacy_ui.no_available_time_for_this_date")}</p>
                   )}
                 </CustomSelect>
               )}
@@ -223,7 +223,7 @@ export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
               {t("cancel")}
             </Button>
             <Button variant="primary" size="lg" type="submit" loading={isSubmitting}>
-              {isSubmitting ? "Submitting..." : "Submit"}
+              {isSubmitting ? t("legacy_ui.submitting") : t("submit")}
             </Button>
           </div>
         </div>

@@ -68,19 +68,21 @@ export const AppRailRoot = observer(() => {
           <ContextMenu.Content positionerClassName="z-30" className="outline-none">
             <ContextMenu.Item onClick={() => updateDisplayMode("icon_only")}>
               <div className="flex w-full items-center justify-between gap-2">
-                <span className="text-11">Icon only</span>
+                <span className="text-11">{t("legacy_ui.icon_only")}</span>
                 {preferences.displayMode === "icon_only" && <CheckIcon className="size-3.5" />}
               </div>
             </ContextMenu.Item>
             <ContextMenu.Item onClick={() => updateDisplayMode("icon_with_label")}>
               <div className="flex w-full items-center justify-between gap-2">
-                <span className="text-11">Icon with name</span>
+                <span className="text-11">{t("legacy_ui.icon_with_name")}</span>
                 {preferences.displayMode === "icon_with_label" && <CheckIcon className="size-3.5" />}
               </div>
             </ContextMenu.Item>
             <ContextMenu.Separator />
             <ContextMenu.Item onClick={toggleAppRail}>
-              <span className="text-11">{isCollapsed ? "Dock App Rail" : "Undock App Rail"}</span>
+              <span className="text-11">
+                {isCollapsed ? t("legacy_ui.dock_app_rail") : t("legacy_ui.undock_app_rail")}
+              </span>
             </ContextMenu.Item>
           </ContextMenu.Content>
         </ContextMenu.Portal>

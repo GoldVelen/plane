@@ -38,7 +38,7 @@ export const StateUpdate = observer(function StateUpdate(props: TStateUpdate) {
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: t("toast.success"),
-        message: "State updated successfully.",
+        message: t("legacy_ui.state_updated_successfully"),
       });
       handleClose();
       return { status: "success" };
@@ -48,14 +48,14 @@ export const StateUpdate = observer(function StateUpdate(props: TStateUpdate) {
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: "Another state exists with the same name. Please try again with another name.",
+          message: t("legacy_ui.another_state_exists_with_the_same_name_please_try_again_with_another_name"),
         });
         return { status: "already_exists" };
       } else {
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: "State could not be updated. Please try again.",
+          message: t("legacy_ui.state_could_not_be_updated_please_try_again"),
         });
         return { status: "error" };
       }
@@ -68,7 +68,7 @@ export const StateUpdate = observer(function StateUpdate(props: TStateUpdate) {
       onSubmit={onSubmit}
       onCancel={onCancel}
       buttonDisabled={loader}
-      buttonTitle={loader ? `Updating` : `Update`}
+      buttonTitle={loader ? t("updating") : t("update")}
     />
   );
 });

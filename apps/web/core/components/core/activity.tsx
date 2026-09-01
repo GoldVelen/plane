@@ -43,6 +43,7 @@ import { usePlatformOS } from "@/hooks/use-platform-os";
 // types
 
 export function IssueLink({ activity }: { activity: IIssueActivity }) {
+  const { t } = useTranslation();
   // router params
   const { workspaceSlug } = useParams();
   const { isMobile } = usePlatformOS();
@@ -57,7 +58,9 @@ export function IssueLink({ activity }: { activity: IIssueActivity }) {
 
   return (
     <Tooltip
-      tooltipContent={activity?.issue_detail ? activity.issue_detail.name : "This work item has been deleted"}
+      tooltipContent={
+        activity?.issue_detail ? activity.issue_detail.name : t("legacy_ui.this_work_item_has_been_deleted")
+      }
       isMobile={isMobile}
     >
       {activity?.issue_detail ? (
@@ -73,7 +76,7 @@ export function IssueLink({ activity }: { activity: IIssueActivity }) {
         </a>
       ) : (
         <span className="inline-flex items-center gap-1 font-medium whitespace-nowrap text-primary">
-          {" a work item"}{" "}
+          {t("legacy_ui.a_work_item")}{" "}
         </span>
       )}
     </Tooltip>
@@ -117,38 +120,23 @@ const LabelPill = observer(function LabelPill({ labelId, workspaceSlug }: { labe
   );
 });
 
-const inboxActivityMessage = {
-  declined: {
-    showIssue: "declined work item",
-    noIssue: "declined this work item from intake.",
-  },
-  snoozed: {
-    showIssue: "snoozed work item",
-    noIssue: "snoozed this work item.",
-  },
-  accepted: {
-    showIssue: "accepted work item",
-    noIssue: "accepted this work item from intake.",
-  },
-  markedDuplicate: {
-    showIssue: "declined work item",
-    noIssue: "declined this work item from intake by marking a duplicate work item.",
-  },
-};
+const getInboxUserActivityMessage = (
+  activity: IIssueActivity,
+  showIssue: boolean,
+  t: (key: string, params?: Record<string, unknown>) => string
+) => {
+  const statusKey =
+    activity.verb === "0"
+      ? "inbox_issue.status.snoozed.title"
+      : activity.verb === "1"
+        ? "inbox_issue.status.accepted.title"
+        : "inbox_issue.status.declined.title";
+  const subject = showIssue ? t("common.work_item") : t("legacy_ui.this_work_item");
 
-const getInboxUserActivityMessage = (activity: IIssueActivity, showIssue: boolean) => {
-  switch (activity.verb) {
-    case "-1":
-      return showIssue ? inboxActivityMessage.declined.showIssue : inboxActivityMessage.declined.noIssue;
-    case "0":
-      return showIssue ? inboxActivityMessage.snoozed.showIssue : inboxActivityMessage.snoozed.noIssue;
-    case "1":
-      return showIssue ? inboxActivityMessage.accepted.showIssue : inboxActivityMessage.accepted.noIssue;
-    case "2":
-      return showIssue ? inboxActivityMessage.markedDuplicate.showIssue : inboxActivityMessage.markedDuplicate.noIssue;
-    default:
-      return "updated intake work item status.";
+  if (activity.verb === "2") {
+    return `${t(statusKey)} ${subject} · ${t("inbox_issue.actions.mark_as_duplicate")}`;
   }
+  return `${t(statusKey)} ${subject}`;
 };
 
 const activityDetails: {
@@ -163,15 +151,15 @@ const activityDetails: {
   };
 } = {
   assignees: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (activity.old_value === "")
         return (
           <>
-            added a new assignee <UserLink activity={activity} />
+            {t("legacy_ui.added_a_new_assignee")} <UserLink activity={activity} />
             {showIssue && (
               <>
                 {" "}
-                to <IssueLink activity={activity} />
+                {t("legacy_ui.to")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -179,11 +167,11 @@ const activityDetails: {
       else
         return (
           <>
-            removed the assignee <UserLink activity={activity} />
+            {t("legacy_ui.removed_the_assignee")} <UserLink activity={activity} />
             {showIssue && (
               <>
                 {" "}
-                from <IssueLink activity={activity} />
+                {t("legacy_ui.from")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -192,32 +180,32 @@ const activityDetails: {
     icon: <Users2Icon size={12} className="text-secondary" aria-hidden="true" />,
   },
   archived_at: {
-    message: (activity) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (activity.new_value === "restore")
         return (
           <>
-            restored <IssueLink activity={activity} />
+            {t("legacy_ui.restored")} <IssueLink activity={activity} />
           </>
         );
       else
         return (
           <>
-            archived <IssueLink activity={activity} />
+            {t("legacy_ui.archived")} <IssueLink activity={activity} />
           </>
         );
     },
     icon: <ArchiveIcon size={12} className="text-secondary" aria-hidden="true" />,
   },
   attachment: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (activity.verb === "created")
         return (
           <>
-            uploaded a new attachment
+            {t("legacy_ui.uploaded_a_new_attachment")}{" "}
             {showIssue && (
               <>
                 {" "}
-                to <IssueLink activity={activity} />
+                {t("legacy_ui.to")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -225,11 +213,11 @@ const activityDetails: {
       else
         return (
           <>
-            removed an attachment
+            {t("legacy_ui.removed_an_attachment")}{" "}
             {showIssue && (
               <>
                 {" "}
-                from <IssueLink activity={activity} />
+                {t("legacy_ui.from")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -238,13 +226,13 @@ const activityDetails: {
     icon: <PaperclipIcon size={12} className="text-secondary" aria-hidden="true" />,
   },
   description: {
-    message: (activity, showIssue) => (
+    message: (activity, showIssue, _workspaceSlug, t) => (
       <>
-        updated the description
+        {t("legacy_ui.updated_the_description")}{" "}
         {showIssue && (
           <>
             {" "}
-            of <IssueLink activity={activity} />
+            {t("legacy_ui.of")} <IssueLink activity={activity} />
           </>
         )}
       </>
@@ -252,15 +240,15 @@ const activityDetails: {
     icon: <MessageSquareIcon size={12} className="text-secondary" aria-hidden="true" />,
   },
   estimate_point: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (!activity.new_value)
         return (
           <>
-            removed the estimate point
+            {t("legacy_ui.removed_the_estimate_point")}{" "}
             {showIssue && (
               <>
                 {" "}
-                from <IssueLink activity={activity} />
+                {t("legacy_ui.from")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -268,11 +256,11 @@ const activityDetails: {
       else
         return (
           <>
-            set the estimate point to {activity.new_value}
+            {t("legacy_ui.set_the_estimate_point_to")} {activity.new_value}
             {showIssue && (
               <>
                 {" "}
-                for <IssueLink activity={activity} />
+                {t("legacy_ui.for")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -291,13 +279,13 @@ const activityDetails: {
       else if (activity.verb === "converted")
         return (
           <>
-            converted <IssueLink activity={activity} /> to an epic
+            {t("legacy_ui.converted")} <IssueLink activity={activity} /> {t("legacy_ui.to_an_epic")}
           </>
         );
       else
         return (
           <>
-            deleted <IssueLink activity={activity} />
+            {t("legacy_ui.deleted")} <IssueLink activity={activity} />
           </>
         );
     },
@@ -314,24 +302,24 @@ const activityDetails: {
       else if (activity.verb === "converted")
         return (
           <>
-            converted <IssueLink activity={activity} /> to a work item
+            {t("legacy_ui.converted")} <IssueLink activity={activity} /> {t("legacy_ui.to_a_work_item")}
           </>
         );
       else
         return (
           <>
-            deleted <IssueLink activity={activity} />
+            {t("legacy_ui.deleted")} <IssueLink activity={activity} />
           </>
         );
     },
     icon: <EpicIcon width={12} height={12} className="text-secondary" aria-hidden="true" />,
   },
   labels: {
-    message: (activity, showIssue, workspaceSlug) => {
+    message: (activity, showIssue, workspaceSlug, t) => {
       if (activity.old_value === "")
         return (
           <span className="overflow-hidden">
-            added a new label{" "}
+            {t("legacy_ui.added_a_new_label")}{" "}
             <span className="inline-flex items-center gap-2 rounded-full border border-strong px-2 py-0.5 text-11">
               <LabelPill labelId={activity.new_identifier ?? ""} workspaceSlug={workspaceSlug} />
               <span className="line-clamp-1 flex-shrink font-medium break-all text-primary">{activity.new_value}</span>
@@ -339,7 +327,7 @@ const activityDetails: {
             {showIssue && (
               <span className="">
                 {" "}
-                to <IssueLink activity={activity} />
+                {t("legacy_ui.to")} <IssueLink activity={activity} />
               </span>
             )}
           </span>
@@ -347,7 +335,7 @@ const activityDetails: {
       else
         return (
           <>
-            removed the label{" "}
+            {t("legacy_ui.removed_the_label")}{" "}
             <span className="inline-flex items-center gap-2 rounded-full border border-strong px-2 py-0.5 text-11">
               <LabelPill labelId={activity.old_identifier ?? ""} workspaceSlug={workspaceSlug} />
               <span className="line-clamp-1 flex-shrink font-medium break-all text-primary">{activity.old_value}</span>
@@ -355,7 +343,7 @@ const activityDetails: {
             {showIssue && (
               <span>
                 {" "}
-                from <IssueLink activity={activity} />
+                {t("legacy_ui.from")} <IssueLink activity={activity} />
               </span>
             )}
           </>
@@ -364,23 +352,23 @@ const activityDetails: {
     icon: <TagIcon size={12} className="text-secondary" aria-hidden="true" />,
   },
   link: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (activity.verb === "created")
         return (
           <>
-            added this{" "}
+            {t("legacy_ui.added_this")}{" "}
             <a
               href={`${activity.new_value}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
             >
-              link
+              {t("legacy_ui.link")}
             </a>
             {showIssue && (
               <>
                 {" "}
-                to <IssueLink activity={activity} />
+                {t("legacy_ui.to")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -388,19 +376,19 @@ const activityDetails: {
       else if (activity.verb === "updated")
         return (
           <>
-            updated the{" "}
+            {t("legacy_ui.updated_the")}{" "}
             <a
               href={`${activity.old_value}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
             >
-              link
+              {t("legacy_ui.link")}
             </a>
             {showIssue && (
               <>
                 {" "}
-                from <IssueLink activity={activity} />
+                {t("legacy_ui.from")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -408,19 +396,19 @@ const activityDetails: {
       else
         return (
           <>
-            removed this{" "}
+            {t("legacy_ui.removed_this")}{" "}
             <a
               href={`${activity.old_value}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
             >
-              link
+              {t("legacy_ui.link")}
             </a>
             {showIssue && (
               <>
                 {" "}
-                from <IssueLink activity={activity} />
+                {t("legacy_ui.from")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -429,13 +417,13 @@ const activityDetails: {
     icon: <Link2Icon size={12} className="text-secondary" aria-hidden="true" />,
   },
   cycles: {
-    message: (activity, showIssue, workspaceSlug) => {
+    message: (activity, showIssue, workspaceSlug, t) => {
       if (activity.verb === "created")
         return (
           <>
             <span className="flex-shrink-0">
-              added {showIssue ? <IssueLink activity={activity} /> : "this work item"}{" "}
-              <span className="whitespace-nowrap">to the cycle</span>{" "}
+              {t("legacy_ui.added")} {showIssue ? <IssueLink activity={activity} /> : t("legacy_ui.this_work_item")}{" "}
+              <span className="whitespace-nowrap">{t("legacy_ui.to_the_cycle")}</span>{" "}
             </span>
             <a
               href={`/${workspaceSlug}/projects/${activity.project}/cycles/${activity.new_identifier}`}
@@ -450,7 +438,7 @@ const activityDetails: {
       else if (activity.verb === "updated")
         return (
           <>
-            <span className="flex-shrink-0 whitespace-nowrap">set the cycle to </span>
+            <span className="flex-shrink-0 whitespace-nowrap">{t("legacy_ui.set_the_cycle_to")}</span>
             <a
               href={`/${workspaceSlug}/projects/${activity.project}/cycles/${activity.new_identifier}`}
               target="_blank"
@@ -464,7 +452,7 @@ const activityDetails: {
       else
         return (
           <>
-            removed <IssueLink activity={activity} /> from the cycle{" "}
+            {t("legacy_ui.removed")} <IssueLink activity={activity} /> {t("legacy_ui.from_the_cycle")}{" "}
             <a
               href={`/${workspaceSlug}/projects/${activity.project}/cycles/${activity.old_identifier}`}
               target="_blank"
@@ -479,11 +467,12 @@ const activityDetails: {
     icon: <CycleIcon height={12} width={12} className="text-secondary" aria-hidden="true" />,
   },
   modules: {
-    message: (activity, showIssue, workspaceSlug) => {
+    message: (activity, showIssue, workspaceSlug, t) => {
       if (activity.verb === "created")
         return (
           <>
-            added {showIssue ? <IssueLink activity={activity} /> : "this work item"} to the module{" "}
+            {t("legacy_ui.added")} {showIssue ? <IssueLink activity={activity} /> : t("legacy_ui.this_work_item")}{" "}
+            {t("legacy_ui.to_the_module")}{" "}
             <a
               href={`/${workspaceSlug}/projects/${activity.project}/modules/${activity.new_identifier}`}
               target="_blank"
@@ -497,7 +486,7 @@ const activityDetails: {
       else if (activity.verb === "updated")
         return (
           <>
-            set the module to{" "}
+            {t("legacy_ui.set_the_module_to")}{" "}
             <a
               href={`/${workspaceSlug}/projects/${activity.project}/modules/${activity.new_identifier}`}
               target="_blank"
@@ -511,7 +500,7 @@ const activityDetails: {
       else
         return (
           <>
-            removed <IssueLink activity={activity} /> from the module{" "}
+            {t("legacy_ui.removed")} <IssueLink activity={activity} /> {t("legacy_ui.from_the_module")}{" "}
             <a
               href={`/${workspaceSlug}/projects/${activity.project}/modules/${activity.old_identifier}`}
               target="_blank"
@@ -526,13 +515,13 @@ const activityDetails: {
     icon: <ModuleIcon className="h-3 w-3 !text-secondary" aria-hidden="true" />,
   },
   name: {
-    message: (activity, showIssue) => (
+    message: (activity, showIssue, _workspaceSlug, t) => (
       <>
-        set the title to <span className="break-all">{activity.new_value}</span>
+        {t("legacy_ui.set_the_title_to")} <span className="break-all">{activity.new_value}</span>
         {showIssue && (
           <>
             {" "}
-            of <IssueLink activity={activity} />
+            {t("legacy_ui.of")} <IssueLink activity={activity} />
           </>
         )}
       </>
@@ -540,15 +529,16 @@ const activityDetails: {
     icon: <MessageSquareIcon size={12} className="text-secondary" aria-hidden="true" />,
   },
   parent: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (!activity.new_value)
         return (
           <>
-            removed the parent <span className="font-medium whitespace-nowrap text-primary">{activity.old_value}</span>
+            {t("legacy_ui.removed_the_parent")}{" "}
+            <span className="font-medium whitespace-nowrap text-primary">{activity.old_value}</span>
             {showIssue && (
               <>
                 {" "}
-                from <IssueLink activity={activity} />
+                {t("legacy_ui.from")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -556,11 +546,12 @@ const activityDetails: {
       else
         return (
           <>
-            set the parent to <span className="font-medium whitespace-nowrap text-primary">{activity.new_value}</span>
+            {t("legacy_ui.set_the_parent_to")}{" "}
+            <span className="font-medium whitespace-nowrap text-primary">{activity.new_value}</span>
             {showIssue && (
               <>
                 {" "}
-                for <IssueLink activity={activity} />
+                {t("legacy_ui.for")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -569,16 +560,16 @@ const activityDetails: {
     icon: <UsersIcon className="h-3 w-3 !text-secondary" aria-hidden="true" />,
   },
   priority: {
-    message: (activity, showIssue) => (
+    message: (activity, showIssue, _workspaceSlug, t) => (
       <>
-        set the priority to{" "}
+        {t("legacy_ui.set_the_priority_to")}{" "}
         <span className="font-medium text-primary">
-          {activity.new_value ? capitalizeFirstLetter(activity.new_value) : "None"}
+          {activity.new_value ? capitalizeFirstLetter(activity.new_value) : t("none")}
         </span>
         {showIssue && (
           <>
             {" "}
-            for <IssueLink activity={activity} />
+            {t("legacy_ui.for")} <IssueLink activity={activity} />
           </>
         )}
       </>
@@ -586,18 +577,19 @@ const activityDetails: {
     icon: <SignalMediumIcon size={12} className="text-secondary" aria-hidden="true" />,
   },
   relates_to: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (activity.old_value === "")
         return (
           <>
-            marked that {showIssue ? <IssueLink activity={activity} /> : "this work item"} relates to{" "}
+            {t("legacy_ui.marked_that")} {showIssue ? <IssueLink activity={activity} /> : t("legacy_ui.this_work_item")}{" "}
+            {t("legacy_ui.relates_to")}{" "}
             <span className="font-medium whitespace-nowrap text-primary">{activity.new_value}</span>.
           </>
         );
       else
         return (
           <>
-            removed the relation from{" "}
+            {t("legacy_ui.removed_the_relation_from")}{" "}
             <span className="font-medium whitespace-nowrap text-primary">{activity.old_value}</span>.
           </>
         );
@@ -605,18 +597,19 @@ const activityDetails: {
     icon: <RelatedIcon height="12" width="12" className="text-secondary" />,
   },
   blocking: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (activity.old_value === "")
         return (
           <>
-            marked {showIssue ? <IssueLink activity={activity} /> : "this work item"} is blocking work item{" "}
+            {t("legacy_ui.marked")} {showIssue ? <IssueLink activity={activity} /> : t("legacy_ui.this_work_item")}{" "}
+            {t("legacy_ui.is_blocking_work_item")}{" "}
             <span className="font-medium whitespace-nowrap text-primary">{activity.new_value}</span>.
           </>
         );
       else
         return (
           <>
-            removed the blocking work item{" "}
+            {t("legacy_ui.removed_the_blocking_work_item")}{" "}
             <span className="font-medium whitespace-nowrap text-primary">{activity.old_value}</span>.
           </>
         );
@@ -624,18 +617,20 @@ const activityDetails: {
     icon: <BlockerIcon height="12" width="12" className="text-secondary" />,
   },
   blocked_by: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (activity.old_value === "")
         return (
           <>
-            marked {showIssue ? <IssueLink activity={activity} /> : "this work item"} is being blocked by{" "}
+            {t("legacy_ui.marked")} {showIssue ? <IssueLink activity={activity} /> : t("legacy_ui.this_work_item")}{" "}
+            {t("legacy_ui.is_being_blocked_by")}{" "}
             <span className="font-medium whitespace-nowrap text-primary">{activity.new_value}</span>.
           </>
         );
       else
         return (
           <>
-            removed {showIssue ? <IssueLink activity={activity} /> : "this work item"} being blocked by work item{" "}
+            {t("legacy_ui.removed")} {showIssue ? <IssueLink activity={activity} /> : t("legacy_ui.this_work_item")}{" "}
+            {t("legacy_ui.being_blocked_by_work_item")}{" "}
             <span className="font-medium whitespace-nowrap text-primary">{activity.old_value}</span>.
           </>
         );
@@ -643,18 +638,20 @@ const activityDetails: {
     icon: <BlockedIcon height="12" width="12" className="text-secondary" />,
   },
   duplicate: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (activity.old_value === "")
         return (
           <>
-            marked {showIssue ? <IssueLink activity={activity} /> : "this work item"} as duplicate of{" "}
+            {t("legacy_ui.marked")} {showIssue ? <IssueLink activity={activity} /> : t("legacy_ui.this_work_item")}{" "}
+            {t("legacy_ui.as_duplicate_of")}{" "}
             <span className="font-medium whitespace-nowrap text-primary">{activity.new_value}</span>.
           </>
         );
       else
         return (
           <>
-            removed {showIssue ? <IssueLink activity={activity} /> : "this work item"} as a duplicate of{" "}
+            {t("legacy_ui.removed")} {showIssue ? <IssueLink activity={activity} /> : t("legacy_ui.this_work_item")}{" "}
+            {t("legacy_ui.as_a_duplicate_of")}{" "}
             <span className="font-medium whitespace-nowrap text-primary">{activity.old_value}</span>.
           </>
         );
@@ -662,13 +659,14 @@ const activityDetails: {
     icon: <CopyPlus size={12} className="text-secondary" />,
   },
   state: {
-    message: (activity, showIssue) => (
+    message: (activity, showIssue, _workspaceSlug, t) => (
       <>
-        set the state to <span className="font-medium break-all text-primary">{activity.new_value}</span>
+        {t("legacy_ui.set_the_state_to")}{" "}
+        <span className="font-medium break-all text-primary">{activity.new_value}</span>
         {showIssue && (
           <>
             {" "}
-            for <IssueLink activity={activity} />
+            {t("legacy_ui.for")} <IssueLink activity={activity} />
           </>
         )}
       </>
@@ -676,15 +674,15 @@ const activityDetails: {
     icon: <LayoutGridIcon size={12} className="text-secondary" aria-hidden="true" />,
   },
   start_date: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (!activity.new_value)
         return (
           <>
-            removed the start date
+            {t("legacy_ui.removed_the_start_date")}{" "}
             {showIssue && (
               <>
                 {" "}
-                from <IssueLink activity={activity} />
+                {t("legacy_ui.from")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -692,14 +690,14 @@ const activityDetails: {
       else
         return (
           <>
-            set the start date to{" "}
+            {t("legacy_ui.set_the_start_date_to")}{" "}
             <span className="font-medium whitespace-nowrap text-primary">
               {renderFormattedDate(activity.new_value)}
             </span>
             {showIssue && (
               <>
                 {" "}
-                for <IssueLink activity={activity} />
+                {t("legacy_ui.for")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -708,15 +706,15 @@ const activityDetails: {
     icon: <Calendar size={12} className="text-secondary" aria-hidden="true" />,
   },
   target_date: {
-    message: (activity, showIssue) => {
+    message: (activity, showIssue, _workspaceSlug, t) => {
       if (!activity.new_value)
         return (
           <>
-            removed the due date
+            {t("legacy_ui.removed_the_due_date")}{" "}
             {showIssue && (
               <>
                 {" "}
-                from <IssueLink activity={activity} />
+                {t("legacy_ui.from")} <IssueLink activity={activity} />
               </>
             )}
           </>
@@ -724,7 +722,7 @@ const activityDetails: {
       else
         return (
           <>
-            set the due date to{" "}
+            {t("legacy_ui.set_the_due_date_to")}{" "}
             <span className="font-medium whitespace-nowrap text-primary">
               {renderFormattedDate(activity.new_value)}
             </span>
@@ -739,16 +737,15 @@ const activityDetails: {
     icon: <Calendar size={12} className="text-secondary" aria-hidden="true" />,
   },
   inbox: {
-    message: (activity, showIssue) => (
+    message: (activity, showIssue, _workspaceSlug, t) => (
       <>
-        {getInboxUserActivityMessage(activity, showIssue)}
+        {getInboxUserActivityMessage(activity, showIssue, t)}
         {showIssue && (
           <>
             {" "}
             <IssueLink activity={activity} />
           </>
         )}
-        {activity.verb === "2" && ` from intake by marking a duplicate work item.`}
       </>
     ),
     icon: <IntakeIcon className="size-3 text-secondary" aria-hidden="true" />,

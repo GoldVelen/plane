@@ -54,13 +54,13 @@ export const CreateUpdateProjectViewModal = observer(function CreateUpdateProjec
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: t("toast.success"),
-        message: "View created successfully.",
+        message: t("legacy_ui.view_created_successfully"),
       });
     } catch (_error) {
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: "Failed to create view. Please try again.",
+        message: t("legacy_ui.failed_to_create_view_please_try_again"),
       });
     }
   };
@@ -75,7 +75,7 @@ export const CreateUpdateProjectViewModal = observer(function CreateUpdateProjec
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: "Failed to update view. Please try again.",
+        message: t("legacy_ui.failed_to_update_view_please_try_again"),
       });
     }
   };

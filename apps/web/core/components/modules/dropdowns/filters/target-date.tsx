@@ -56,7 +56,7 @@ export const FilterTargetDate = observer(function FilterTargetDate(props: Props)
         />
       )}
       <FilterHeader
-        title={`Due date${appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : ""}`}
+        title={t("legacy_ui.due_date_value0", { value0: appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : "" })}
         isPreviewEnabled={previewEnabled}
         handleIsPreviewEnabled={() => setPreviewEnabled(!previewEnabled)}
       />

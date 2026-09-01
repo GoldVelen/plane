@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useMemo, useCallback } from "react";
 import { Tabs } from "@base-ui-components/react";
 import { Popover } from "../popover";
@@ -15,6 +16,7 @@ import { emojiToString, EmojiIconPickerTypes } from "./helper";
 import { IconRoot } from "./icon/icon-root";
 
 export function EmojiPicker(props: TCustomEmojiPicker) {
+  const { t } = useTranslation();
   const {
     isOpen,
     handleToggle,
@@ -70,7 +72,7 @@ export function EmojiPicker(props: TCustomEmojiPicker) {
       [
         {
           key: "emoji",
-          label: "Emoji",
+          label: t("legacy_ui.emoji"),
           content: (
             <EmojiRoot
               onChange={handleEmojiChange}
@@ -81,7 +83,7 @@ export function EmojiPicker(props: TCustomEmojiPicker) {
         },
         {
           key: "icon",
-          label: "Icon",
+          label: t("legacy_ui.icon"),
           content: (
             <IconRoot
               defaultColor={defaultIconColor}
@@ -96,7 +98,7 @@ export function EmojiPicker(props: TCustomEmojiPicker) {
         label: tab.label,
         content: tab.content,
       })),
-    [defaultIconColor, searchDisabled, searchPlaceholder, iconType, handleEmojiChange, handleIconChange]
+    [defaultIconColor, searchDisabled, searchPlaceholder, iconType, handleEmojiChange, handleIconChange, t]
   );
 
   return (

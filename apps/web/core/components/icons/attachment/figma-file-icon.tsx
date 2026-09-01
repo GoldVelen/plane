@@ -11,5 +11,5 @@ import FigmaFileIcon from "@/app/assets/attachment/figma-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function FigmaIcon({ width, height }: ImageIconPros) {
-  return <img src={FigmaFileIcon} width={width} height={height} alt="FigmaFileIcon" />;
+  return <img src={FigmaFileIcon} width={width} height={height} alt="" />;
 }

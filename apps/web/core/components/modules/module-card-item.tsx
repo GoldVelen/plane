@@ -80,14 +80,14 @@ export const ModuleCardItem = observer(function ModuleCardItem(props: Props) {
     );
 
     setPromiseToast(addToFavoritePromise, {
-      loading: "Adding module to favorites...",
+      loading: t("legacy_ui.adding_module_to_favorites"),
       success: {
         title: t("toast.success"),
-        message: () => "Module added to favorites.",
+        message: () => t("legacy_ui.module_added_to_favorites"),
       },
       error: {
         title: t("toast.error"),
-        message: () => "Couldn't add the module to favorites. Please try again.",
+        message: () => t("legacy_ui.couldn_t_add_the_module_to_favorites_please_try_again"),
       },
     });
   };
@@ -104,14 +104,14 @@ export const ModuleCardItem = observer(function ModuleCardItem(props: Props) {
     );
 
     setPromiseToast(removeFromFavoritePromise, {
-      loading: "Removing module from favorites...",
+      loading: t("legacy_ui.removing_module_from_favorites"),
       success: {
         title: t("toast.success"),
-        message: () => "Module removed from favorites.",
+        message: () => t("legacy_ui.module_removed_from_favorites"),
       },
       error: {
         title: t("toast.error"),
-        message: () => "Couldn't remove the module from favorites. Please try again.",
+        message: () => t("legacy_ui.couldn_t_remove_the_module_from_favorites_please_try_again"),
       },
     });
   };
@@ -129,14 +129,14 @@ export const ModuleCardItem = observer(function ModuleCardItem(props: Props) {
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "Module updated successfully.",
+          message: t("legacy_ui.module_updated_successfully"),
         });
       })
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: err?.detail ?? "Module could not be updated. Please try again.",
+          message: err?.detail ?? t("legacy_ui.module_could_not_be_updated_please_try_again"),
         });
       });
   };
@@ -180,7 +180,7 @@ export const ModuleCardItem = observer(function ModuleCardItem(props: Props) {
 
   const progressIndicatorData = PROGRESS_STATE_GROUPS_DETAILS.map((group, index) => ({
     id: index,
-    name: group.title,
+    name: t(group.titleTranslationKey),
     value: moduleTotalIssues > 0 ? (moduleDetails[group.key as keyof IModule] as number) : 0,
     color: group.color,
   }));
@@ -212,14 +212,14 @@ export const ModuleCardItem = observer(function ModuleCardItem(props: Props) {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 text-secondary">
                 <WorkItemsIcon className="h-4 w-4 text-tertiary" />
-                <span className="text-11 text-tertiary">{issueCount ?? "0 Work item"}</span>
+                <span className="text-11 text-tertiary">{issueCount ?? t("legacy_ui.0_work_item")}</span>
               </div>
               {moduleLeadDetails ? (
                 <span className="cursor-default">
                   <ButtonAvatars showTooltip={false} userIds={moduleLeadDetails?.id} />
                 </span>
               ) : (
-                <Tooltip tooltipContent="No lead">
+                <Tooltip tooltipContent={t("legacy_ui.no_lead")}>
                   <SquareUser className="mx-1 h-4 w-4 text-tertiary" />
                 </Tooltip>
               )}
@@ -241,8 +241,8 @@ export const ModuleCardItem = observer(function ModuleCardItem(props: Props) {
                   });
                 }}
                 placeholder={{
-                  from: "Start date",
-                  to: "End date",
+                  from: t("start_date"),
+                  to: t("end_date"),
                 }}
                 disabled={isDisabled}
                 hideIcon={{ from: renderIcon ?? true, to: renderIcon }}

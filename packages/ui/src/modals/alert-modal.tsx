@@ -7,6 +7,7 @@
 import type { LucideIcon } from "lucide-react";
 import { AlertTriangle, Info } from "lucide-react";
 import React from "react";
+import { useTranslation } from "@plane/i18n";
 // components
 import type { TButtonVariant } from "@plane/propel/button";
 import { Button } from "@plane/propel/button";
@@ -53,6 +54,7 @@ const VARIANT_CLASSES: Record<TModalVariant, string> = {
 };
 
 export function AlertModalCore(props: Props) {
+  const { t } = useTranslation();
   const {
     content,
     handleClose,
@@ -61,16 +63,19 @@ export function AlertModalCore(props: Props) {
     isSubmitting,
     isOpen,
     position = EModalPosition.CENTER,
-    primaryButtonText = {
-      loading: "Deleting",
-      default: "Delete",
-    },
-    secondaryButtonText = "Cancel",
+    primaryButtonText,
+    secondaryButtonText,
     title,
     variant = "danger",
     width = EModalWidth.XL,
     customIcon,
   } = props;
+
+  const resolvedPrimaryButtonText = primaryButtonText ?? {
+    loading: t("common.deleting"),
+    default: t("common.delete"),
+  };
+  const resolvedSecondaryButtonText = secondaryButtonText ?? t("common.cancel");
 
   const Icon = VARIANT_ICONS[variant];
 
@@ -94,10 +99,10 @@ export function AlertModalCore(props: Props) {
       </div>
       <div className="flex flex-col-reverse gap-2 border-t-[0.5px] border-subtle px-5 py-4 sm:flex-row sm:justify-end">
         <Button variant="secondary" onClick={handleClose}>
-          {secondaryButtonText}
+          {resolvedSecondaryButtonText}
         </Button>
         <Button variant={BUTTON_VARIANTS[variant]} tabIndex={1} onClick={handleSubmit} loading={isSubmitting}>
-          {isSubmitting ? primaryButtonText.loading : primaryButtonText.default}
+          {isSubmitting ? resolvedPrimaryButtonText.loading : resolvedPrimaryButtonText.default}
         </Button>
       </div>
     </ModalCore>

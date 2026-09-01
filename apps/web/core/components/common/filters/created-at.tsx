@@ -55,7 +55,9 @@ export const FilterCreatedDate = observer(function FilterCreatedDate(props: Prop
         />
       )}
       <FilterHeader
-        title={`Created date${appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : ""}`}
+        title={t("legacy_ui.created_date_value0", {
+          value0: appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : "",
+        })}
         isPreviewEnabled={previewEnabled}
         handleIsPreviewEnabled={() => setPreviewEnabled(!previewEnabled)}
       />

@@ -8,6 +8,7 @@ import React, { useEffect, useState, useCallback } from "react";
 // plane imports
 import { TOOLBAR_ITEMS } from "@plane/editor";
 import type { ToolbarMenuItem, EditorRefApi } from "@plane/editor";
+import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 import { Tooltip } from "@plane/propel/tooltip";
 import { cn } from "@plane/utils";
@@ -24,6 +25,7 @@ type Props = {
 const toolbarItems = TOOLBAR_ITEMS.lite;
 
 export function IssueCommentToolbar(props: Props) {
+  const { t } = useTranslation();
   const { executeCommand, handleSubmit, isCommentEmpty, editorRef, isSubmitting, showSubmitButton } = props;
   // states
   const [activeStates, setActiveStates] = useState<Record<string, boolean>>({});
@@ -72,7 +74,7 @@ export function IssueCommentToolbar(props: Props) {
                     key={item.renderKey}
                     tooltipContent={
                       <p className="flex flex-col gap-1 text-center text-11">
-                        <span className="font-medium">{item.name}</span>
+                        <span className="font-medium">{t(item.nameTranslationKey)}</span>
                         {item.shortcut && <kbd className="text-placeholder">{item.shortcut.join(" + ")}</kbd>}
                       </p>
                     }
@@ -109,7 +111,7 @@ export function IssueCommentToolbar(props: Props) {
               disabled={isCommentEmpty}
               loading={isSubmitting}
             >
-              Comment
+              {t("common.comment")}
             </Button>
           </div>
         )}

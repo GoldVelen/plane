@@ -39,27 +39,27 @@ export const useCollaborativePageActions = (props: Props) => {
     () => ({
       [DocumentCollaborativeEvents.lock.client]: {
         execute: (shouldSync?: boolean, recursive?: boolean) => page.lock({ shouldSync, recursive }),
-        errorMessage: "Page could not be locked. Please try again later.",
+        errorMessage: t("legacy_ui.page_could_not_be_locked_please_try_again_later"),
       },
       [DocumentCollaborativeEvents.unlock.client]: {
         execute: (shouldSync?: boolean, recursive?: boolean) => page.unlock({ shouldSync, recursive }),
-        errorMessage: "Page could not be unlocked. Please try again later.",
+        errorMessage: t("legacy_ui.page_could_not_be_unlocked_please_try_again_later"),
       },
       [DocumentCollaborativeEvents.archive.client]: {
         execute: (shouldSync?: boolean) => page.archive({ shouldSync }),
-        errorMessage: "Page could not be archived. Please try again later.",
+        errorMessage: t("legacy_ui.page_could_not_be_archived_please_try_again_later"),
       },
       [DocumentCollaborativeEvents.unarchive.client]: {
         execute: (shouldSync?: boolean) => page.restore({ shouldSync }),
-        errorMessage: "Page could not be restored. Please try again later.",
+        errorMessage: t("legacy_ui.page_could_not_be_restored_please_try_again_later"),
       },
       [DocumentCollaborativeEvents["make-public"].client]: {
         execute: (shouldSync?: boolean) => page.makePublic({ shouldSync }),
-        errorMessage: "Page could not be made public. Please try again later.",
+        errorMessage: t("legacy_ui.page_could_not_be_made_public_please_try_again_later"),
       },
       [DocumentCollaborativeEvents["make-private"].client]: {
         execute: (shouldSync?: boolean) => page.makePrivate({ shouldSync }),
-        errorMessage: "Page could not be made private. Please try again later.",
+        errorMessage: t("legacy_ui.page_could_not_be_made_private_please_try_again_later"),
       },
     }),
     [page]

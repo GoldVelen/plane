@@ -213,12 +213,12 @@
     },
     "tokens": {
       "title": "暂无个人令牌",
-      "description": "生成安全的 API 令牌以将工作空间与外部系统和应用程序连接。",
+      "description": "生成安全的 API 令牌以将工作区与外部系统和应用程序连接。",
       "cta_primary": "添加 API 令牌"
     },
     "workspace_tokens": {
       "title": "暂无访问令牌",
-      "description": "生成安全的 API 令牌以将工作空间与外部系统和应用程序连接。",
+      "description": "生成安全的 API 令牌以将工作区与外部系统和应用程序连接。",
       "cta_primary": "添加访问令牌"
     },
     "webhooks": {
@@ -241,9 +241,9 @@
       "cta_primary": "创建您的第一个模板"
     },
     "recurring_work_items": {
-      "title": "暂无循环工作项",
-      "description": "设置循环工作项以自动化重复任务并轻松保持计划进度。",
-      "cta_primary": "创建循环工作项"
+      "title": "暂无重复工作项",
+      "description": "设置重复工作项，自动处理周期性任务并轻松保持计划进度。",
+      "cta_primary": "创建重复工作项"
     },
     "worklogs": {
       "title": "跟踪所有成员的工时表",

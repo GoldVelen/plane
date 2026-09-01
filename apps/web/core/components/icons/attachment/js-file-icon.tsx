@@ -11,5 +11,5 @@ import JsFileIcon from "@/app/assets/attachment/js-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function JavaScriptIcon({ width, height }: ImageIconPros) {
-  return <img src={JsFileIcon} width={width} height={height} alt="JsFileIcon" />;
+  return <img src={JsFileIcon} width={width} height={height} alt="" />;
 }

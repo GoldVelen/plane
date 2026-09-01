@@ -71,7 +71,7 @@ export const WorkspaceDetails = observer(function WorkspaceDetails() {
       setToast({
         title: t("toast.success"),
         type: TOAST_TYPE.SUCCESS,
-        message: "Workspace updated successfully",
+        message: t("legacy_ui.workspace_updated_successfully"),
       });
     } catch (err: unknown) {
       console.error(err);
@@ -92,13 +92,13 @@ export const WorkspaceDetails = observer(function WorkspaceDetails() {
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: t("toast.success"),
-        message: "Workspace picture removed successfully.",
+        message: t("legacy_ui.workspace_picture_removed_successfully"),
       });
     } catch {
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: "There was some error in deleting your profile picture. Please try again.",
+        message: t("legacy_ui.there_was_some_error_in_deleting_your_profile_picture_please_try_again"),
       });
     }
   };
@@ -110,7 +110,7 @@ export const WorkspaceDetails = observer(function WorkspaceDetails() {
       .then(() => {
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Workspace URL copied to the clipboard.",
+          title: t("legacy_ui.workspace_url_copied_to_the_clipboard"),
         });
         return undefined;
       })
@@ -154,7 +154,7 @@ export const WorkspaceDetails = observer(function WorkspaceDetails() {
                   <img
                     src={getFileURL(workspaceLogo)}
                     className="absolute top-0 left-0 size-full rounded-md object-cover"
-                    alt="Workspace Logo"
+                    alt={t("workspace_logo")}
                   />
                 </div>
               ) : (
@@ -166,9 +166,11 @@ export const WorkspaceDetails = observer(function WorkspaceDetails() {
           </div>
           <div className="flex flex-col gap-1">
             <div className="mb:-my-5 text-h5-semibold leading-6">{watch("name")}</div>
-            <button type="button" onClick={handleCopyUrl} className="text-left text-body-xs-regular tracking-tight">{`${
-              typeof window !== "undefined" && window.location.origin.replace("http://", "").replace("https://", "")
-            }/${currentWorkspace.slug}`}</button>
+            <button
+              type="button"
+              onClick={handleCopyUrl}
+              className="text-left text-body-xs-regular tracking-tight"
+            >{`${typeof window !== "undefined" && window.location.origin.replace("http://", "").replace("https://", "")}/${currentWorkspace.slug}`}</button>
             {isAdmin && (
               <button
                 type="button"

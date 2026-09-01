@@ -138,7 +138,7 @@ export const ListGroup = observer(function ListGroup(props: Props) {
       }
       onClick={() => loadMoreIssues(group.id)}
     >
-      {t("common.load_more")} &darr;
+      {t("common.load_more")} {t("legacy_ui.copy_2d83e069de")}
     </div>
   );
 

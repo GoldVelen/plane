@@ -165,7 +165,7 @@ export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props
                 className="relative flex h-6 w-6 flex-shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-sm hover:bg-layer-1"
                 onClick={handleSignOut}
               >
-                <Tooltip tooltipContent={"Sign out"} position="top" className="ml-2" isMobile={isMobile}>
+                <Tooltip tooltipContent={t("sign_out")} position="top" className="ml-2" isMobile={isMobile}>
                   <LogOut size={14} />
                 </Tooltip>
               </div>
@@ -173,11 +173,11 @@ export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props
           </div>
           <div className="relative flex h-full w-full flex-grow flex-col items-center justify-center space-y-3">
             <div className="relative flex-shrink-0">
-              <img src={WorkSpaceNotAvailable} className="h-[220px] object-contain object-center" alt="Plane logo" />
+              <img src={WorkSpaceNotAvailable} className="h-[220px] object-contain object-center" alt="" />
             </div>
-            <h3 className="text-center text-16 font-semibold">Workspace not found</h3>
+            <h3 className="text-center text-16 font-semibold">{t("legacy_ui.workspace_not_found")}</h3>
             <p className="text-center text-13 text-secondary">
-              No workspace found with the URL. It may not exist or you lack authorization to view it.
+              {t("legacy_ui.no_workspace_found_with_the_url_it_may_not_exist_or_you_lack_authorization_to_vi")}
             </p>
             <div className="flex items-center justify-center gap-2 pt-4">
               {allWorkspaces && allWorkspaces.length > 0 && (
@@ -187,12 +187,12 @@ export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props
               )}
               {allWorkspaces?.length > 0 && (
                 <Link href="/settings/profile/general/" className={cn(getButtonStyling("secondary", "base"))}>
-                  Visit Profile
+                  {t("legacy_ui.visit_profile")}
                 </Link>
               )}
               {allWorkspaces && allWorkspaces.length === 0 && (
                 <Link href="/create-workspace/" className={cn(getButtonStyling("secondary", "base"))}>
-                  Create new workspace
+                  {t("legacy_ui.create_new_workspace")}
                 </Link>
               )}
             </div>
@@ -211,22 +211,22 @@ export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props
         <div className="grid h-full place-items-center p-4">
           <div className="space-y-8 text-center">
             <div className="space-y-2">
-              <h3 className="text-16 font-semibold">Not Authorized!</h3>
+              <h3 className="text-16 font-semibold">{t("legacy_ui.not_authorized")}</h3>
               <p className="mx-auto w-1/2 text-13 text-secondary">
                 {t("you")}
-                {"'"}re not a member of this workspace. Please contact the workspace admin to get an invitation or check
-                your pending invitations.
+                {"'"}
+                {t("legacy_ui.re_not_a_member_of_this_workspace_please_contact_the_workspace_admin_to_get_an_i")}
               </p>
             </div>
             <div className="flex items-center justify-center gap-2">
               <Link href="/invitations">
                 <span>
-                  <Button variant="secondary">Check pending invites</Button>
+                  <Button variant="secondary">{t("legacy_ui.check_pending_invites")}</Button>
                 </span>
               </Link>
               <Link href="/create-workspace">
                 <span>
-                  <Button variant="primary">Create new workspace</Button>
+                  <Button variant="primary">{t("legacy_ui.create_new_workspace")}</Button>
                 </span>
               </Link>
             </div>

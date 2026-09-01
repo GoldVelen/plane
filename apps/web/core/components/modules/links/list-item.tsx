@@ -107,7 +107,10 @@ export const ModulesLinksListItem = observer(function ModulesLinksListItem(props
           {t("project.members_import.summary.stats.added")}
           {calculateTimeAgo(link.created_at)}{" "}
           {createdByDetails && (
-            <>by {createdByDetails?.is_bot ? createdByDetails?.first_name + " Bot" : createdByDetails?.display_name}</>
+            <>
+              {t("legacy_ui.by")}
+              {createdByDetails?.is_bot ? createdByDetails?.first_name + t("bot") : createdByDetails?.display_name}
+            </>
           )}
         </p>
       </div>

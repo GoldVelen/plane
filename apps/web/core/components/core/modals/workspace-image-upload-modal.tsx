@@ -82,7 +82,7 @@ export const WorkspaceImageUploadModal = observer(function WorkspaceImageUploadM
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("error"),
-        message: error.error || "Something went wrong",
+        message: error.error || t("something_went_wrong"),
       });
     } finally {
       setIsImageUploading(false);
@@ -111,7 +111,7 @@ export const WorkspaceImageUploadModal = observer(function WorkspaceImageUploadM
   return (
     <ModalCore isOpen={isOpen} handleClose={handleClose} position={EModalPosition.CENTER} width={EModalWidth.XL}>
       <div className="space-y-5 px-5 py-8 sm:p-6">
-        <h3 className="text-16 leading-6 font-medium text-primary">Upload image</h3>
+        <h3 className="text-16 leading-6 font-medium text-primary">{t("legacy_ui.upload_image_f35dec5f")}</h3>
         <div className="space-y-3">
           <div className="flex items-center justify-center gap-3">
             <div
@@ -132,7 +132,7 @@ export const WorkspaceImageUploadModal = observer(function WorkspaceImageUploadM
                   </button>
                   <img
                     src={image ? URL.createObjectURL(image) : value ? getFileURL(value) : ""}
-                    alt="image"
+                    alt={t("legacy_ui.image")}
                     className="absolute top-0 left-0 h-full w-full rounded-md object-cover"
                   />
                 </>
@@ -140,7 +140,7 @@ export const WorkspaceImageUploadModal = observer(function WorkspaceImageUploadM
                 <div>
                   <UserCirclePropertyIcon className="mx-auto h-16 w-16 text-secondary" />
                   <span className="mt-2 block text-13 font-medium text-secondary">
-                    {isDragActive ? "Drop image here to upload" : "Drag & drop image here"}
+                    {isDragActive ? t("legacy_ui.drop_image_here_to_upload") : t("legacy_ui.drag_drop_image_here")}
                   </span>
                 </div>
               )}
@@ -151,22 +151,24 @@ export const WorkspaceImageUploadModal = observer(function WorkspaceImageUploadM
           {fileRejections.length > 0 && (
             <p className="text-13 text-danger-primary">
               {fileRejections[0].errors[0].code === "file-too-large"
-                ? "The image size cannot exceed 5 MB."
-                : "Please upload a file in a valid format."}
+                ? t("legacy_ui.the_image_size_cannot_exceed_5_mb")
+                : t("legacy_ui.please_upload_a_file_in_a_valid_format")}
             </p>
           )}
         </div>
-        <p className="my-4 text-13 text-secondary">File formats supported- .jpeg, .jpg, .png, .webp</p>
+        <p className="my-4 text-13 text-secondary">{t("legacy_ui.file_formats_supported_jpeg_jpg_png_webp")}</p>
         <div className="flex items-center justify-between">
           <Button variant="error-fill" size="lg" onClick={handleImageRemove} disabled={!value} loading={isRemoving}>
-            {isRemoving ? "Removing" : "Remove"}
+            {isRemoving ? t("removing") : t("remove")}
           </Button>
           <div className="flex items-center gap-2">
             <Button variant="secondary" size="lg" onClick={handleClose}>
               {t("cancel")}
             </Button>
             <Button variant="primary" size="lg" onClick={handleSubmit} disabled={!image} loading={isImageUploading}>
-              {isImageUploading ? "Uploading" : "Upload & Save"}
+              {isImageUploading
+                ? t("templates.settings.form.publish.cover_image.uploading")
+                : t("workspace_settings.settings.applications.upload_and_save")}
             </Button>
           </div>
         </div>

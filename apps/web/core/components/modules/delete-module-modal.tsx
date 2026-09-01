@@ -53,7 +53,7 @@ export const DeleteModuleModal = observer(function DeleteModuleModal(props: Prop
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "Module deleted successfully.",
+          message: t("legacy_ui.module_deleted_successfully"),
         });
       })
       .catch((errors) => {
@@ -79,9 +79,9 @@ export const DeleteModuleModal = observer(function DeleteModuleModal(props: Prop
       title={t("project_module.delete_module")}
       content={
         <>
-          Are you sure you want to delete module-{" "}
-          <span className="font-medium break-all text-primary">{data?.name}</span>? All of the data related to the
-          module will be permanently removed. This action cannot be undone.
+          {t("legacy_ui.are_you_sure_you_want_to_delete_module")}{" "}
+          <span className="font-medium break-all text-primary">{data?.name}</span>
+          {t("legacy_ui.all_of_the_data_related_to_the_module_will_be_permanently_removed_this_action_ca")}
         </>
       }
     />

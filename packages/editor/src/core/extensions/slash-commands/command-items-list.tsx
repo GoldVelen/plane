@@ -24,6 +24,8 @@ import {
   Table,
   TextQuote,
 } from "lucide-react";
+// plane imports
+import { i18nInstance } from "@plane/i18n";
 // constants
 import { COLORS_LIST } from "@/constants/common";
 // helpers
@@ -57,6 +59,7 @@ export type TSlashCommandSection = {
 export const getSlashCommandFilteredSections =
   (args: TExtensionProps) =>
   ({ query }: { query: string }): TSlashCommandSection[] => {
+    const t = i18nInstance.t.bind(i18nInstance);
     const { additionalOptions: externalAdditionalOptions, disabledExtensions, flaggedExtensions } = args;
     const SLASH_COMMAND_SECTIONS: TSlashCommandSection[] = [
       {
@@ -65,8 +68,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "text",
             key: "text",
-            title: "Text",
-            description: "Just start typing with plain text.",
+            title: t("work_item_types.settings.properties.property_type.text.label"),
+            description: t("legacy_ui.just_start_typing_with_plain_text"),
             searchTerms: ["p", "paragraph"],
             icon: <CaseSensitive className="size-3.5" />,
             command: ({ editor, range }) => setText(editor, range),
@@ -74,8 +77,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "h1",
             key: "h1",
-            title: "Heading 1",
-            description: "Big section heading.",
+            title: t("legacy_ui.heading_1"),
+            description: t("legacy_ui.big_section_heading"),
             searchTerms: ["title", "big", "large"],
             icon: <Heading1 className="size-3.5" />,
             command: ({ editor, range }) => toggleHeading(editor, 1, range),
@@ -83,8 +86,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "h2",
             key: "h2",
-            title: "Heading 2",
-            description: "Medium section heading.",
+            title: t("legacy_ui.heading_2"),
+            description: t("legacy_ui.medium_section_heading"),
             searchTerms: ["subtitle", "medium"],
             icon: <Heading2 className="size-3.5" />,
             command: ({ editor, range }) => toggleHeading(editor, 2, range),
@@ -92,8 +95,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "h3",
             key: "h3",
-            title: "Heading 3",
-            description: "Small section heading.",
+            title: t("legacy_ui.heading_3"),
+            description: t("legacy_ui.small_section_heading"),
             searchTerms: ["subtitle", "small"],
             icon: <Heading3 className="size-3.5" />,
             command: ({ editor, range }) => toggleHeading(editor, 3, range),
@@ -101,8 +104,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "h4",
             key: "h4",
-            title: "Heading 4",
-            description: "Small section heading.",
+            title: t("legacy_ui.heading_4"),
+            description: t("legacy_ui.small_section_heading"),
             searchTerms: ["subtitle", "small"],
             icon: <Heading4 className="size-3.5" />,
             command: ({ editor, range }) => toggleHeading(editor, 4, range),
@@ -110,8 +113,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "h5",
             key: "h5",
-            title: "Heading 5",
-            description: "Small section heading.",
+            title: t("legacy_ui.heading_5"),
+            description: t("legacy_ui.small_section_heading"),
             searchTerms: ["subtitle", "small"],
             icon: <Heading5 className="size-3.5" />,
             command: ({ editor, range }) => toggleHeading(editor, 5, range),
@@ -119,8 +122,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "h6",
             key: "h6",
-            title: "Heading 6",
-            description: "Small section heading.",
+            title: t("legacy_ui.heading_6"),
+            description: t("legacy_ui.small_section_heading"),
             searchTerms: ["subtitle", "small"],
             icon: <Heading6 className="size-3.5" />,
             command: ({ editor, range }) => toggleHeading(editor, 6, range),
@@ -129,8 +132,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "numbered-list",
             key: "numbered-list",
-            title: "Numbered list",
-            description: "Create a numbered list.",
+            title: t("legacy_ui.numbered_list"),
+            description: t("legacy_ui.create_a_numbered_list"),
             searchTerms: ["ordered"],
             icon: <ListOrdered className="size-3.5" />,
             command: ({ editor, range }) => toggleOrderedList(editor, range),
@@ -138,8 +141,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "bulleted-list",
             key: "bulleted-list",
-            title: "Bulleted list",
-            description: "Create a bulleted list.",
+            title: t("legacy_ui.bulleted_list"),
+            description: t("legacy_ui.create_a_bulleted_list"),
             searchTerms: ["unordered", "point"],
             icon: <List className="size-3.5" />,
             command: ({ editor, range }) => toggleBulletList(editor, range),
@@ -147,8 +150,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "to-do-list",
             key: "to-do-list",
-            title: "To-do list",
-            description: "Create a to-do list.",
+            title: t("legacy_ui.to_do_list"),
+            description: t("legacy_ui.create_a_to_do_list"),
             searchTerms: ["todo", "task", "list", "check", "checkbox"],
             icon: <ListTodo className="size-3.5" />,
             command: ({ editor, range }) => toggleTaskList(editor, range),
@@ -156,8 +159,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "table",
             key: "table",
-            title: "Table",
-            description: "Create a table",
+            title: t("issue.layouts.spreadsheet"),
+            description: t("legacy_ui.create_a_table"),
             searchTerms: ["table", "cell", "db", "data", "tabular"],
             icon: <Table className="size-3.5" />,
             command: ({ editor, range }) => insertTableCommand(editor, range),
@@ -165,8 +168,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "quote",
             key: "quote",
-            title: "Quote",
-            description: "Capture a quote.",
+            title: t("legacy_ui.quote"),
+            description: t("legacy_ui.capture_a_quote"),
             searchTerms: ["blockquote"],
             icon: <TextQuote className="size-3.5" />,
             command: ({ editor, range }) => toggleBlockquote(editor, range),
@@ -174,8 +177,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "code",
             key: "code",
-            title: "Code",
-            description: "Capture a code snippet.",
+            title: t("legacy_ui.code"),
+            description: t("legacy_ui.capture_a_code_snippet"),
             searchTerms: ["codeblock"],
             icon: <Code2 className="size-3.5" />,
             command: ({ editor, range }) => editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
@@ -183,17 +186,17 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "callout",
             key: "callout",
-            title: "Callout",
+            title: t("legacy_ui.callout"),
             icon: <MessageSquareText className="size-3.5" />,
-            description: "Insert callout",
+            description: t("legacy_ui.insert_callout"),
             searchTerms: ["callout", "comment", "message", "info", "alert"],
             command: ({ editor, range }: CommandProps) => insertCallout(editor, range),
           },
           {
             commandKey: "divider",
             key: "divider",
-            title: "Divider",
-            description: "Visually divide blocks.",
+            title: t("legacy_ui.divider"),
+            description: t("legacy_ui.visually_divide_blocks"),
             searchTerms: ["line", "divider", "horizontal", "rule", "separate"],
             icon: <MinusSquare className="size-3.5" />,
             command: ({ editor, range }) => editor.chain().focus().deleteRange(range).setHorizontalRule().run(),
@@ -201,8 +204,8 @@ export const getSlashCommandFilteredSections =
           {
             commandKey: "emoji",
             key: "emoji",
-            title: "Emoji",
-            description: "Insert an emoji",
+            title: t("legacy_ui.emoji"),
+            description: t("legacy_ui.insert_an_emoji"),
             searchTerms: ["emoji", "icons", "reaction", "emoticon", "emotags"],
             icon: <Smile className="size-3.5" />,
             command: ({ editor, range }) => {
@@ -213,13 +216,13 @@ export const getSlashCommandFilteredSections =
       },
       {
         key: "text-colors",
-        title: "Colors",
+        title: t("legacy_ui.colors"),
         items: [
           {
             commandKey: "text-color",
             key: "text-color-default",
-            title: "Default",
-            description: "Change text color",
+            title: t("common.default"),
+            description: t("legacy_ui.change_text_color"),
             searchTerms: ["color", "text", "default"],
             icon: <ALargeSmall className="size-3.5 text-primary" />,
             command: ({ editor, range }) => toggleTextColor(undefined, editor, range),
@@ -229,9 +232,9 @@ export const getSlashCommandFilteredSections =
               ({
                 commandKey: "text-color",
                 key: `text-color-${color.key}`,
-                title: color.label,
-                description: "Change text color",
-                searchTerms: ["color", "text", color.label],
+                title: t(color.labelKey),
+                description: t("legacy_ui.change_text_color"),
+                searchTerms: ["color", "text", t(color.labelKey)],
 
                 icon: (
                   <ALargeSmall
@@ -249,13 +252,13 @@ export const getSlashCommandFilteredSections =
       },
       {
         key: "background-colors",
-        title: "Background colors",
+        title: t("legacy_ui.background_colors"),
         items: [
           {
             commandKey: "background-color",
             key: "background-color-default",
-            title: "Default background",
-            description: "Change background color",
+            title: t("legacy_ui.default_background"),
+            description: t("legacy_ui.change_background_color"),
             searchTerms: ["color", "bg", "background", "default"],
             icon: <ALargeSmall className="size-3.5" />,
             iconContainerStyle: {
@@ -270,9 +273,9 @@ export const getSlashCommandFilteredSections =
               ({
                 commandKey: "background-color",
                 key: `background-color-${color.key}`,
-                title: color.label,
-                description: "Change background color",
-                searchTerms: ["color", "bg", "background", color.label],
+                title: t(color.labelKey),
+                description: t("legacy_ui.change_background_color"),
+                searchTerms: ["color", "bg", "background", t(color.labelKey)],
                 icon: <ALargeSmall className="size-3.5" />,
 
                 iconContainerStyle: {
@@ -292,9 +295,9 @@ export const getSlashCommandFilteredSections =
       internalAdditionalOptions.push({
         commandKey: "image",
         key: "image",
-        title: "Image",
+        title: t("legacy_ui.image"),
         icon: <ImageIcon className="size-3.5" />,
-        description: "Insert an image",
+        description: t("legacy_ui.insert_an_image"),
         searchTerms: ["img", "photo", "picture", "media", "upload"],
         command: ({ editor, range }: CommandProps) => insertImage({ editor, event: "insert", range }),
         section: "general",

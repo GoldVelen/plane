@@ -54,13 +54,13 @@ export const IssueReaction = observer(function IssueReaction(props: TIssueReacti
           setToast({
             title: t("toast.success"),
             type: TOAST_TYPE.SUCCESS,
-            message: "Reaction created successfully",
+            message: t("legacy_ui.reaction_created_successfully"),
           });
         } catch (_error) {
           setToast({
             title: t("toast.error"),
             type: TOAST_TYPE.ERROR,
-            message: "Reaction creation failed",
+            message: t("legacy_ui.reaction_creation_failed"),
           });
         }
       },
@@ -71,13 +71,13 @@ export const IssueReaction = observer(function IssueReaction(props: TIssueReacti
           setToast({
             title: t("toast.success"),
             type: TOAST_TYPE.SUCCESS,
-            message: "Reaction removed successfully",
+            message: t("legacy_ui.reaction_removed_successfully"),
           });
         } catch (_error) {
           setToast({
             title: t("toast.error"),
             type: TOAST_TYPE.ERROR,
-            message: "Reaction remove failed",
+            message: t("legacy_ui.reaction_remove_failed"),
           });
         }
       },

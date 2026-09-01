@@ -11,5 +11,5 @@ import SheetFileIcon from "@/app/assets/attachment/excel-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function SheetIcon({ width, height }: ImageIconPros) {
-  return <img src={SheetFileIcon} width={width} height={height} alt="SheetFileIcon" />;
+  return <img src={SheetFileIcon} width={width} height={height} alt="" />;
 }

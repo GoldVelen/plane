@@ -33,7 +33,7 @@ function ProgressChart({ distribution, totalIssues, className = "", plotTitle = 
         areas={[
           {
             key: "current",
-            label: `Current ${plotTitle}`,
+            label: t("legacy_ui.current_value0", { value0: plotTitle }),
             strokeColor: "#3F76FF",
             fill: "#3F76FF33",
             fillOpacity: 1,
@@ -44,7 +44,7 @@ function ProgressChart({ distribution, totalIssues, className = "", plotTitle = 
           },
           {
             key: "ideal",
-            label: `Ideal ${plotTitle}`,
+            label: t("legacy_ui.ideal_value0", { value0: plotTitle }),
             strokeColor: "#A9BBD0",
             fill: "#A9BBD0",
             fillOpacity: 0,

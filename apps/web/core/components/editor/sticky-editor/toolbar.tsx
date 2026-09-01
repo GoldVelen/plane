@@ -94,7 +94,7 @@ export function StickyEditorToolbar(props: Props) {
                       key={item.renderKey}
                       tooltipContent={
                         <p className="flex flex-col gap-1 text-center text-11">
-                          <span className="font-medium">{item.name}</span>
+                          <span className="font-medium">{t(item.nameTranslationKey)}</span>
                           {item.shortcut && <kbd className="text-placeholder">{item.shortcut.join(" + ")}</kbd>}
                         </p>
                       }

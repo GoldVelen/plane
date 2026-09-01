@@ -17,7 +17,18 @@ import { LOCALES_DIR, listLocales, loadLocale } from "./lib/locale-io.js";
 const REPO_ROOT = path.resolve(import.meta.dirname, "../../..");
 
 const SOURCE_EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx"]);
-const SOURCE_DIRECTORY_EXCLUDES = new Set([".next", ".turbo", "dist", "node_modules"]);
+const SOURCE_DIRECTORY_EXCLUDES = new Set([".next", ".react-router", ".turbo", "build", "dist", "node_modules"]);
+const SOURCE_PATH_EXCLUDES = [
+  // Retained for compatibility by the deprecated dashboard helper; there are no runtime UI consumers.
+  "/packages/constants/src/dashboard.ts",
+  "/packages/editor/src/core/extensions/starter-kit.ts",
+  "/packages/editor/src/core/hooks/use-yjs-setup.ts",
+  "/packages/i18n/",
+  "/packages/propel/src/charts/",
+  "/packages/propel/src/empty-state/assets/",
+  "/packages/propel/src/icons/constants.tsx",
+  "/packages/utils/src/auth.ts",
+];
 
 const AUDITED_UI_PATHS = [
   "apps/web/core/components/project",
@@ -31,24 +42,87 @@ const AUDITED_UI_PATHS = [
 ];
 
 const UI_COPY_PROPS = new Set([
+  "alt",
   "aria-label",
+  "ariaLabel",
   "buttonTitle",
+  "content",
+  "customTooltipHeading",
   "description",
+  "emptyText",
   "emptyStateMessage",
+  "errorMessage",
   "heading",
+  "header",
   "label",
+  "loading",
   "message",
   "placeholder",
+  "required",
   "subHeading",
+  "subHeader",
   "text",
   "title",
   "tooltipContent",
+  "tooltipHeading",
 ]);
 
-const NON_UI_COPY_VALUES = new Set(["&nbsp;", "text-11", "text-13", "text-14", "text-16", "text-11 font-medium"]);
+const NON_UI_COPY_VALUES = new Set([
+  "&nbsp;",
+  "archive",
+  "block+",
+  "heading",
+  "lazy",
+  "lock",
+  "make-private",
+  "make-public",
+  "text-11",
+  "text-13",
+  "text-14",
+  "text-16",
+  "text-11 font-medium",
+  "text*",
+  "tableRow+",
+  "(tableCell | tableHeader)*",
+  "unarchive",
+  "unlock",
+]);
+
+const INTENTIONAL_ENGLISH_UI_COPY = new Set([
+  "@planepowers",
+  "- Plane",
+  "Ask Pi",
+  "AWS AMI",
+  "CSV",
+  "Excel",
+  "Freshdesk",
+  "GAC",
+  "GitHub",
+  "GitLab",
+  "Google",
+  "Jira",
+  "JSON",
+  "Markdown",
+  "OAuth",
+  "OIDC",
+  "PDF",
+  "Plane",
+  "PQL",
+  "RBAC",
+  "SAML",
+  "Sentry",
+  "SLA",
+  "Slack",
+  "SMTP",
+  "Studio OS",
+  "Unsplash",
+  "UTC",
+  "Zapier",
+  "Zendesk",
+]);
 
 // Any high-confidence hardcoded UI copy across the Web app is a regression.
-const LEGACY_WEB_UI_COPY_BASELINE = 0;
+const WEB_UI_COPY_BASELINE = 0;
 
 const ZH_CN_EQUAL_VALUE_ALLOWLIST = new Set([
   "auth:auth.common.email.placeholder",
@@ -64,6 +138,17 @@ const ZH_CN_EQUAL_VALUE_ALLOWLIST = new Set([
   "automation:automations.trigger.schedule.pm",
   "automation:automations.trigger.schedule.schedule_mode_cron",
   "common:common.url",
+  "legacy-ui:legacy_ui.100_mb",
+  "legacy-ui:legacy_ui.1_tb",
+  "legacy-ui:legacy_ui.200_mb",
+  "legacy-ui:legacy_ui.5_mb",
+  "legacy-ui:legacy_ui.5_tb",
+  "legacy-ui:legacy_ui.5gb",
+  "legacy-ui:legacy_ui.gac",
+  "legacy-ui:legacy_ui.ldap",
+  "legacy-ui:legacy_ui.power_k",
+  "legacy-ui:legacy_ui.url",
+  "legacy-ui:legacy_ui.value0_plane",
   "common:exporter.csv.title",
   "common:exporter.excel.title",
   "common:exporter.json.title",
@@ -244,30 +329,37 @@ function findUntranslatedChineseValues(enData: LocaleData, zhData: LocaleData): 
   return issues.toSorted((a, b) => a.key.localeCompare(b.key));
 }
 
-function getEnglishValuesWithChineseTranslations(enData: LocaleData, zhData: LocaleData): Set<string> {
-  const enValues = getNamespaceValues(enData);
-  const zhValues = getNamespaceValues(zhData);
-  const translatedValues = new Set<string>();
+interface LocaleArtifactIssue extends LocaleValueIssue {
+  locale: string;
+}
 
-  for (const [key, enValue] of enValues) {
-    const zhValue = zhValues.get(key);
-    if (typeof enValue === "string" && typeof zhValue === "string" && enValue !== zhValue) {
-      translatedValues.add(enValue);
+function findLocaleValueArtifacts(localeData: LocaleData): LocaleArtifactIssue[] {
+  const issues: LocaleArtifactIssue[] = [];
+
+  for (const [key, value] of getNamespaceValues(localeData)) {
+    if (
+      typeof value === "string" &&
+      (/⟪|__ITEM|__TERM|__[^\s"]+_\d{3}__/.test(value) ||
+        (["zh-CN", "zh-TW"].includes(localeData.locale) && value.includes("飞机")))
+    ) {
+      issues.push({ locale: localeData.locale, key, value });
     }
   }
 
-  return translatedValues;
+  return issues.toSorted((a, b) => a.key.localeCompare(b.key));
 }
 
 function normalizeUiCopy(value: string): string {
   return value.replace(/\s+/g, " ").trim();
 }
 
-function findHardcodedUiCopy(relativePaths: string[], translatedEnglishValues?: Set<string>): SourceIssue[] {
+function findHardcodedUiCopy(relativePaths: string[]): SourceIssue[] {
   const issues: SourceIssue[] = [];
+  const seenIssues = new Set<string>();
   const files = listSourceFiles(relativePaths).filter(
     (filePath) =>
-      [".tsx", ".jsx"].includes(path.extname(filePath)) &&
+      SOURCE_EXTENSIONS.has(path.extname(filePath)) &&
+      !SOURCE_PATH_EXCLUDES.some((excludedPath) => filePath.includes(excludedPath)) &&
       !filePath.includes(".stories.") &&
       !filePath.includes(".test.") &&
       !filePath.includes(".spec.")
@@ -275,34 +367,153 @@ function findHardcodedUiCopy(relativePaths: string[], translatedEnglishValues?: 
 
   const addIssue = (filePath: string, sourceFile: ts.SourceFile, node: ts.Node, rawValue: string) => {
     const value = normalizeUiCopy(rawValue);
-    if (!value || NON_UI_COPY_VALUES.has(value) || /^[.,:;!?()-]+$/.test(value)) return;
-    if (translatedEnglishValues ? !translatedEnglishValues.has(value) : !/[A-Za-z]{2}/.test(value)) return;
-    issues.push(sourceIssue(filePath, sourceFile, node, value));
+    if (!value || NON_UI_COPY_VALUES.has(value) || INTENTIONAL_ENGLISH_UI_COPY.has(value)) return;
+    if (/^#[0-9a-f]{3,8}$/i.test(value) || /^https?:\/\//i.test(value)) return;
+    if (/^[.,:;!?()-]+$/.test(value) || !/[A-Za-z]{2}/.test(value)) return;
+    if (/^[a-z0-9_-]+(?:\.[a-z0-9_-]+)+$/.test(value)) return;
+    const issue = sourceIssue(filePath, sourceFile, node, value);
+    const fingerprint = `${issue.file}:${issue.line}:${issue.value}`;
+    if (seenIssues.has(fingerprint)) return;
+    seenIssues.add(fingerprint);
+    issues.push(issue);
   };
 
   for (const filePath of files) {
     const source = fs.readFileSync(filePath, "utf8");
     const sourceFile = createSourceFile(filePath, source);
 
+    const addUiExpressionCopy = (expression: ts.Expression) => {
+      if (ts.isStringLiteralLike(expression)) {
+        addIssue(filePath, sourceFile, expression, expression.text);
+        return;
+      }
+      if (ts.isConditionalExpression(expression)) {
+        addUiExpressionCopy(expression.whenTrue);
+        addUiExpressionCopy(expression.whenFalse);
+        return;
+      }
+      if (ts.isParenthesizedExpression(expression)) {
+        addUiExpressionCopy(expression.expression);
+        return;
+      }
+      if (ts.isBinaryExpression(expression)) {
+        if (
+          [ts.SyntaxKind.PlusToken, ts.SyntaxKind.BarBarToken, ts.SyntaxKind.QuestionQuestionToken].includes(
+            expression.operatorToken.kind
+          )
+        ) {
+          addUiExpressionCopy(expression.left);
+          addUiExpressionCopy(expression.right);
+        }
+        return;
+      }
+      if (ts.isArrowFunction(expression) || ts.isFunctionExpression(expression)) {
+        if (ts.isBlock(expression.body)) {
+          const visitReturns = (node: ts.Node) => {
+            if (ts.isReturnStatement(node) && node.expression) addUiExpressionCopy(node.expression);
+            ts.forEachChild(node, visitReturns);
+          };
+          visitReturns(expression.body);
+        } else {
+          addUiExpressionCopy(expression.body);
+        }
+        return;
+      }
+      if (ts.isNoSubstitutionTemplateLiteral(expression)) {
+        addIssue(filePath, sourceFile, expression, expression.text);
+        return;
+      }
+      if (ts.isTemplateExpression(expression)) {
+        addIssue(filePath, sourceFile, expression.head, expression.head.text);
+        for (const span of expression.templateSpans) {
+          addUiExpressionCopy(span.expression);
+          addIssue(filePath, sourceFile, span.literal, span.literal.text);
+        }
+        return;
+      }
+      if (
+        ts.isCallExpression(expression) &&
+        ts.isIdentifier(expression.expression) &&
+        ["t", "tx"].includes(expression.expression.text)
+      ) {
+        for (const argument of expression.arguments.slice(1)) addUiExpressionCopy(argument);
+      }
+    };
+
     const visit = (node: ts.Node) => {
+      if (ts.isJsxElement(node)) {
+        const tagName = node.openingElement.tagName.getText(sourceFile);
+        if (tagName === "Script" || tagName === "script") return;
+      }
       if (ts.isJsxText(node)) addIssue(filePath, sourceFile, node, node.text);
 
+      if (ts.isJsxExpression(node) && node.expression && !ts.isJsxAttribute(node.parent)) {
+        addUiExpressionCopy(node.expression);
+      }
+
+      if (ts.isJsxAttribute(node) && UI_COPY_PROPS.has(node.name.text) && node.initializer) {
+        const parentTag = node.parent.parent.tagName.getText(sourceFile);
+        if (parentTag === "meta" && node.name.text === "content") {
+          ts.forEachChild(node, visit);
+          return;
+        }
+        if (ts.isStringLiteral(node.initializer)) addIssue(filePath, sourceFile, node, node.initializer.text);
+        else if (ts.isJsxExpression(node.initializer) && node.initializer.expression) {
+          addUiExpressionCopy(node.initializer.expression);
+        }
+      }
+
       if (
-        ts.isJsxAttribute(node) &&
+        ts.isBindingElement(node) &&
+        ts.isIdentifier(node.name) &&
         UI_COPY_PROPS.has(node.name.text) &&
-        node.initializer &&
-        ts.isStringLiteral(node.initializer)
+        node.initializer
       ) {
-        addIssue(filePath, sourceFile, node, node.initializer.text);
+        addUiExpressionCopy(node.initializer);
       }
 
       if (
         ts.isPropertyAssignment(node) &&
         (ts.isIdentifier(node.name) || ts.isStringLiteral(node.name)) &&
-        UI_COPY_PROPS.has(node.name.text) &&
-        ts.isStringLiteralLike(node.initializer)
+        UI_COPY_PROPS.has(node.name.text)
       ) {
-        addIssue(filePath, sourceFile, node, node.initializer.text);
+        const propertyName = node.name.text;
+        const isMetadataContent =
+          propertyName === "content" &&
+          ts.isObjectLiteralExpression(node.parent) &&
+          node.parent.properties.some((property) => {
+            if (
+              !ts.isPropertyAssignment(property) ||
+              !(ts.isIdentifier(property.name) || ts.isStringLiteral(property.name)) ||
+              !ts.isStringLiteralLike(property.initializer)
+            ) {
+              return false;
+            }
+            if (property.name.text === "property") return property.initializer.text.startsWith("og:");
+            if (property.name.text !== "name") return false;
+            return (
+              ["robots", "viewport", "keywords"].includes(property.initializer.text) ||
+              property.initializer.text.startsWith("twitter:")
+            );
+          });
+        if (isMetadataContent) {
+          ts.forEachChild(node, visit);
+          return;
+        }
+        const siblingTranslationKeys = new Set([
+          `i18n_${propertyName}`,
+          `${propertyName}TranslationKey`,
+          propertyName === "label" ? "i18nKey" : "",
+        ]);
+        const hasTranslationKey =
+          ts.isObjectLiteralExpression(node.parent) &&
+          node.parent.properties.some(
+            (property) =>
+              ts.isPropertyAssignment(property) &&
+              (ts.isIdentifier(property.name) || ts.isStringLiteral(property.name)) &&
+              siblingTranslationKeys.has(property.name.text)
+          );
+        if (!hasTranslationKey) addUiExpressionCopy(node.initializer);
       }
 
       ts.forEachChild(node, visit);
@@ -448,9 +659,9 @@ function main() {
   const pathConflicts = findPathConflicts(enData);
   const staticTranslationKeyIssues = findStaticTranslationKeyIssues(enData.allKeys);
   const untranslatedChineseValues = findUntranslatedChineseValues(enData, zhData);
-  const translatedEnglishValues = getEnglishValuesWithChineseTranslations(enData, zhData);
+  const localeValueArtifacts = localeDirs.flatMap((locale) => findLocaleValueArtifacts(localeDataMap.get(locale)!));
   const auditedUiCopyIssues = findHardcodedUiCopy(AUDITED_UI_PATHS);
-  const webUiCopyIssues = findHardcodedUiCopy(["apps/web"], translatedEnglishValues);
+  const webUiCopyIssues = findHardcodedUiCopy(["apps/web", "packages"]);
 
   const comparisons: LocaleComparison[] = [];
   for (const locale of localeDirs) {
@@ -516,6 +727,14 @@ function main() {
     }
   }
 
+  if (localeValueArtifacts.length > 0) {
+    hasFailure = true;
+    console.log("\nTRANSLATION VALUE ARTIFACTS:");
+    for (const issue of localeValueArtifacts) {
+      console.log(`  ✗ ${issue.locale}:${issue.key} = ${JSON.stringify(issue.value)}`);
+    }
+  }
+
   if (auditedUiCopyIssues.length > 0) {
     hasFailure = true;
     console.log("\nHARDCODED UI COPY IN AUDITED CORE PATHS:");
@@ -524,10 +743,10 @@ function main() {
     }
   }
 
-  if (webUiCopyIssues.length > LEGACY_WEB_UI_COPY_BASELINE) {
+  if (webUiCopyIssues.length > WEB_UI_COPY_BASELINE) {
     hasFailure = true;
     console.log(
-      `\nHARDCODED WEB UI COPY REGRESSION: ${fmt(webUiCopyIssues.length)} matches exceeds the ${fmt(LEGACY_WEB_UI_COPY_BASELINE)}-match baseline.`
+      `\nHARDCODED WEB UI COPY REGRESSION: ${fmt(webUiCopyIssues.length)} matches exceeds the ${fmt(WEB_UI_COPY_BASELINE)}-match baseline.`
     );
   }
 
@@ -539,7 +758,7 @@ function main() {
   }
 
   console.log(
-    `\n  Web hardcoded UI inventory: ${fmt(webUiCopyIssues.length)} high-confidence matches across the full app (baseline ${fmt(LEGACY_WEB_UI_COPY_BASELINE)}).`
+    `\n  Web hardcoded UI inventory: ${fmt(webUiCopyIssues.length)} high-confidence matches across the full app (baseline ${fmt(WEB_UI_COPY_BASELINE)}).`
   );
 
   // Missing keys detail

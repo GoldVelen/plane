@@ -77,12 +77,6 @@ export const RESTRICTED_URLS: string[] = [
   "instance",
 ];
 
-export const ROLE = {
-  [EUserWorkspaceRoles.GUEST]: "Guest",
-  [EUserWorkspaceRoles.MEMBER]: "Member",
-  [EUserWorkspaceRoles.ADMIN]: "Admin",
-};
-
 export const ROLE_DETAILS = {
   [EUserWorkspaceRoles.GUEST]: {
     i18n_title: "role_details.guest.title",

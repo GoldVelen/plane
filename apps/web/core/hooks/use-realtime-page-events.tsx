@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useCallback, useMemo } from "react";
 // plane imports
 import type { EventToPayloadMap } from "@plane/editor";
@@ -47,6 +48,7 @@ export const useRealtimePageEvents = ({
   customRealtimeEventHandlers,
   handlers,
 }: UsePageEventsProps) => {
+  const { t } = useTranslation();
   const router = useAppRouter();
   const { removePage, getPageById } = usePageStore(storeType);
 
@@ -119,8 +121,8 @@ export const useRealtimePageEvents = ({
               if (page.id === pageId && data?.user_id !== currentUser?.id) {
                 setToast({
                   type: TOAST_TYPE.ERROR,
-                  title: "Page deleted",
-                  message: `Page deleted${getUserDisplayText(data.user_id)}`,
+                  title: t("legacy_ui.page_deleted"),
+                  message: t("legacy_ui.page_deleted_value0", { value0: getUserDisplayText(data.user_id) }),
                 });
                 router.push(handlers.getRedirectionLink());
               } else if (page.id === pageId) {
@@ -141,14 +143,14 @@ export const useRealtimePageEvents = ({
 
         error: ({ pageIds, data }: { pageIds: string[]; data: EventToPayloadMap["error"] }) => {
           const errorType = data.error_type;
-          const errorMessage = data.error_message || "An error occurred";
+          const errorMessage = data.error_message || t("legacy_ui.an_error_occurred");
           const errorCode = data.error_code;
 
           if (page.id && pageIds.includes(page.id)) {
             // Show toast notification
             setToast({
               type: TOAST_TYPE.ERROR,
-              title: errorType === "fetch" ? "Failed to load page" : "Failed to save page",
+              title: errorType === "fetch" ? t("legacy_ui.failed_to_load_page") : t("legacy_ui.failed_to_save_page"),
               message: errorMessage,
             });
 
@@ -173,7 +175,7 @@ export const useRealtimePageEvents = ({
         ...customRealtimeEventHandlers,
       };
     },
-    [getPageById, removePage, page, currentUser, getUserDisplayText, router, handlers, customRealtimeEventHandlers]
+    [getPageById, removePage, page, currentUser, getUserDisplayText, router, handlers, customRealtimeEventHandlers, t]
   );
 
   // The main function that will be returned from this hook

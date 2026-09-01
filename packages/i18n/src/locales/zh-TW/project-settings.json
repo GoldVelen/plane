@@ -389,7 +389,7 @@
       "modules": {
         "title": "模組",
         "short_title": "模組",
-        "description": "將工作組織成具有專門負責人和受讓人的子專案。",
+        "description": "將工作組織成具有專門負責人和指派對象的子專案。",
         "toggle_title": "啟用模組",
         "toggle_description": "專案成員將能夠建立和編輯模組。"
       },

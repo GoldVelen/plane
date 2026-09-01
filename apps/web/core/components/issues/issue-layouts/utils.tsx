@@ -13,6 +13,7 @@ import type { FC } from "react";
 import { CalendarDays, LayersIcon, Paperclip } from "lucide-react";
 // plane types
 import { EIconSize, ISSUE_PRIORITIES, STATE_GROUPS } from "@plane/constants";
+import { i18nInstance } from "@plane/i18n";
 import { Logo } from "@plane/propel/emoji-icon-picker";
 import type { ISvgIcons } from "@plane/propel/icons";
 import {
@@ -129,7 +130,13 @@ export const getGroupByColumns = ({
     return [
       {
         id: "All Issues",
-        name: allItemsLabel ?? `All ${isEpic ? "Epics" : "work items"}`,
+        name:
+          allItemsLabel ??
+          String(
+            isEpic
+              ? i18nInstance.t("entity.all", { entity: i18nInstance.t("common.epics") })
+              : i18nInstance.t("default_global_view.all_issues")
+          ),
         payload: {},
         icon: undefined,
       },
@@ -201,12 +208,14 @@ const getCycleColumns = (): IGroupByColumn[] | undefined => {
       icon: <CycleGroupIcon cycleGroup={cycleStatus} className="h-3.5 w-3.5" />,
       payload: { cycle_id: cycle.id },
       isDropDisabled,
-      dropErrorMessage: isDropDisabled ? "Work item cannot be moved to completed cycles" : undefined,
+      dropErrorMessage: isDropDisabled
+        ? String(i18nInstance.t("legacy_ui.work_item_cannot_be_moved_to_completed_cycles"))
+        : undefined,
     });
   });
   cycles.push({
     id: "None",
-    name: "None",
+    name: String(i18nInstance.t("common.none")),
     icon: <CycleIcon className="h-3.5 w-3.5" />,
     payload: {},
   });
@@ -233,7 +242,7 @@ const getModuleColumns = (): IGroupByColumn[] | undefined => {
   });
   modules.push({
     id: "None",
-    name: "None",
+    name: String(i18nInstance.t("common.none")),
     icon: <ModuleIcon className="h-3.5 w-3.5" />,
     payload: {},
   });
@@ -262,7 +271,7 @@ const getStateGroupColumns = (): IGroupByColumn[] => {
   // map state groups to group by columns
   return Object.values(stateGroups).map((stateGroup) => ({
     id: stateGroup.key,
-    name: stateGroup.label,
+    name: i18nInstance.t(stateGroup.labelTranslationKey),
     icon: (
       <div className="size-4 rounded-full">
         <StateGroupIcon stateGroup={stateGroup.key} size={EIconSize.LG} />
@@ -277,7 +286,7 @@ const getPriorityColumns = (): IGroupByColumn[] => {
   // map priorities to group by columns
   return priorities.map((priority) => ({
     id: priority.key,
-    name: priority.title,
+    name: i18nInstance.t(priority.titleTranslationKey),
     icon: <PriorityIcon priority={priority?.key} />,
     payload: { priority: priority.key },
   }));
@@ -288,7 +297,7 @@ const getLabelsColumns = ({ isWorkspaceLevel }: TGetColumns): IGroupByColumn[] =
   // map labels to group by columns
   const labels = [
     ...(isWorkspaceLevel ? workspaceLabels || [] : projectLabels || []),
-    { id: "None", name: "None", color: "#666" },
+    { id: "None", name: i18nInstance.t("common.none"), color: "#666" },
   ];
   // map labels to group by columns
   return labels.map((label) => ({
@@ -321,7 +330,12 @@ const getAssigneeColumns = ({ isWorkspaceLevel, projectId }: TGetColumns): IGrou
     });
   });
   if (includeNone) {
-    assigneeColumns.push({ id: "None", name: "None", icon: <Avatar size="md" />, payload: {} });
+    assigneeColumns.push({
+      id: "None",
+      name: String(i18nInstance.t("common.none")),
+      icon: <Avatar size="md" />,
+      payload: {},
+    });
   }
 
   return assigneeColumns;
@@ -726,14 +740,16 @@ export const getBlockViewDetails = (
 
   if (isBlockVisibleOnChart && !isBlockComplete) {
     if (block?.start_date) {
-      message = `From ${renderFormattedDate(block.start_date)}`;
+      message = String(i18nInstance.t("legacy_ui.from_value0", { value0: renderFormattedDate(block.start_date) }));
       blockStyle.maskImage = `linear-gradient(to right, ${backgroundColor} 50%, transparent 95%)`;
     } else if (block?.target_date) {
-      message = `Till ${renderFormattedDate(block.target_date)}`;
+      message = String(i18nInstance.t("legacy_ui.till_value0", { value0: renderFormattedDate(block.target_date) }));
       blockStyle.maskImage = `linear-gradient(to left, ${backgroundColor} 50%, transparent 95%)`;
     }
   } else if (isBlockComplete) {
-    message = `${renderFormattedDate(block?.start_date)} to ${renderFormattedDate(block?.target_date)}`;
+    message = `${i18nInstance.t("legacy_ui.from_value0", {
+      value0: renderFormattedDate(block?.start_date),
+    })} ${i18nInstance.t("legacy_ui.till_value0", { value0: renderFormattedDate(block?.target_date) })}`;
   }
 
   return {

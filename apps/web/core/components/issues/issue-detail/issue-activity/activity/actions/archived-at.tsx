@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 import { RotateCcw } from "lucide-react";
 // hooks
@@ -16,6 +17,7 @@ import { IssueActivityBlockComponent } from "./";
 type TIssueArchivedAtActivity = { activityId: string; ends: "top" | "bottom" | undefined };
 
 export const IssueArchivedAtActivity = observer(function IssueArchivedAtActivity(props: TIssueArchivedAtActivity) {
+  const { t } = useTranslation();
   const { activityId, ends } = props;
   // hooks
   const {
@@ -39,7 +41,8 @@ export const IssueArchivedAtActivity = observer(function IssueArchivedAtActivity
       ends={ends}
       customUserName={activity.new_value === "archive" ? "Plane" : undefined}
     >
-      {activity.new_value === "restore" ? "restored the work item" : "archived the work item"}.
+      {activity.new_value === "restore" ? t("legacy_ui.restored_the_work_item") : t("legacy_ui.archived_the_work_item")}
+      .
     </IssueActivityBlockComponent>
   );
 });

@@ -102,7 +102,7 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("error"),
-        message: "User details update failed. Please try again!",
+        message: t("legacy_ui.user_details_update_failed_please_try_again"),
       });
     }
   };
@@ -149,7 +149,10 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10">
       {/* Header */}
-      <CommonOnboardingHeader title="Create your profile." description="This is how you will appear in Plane." />
+      <CommonOnboardingHeader
+        title={t("legacy_ui.create_your_profile")}
+        description={t("legacy_ui.this_is_how_you_will_appear_in_plane")}
+      />
 
       {/* Profile Picture Section */}
       <Controller
@@ -192,7 +195,9 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
           onClick={() => setIsImageUploadModalOpen(true)}
         >
           <ImageIcon className="size-4" />
-          <span className="text-13">{userAvatar ? "Change image" : "Upload image"}</span>
+          <span className="text-13">
+            {userAvatar ? t("legacy_ui.change_image") : t("legacy_ui.upload_image_f35dec5f")}
+          </span>
         </button>
       </div>
 
@@ -209,11 +214,11 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
             control={control}
             name="first_name"
             rules={{
-              required: "Name is required",
+              required: t("name_is_required"),
               validate: validatePersonName,
               maxLength: {
                 value: 50,
-                message: "Name must be within 50 characters.",
+                message: t("legacy_ui.name_must_be_within_50_characters"),
               },
             }}
             render={({ field: { value, onChange, ref } }) => (
@@ -232,7 +237,7 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
                     "border-danger-strong": errors.first_name,
                   }
                 )}
-                placeholder="Enter your full name"
+                placeholder={t("legacy_ui.enter_your_full_name")}
                 autoComplete="on"
               />
             )}

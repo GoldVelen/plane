@@ -50,7 +50,7 @@ export type EditorStateType = {
   color:
     | {
         key: string;
-        label: string;
+        labelKey: string;
         textColor: string;
         backgroundColor: string;
       }
@@ -58,7 +58,7 @@ export type EditorStateType = {
   backgroundColor:
     | {
         key: string;
-        label: string;
+        labelKey: string;
         textColor: string;
         backgroundColor: string;
       }

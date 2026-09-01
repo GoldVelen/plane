@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 // plane imports
@@ -31,6 +32,7 @@ type Props = {
 };
 
 export function PowerKModalSearchMenu(props: Props) {
+  const { t } = useTranslation();
   const { activePage, context, isWorkspaceLevel, searchTerm, updateSearchTerm, handleSearchMenuClose } = props;
   // states
   const [resultsCount, setResultsCount] = useState(0);
@@ -89,13 +91,14 @@ export function PowerKModalSearchMenu(props: Props) {
               "animate-pulse": isSearching,
             })}
           >
-            Search results for{" "}
+            {t("legacy_ui.search_results_for")}{" "}
             <span className="font-medium">
               {'"'}
               {searchTerm}
               {'"'}
             </span>{" "}
-            in {isWorkspaceLevel ? "workspace" : "project"}:
+            {t("legacy_ui.in")}
+            {isWorkspaceLevel ? t("legacy_ui.workspace") : t("legacy_ui.project")}:
           </h5>
         </div>
       )}

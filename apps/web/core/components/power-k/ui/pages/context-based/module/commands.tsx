@@ -47,7 +47,7 @@ export const usePowerKModuleContextBasedActions = (): TPowerKCommandConfig[] => 
           setToast({
             type: TOAST_TYPE.ERROR,
             title: t("toast.error"),
-            message: "Module could not be updated. Please try again.",
+            message: t("legacy_ui.module_could_not_be_updated_please_try_again"),
           });
         }
       );
@@ -76,10 +76,10 @@ export const usePowerKModuleContextBasedActions = (): TPowerKCommandConfig[] => 
     } catch {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Some error occurred",
+        title: t("legacy_ui.some_error_occurred"),
       });
     }
-  }, [addModuleToFavorites, removeModuleFromFavorites, workspaceSlug, moduleDetails, isFavorite]);
+  }, [addModuleToFavorites, removeModuleFromFavorites, workspaceSlug, moduleDetails, isFavorite, t]);
 
   const copyModuleUrlToClipboard = useCallback(() => {
     const url = new URL(window.location.href);

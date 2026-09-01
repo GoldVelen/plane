@@ -8,6 +8,7 @@ import { cloneDeep, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction, computed } from "mobx";
 // plane imports
 import { EUserPermissions, API_BASE_URL } from "@plane/constants";
+import { i18nInstance } from "@plane/i18n";
 import type { IUser, TUserPermissions } from "@plane/types";
 // plane web imports
 import type { RootStore } from "@/store/root.store";
@@ -140,7 +141,7 @@ export class UserStore implements IUserStore {
         this.isAuthenticated = false;
         this.error = {
           status: "user-fetch-error",
-          message: "Failed to fetch current user",
+          message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
       throw error;
@@ -181,7 +182,7 @@ export class UserStore implements IUserStore {
       runInAction(() => {
         this.error = {
           status: "user-update-error",
-          message: "Failed to update current user",
+          message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
       throw error;
@@ -207,7 +208,7 @@ export class UserStore implements IUserStore {
       runInAction(() => {
         this.error = {
           status: "user-update-error",
-          message: "Failed to update current user",
+          message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
       throw error;

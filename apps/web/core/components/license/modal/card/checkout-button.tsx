@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 // plane imports
 import { Button } from "@plane/propel/button";
@@ -33,6 +34,7 @@ type Props = {
 };
 
 export const PlanCheckoutButton = observer(function PlanCheckoutButton(props: Props) {
+  const { t } = useTranslation();
   const {
     planeName,
     planVariant,
@@ -65,7 +67,7 @@ export const PlanCheckoutButton = observer(function PlanCheckoutButton(props: Pr
             />
           )}
         </div>
-        <div className="text-caption-md-medium text-tertiary">per user per month</div>
+        <div className="text-caption-md-medium text-tertiary">{t("legacy_ui.per_user_per_month")}</div>
       </div>
       {isLoading ? (
         <Loader className="flex flex-col items-center justify-center">
@@ -88,7 +90,9 @@ export const PlanCheckoutButton = observer(function PlanCheckoutButton(props: Pr
             }}
             disabled={!!upgradeLoaderType}
           >
-            {upgradeLoaderType === planVariant ? "Redirecting to Stripe" : (upgradeCTA ?? `Upgrade to ${planeName}`)}
+            {upgradeLoaderType === planVariant
+              ? t("legacy_ui.redirecting_to_stripe")
+              : (upgradeCTA ?? t("legacy_ui.upgrade_to_value0", { value0: planeName }))}
           </Button>
           {isTrialAllowed && !isSelfHosted && (
             <div className="mt-1 h-3">

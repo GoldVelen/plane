@@ -7,6 +7,7 @@
 import { useState } from "react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import type { IWorkspaceMember, TProjectMembership } from "@plane/types";
 import { renderFormattedDate } from "@plane/utils";
 // components
@@ -27,6 +28,7 @@ type TUseProjectColumnsProps = {
 };
 
 export const useProjectColumns = (props: TUseProjectColumnsProps) => {
+  const { t } = useTranslation();
   const { projectId, workspaceSlug } = props;
   // states
   const [removeMemberModal, setRemoveMemberModal] = useState<RowData | null>(null);
@@ -59,7 +61,7 @@ export const useProjectColumns = (props: TUseProjectColumnsProps) => {
   const columns = [
     {
       key: "Full Name",
-      content: "Full name",
+      content: t("project_members.full_name"),
       thClassName: "text-left",
       thRender: () => (
         <MemberHeaderColumn
@@ -80,7 +82,7 @@ export const useProjectColumns = (props: TUseProjectColumnsProps) => {
     },
     {
       key: "Display Name",
-      content: "Display name",
+      content: t("project_members.display_name"),
       thRender: () => (
         <MemberHeaderColumn
           property="display_name"
@@ -92,7 +94,7 @@ export const useProjectColumns = (props: TUseProjectColumnsProps) => {
     },
     {
       key: "Email",
-      content: "Email",
+      content: t("project_members.email"),
       thRender: () => (
         <MemberHeaderColumn
           property="email"
@@ -104,7 +106,7 @@ export const useProjectColumns = (props: TUseProjectColumnsProps) => {
     },
     {
       key: "Account Type",
-      content: "Account type",
+      content: t("workspace_settings.settings.members.details.account_type"),
       thRender: () => (
         <MemberHeaderColumn
           property="role"
@@ -123,7 +125,7 @@ export const useProjectColumns = (props: TUseProjectColumnsProps) => {
     },
     {
       key: "Joining Date",
-      content: "Joining date",
+      content: t("project_members.joining_date"),
       thRender: () => (
         <MemberHeaderColumn
           property="joining_date"

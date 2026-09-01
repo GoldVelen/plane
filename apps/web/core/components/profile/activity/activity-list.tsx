@@ -70,11 +70,12 @@ export const ActivityList = observer(function ActivityList(props: Props) {
                       <div>
                         <div className="text-11">
                           {activityItem.actor_detail.is_bot
-                            ? activityItem.actor_detail.first_name + " Bot"
+                            ? activityItem.actor_detail.first_name + t("bot")
                             : activityItem.actor_detail.display_name}
                         </div>
                         <p className="mt-0.5 text-11 text-secondary">
-                          Commented {calculateTimeAgo(activityItem.created_at)}
+                          {t("legacy_ui.commented")}
+                          {calculateTimeAgo(activityItem.created_at)}
                         </p>
                       </div>
                       <div className="issue-comments-section p-0">
@@ -160,7 +161,7 @@ export const ActivityList = observer(function ActivityList(props: Props) {
                               >
                                 <span className="text-gray font-medium">
                                   {currentUser?.id === activityItem.actor_detail.id
-                                    ? "You"
+                                    ? t("you")
                                     : activityItem.actor_detail.display_name}
                                 </span>
                               </Link>

@@ -32,7 +32,9 @@ export const FilterStatus = observer(function FilterStatus(props: Props) {
   return (
     <>
       <FilterHeader
-        title={`Status of the cycle${appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : ""}`}
+        title={t("legacy_ui.status_of_the_cycle_value0", {
+          value0: appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : "",
+        })}
         isPreviewEnabled={previewEnabled}
         handleIsPreviewEnabled={() => setPreviewEnabled(!previewEnabled)}
       />

@@ -89,10 +89,61 @@ export const messages = (
   const verb = activity.verb;
   const workspaceDetail = store.workspaceRoot.getWorkspaceById(activity.workspace);
 
-  const getBooleanActionText = (value: string | undefined) => {
-    if (value === "true") return "enabled";
-    if (value === "false") return "disabled";
-    return verb;
+  const translateVerb = (value: string | undefined) => {
+    switch (value) {
+      case "created":
+        return t("studio.forms.action_created");
+      case "added":
+        return t("legacy_ui.added");
+      case "removed":
+        return t("legacy_ui.removed");
+      case "deleted":
+        return t("legacy_ui.deleted");
+      case "restored":
+      case "restore":
+        return t("legacy_ui.restored");
+      case "archived":
+      case "archive":
+        return t("legacy_ui.archived");
+      case "enabled":
+      case "true":
+        return t("legacy_ui.enabled");
+      case "disabled":
+      case "false":
+        return t("legacy_ui.disabled");
+      default:
+        return t("update");
+    }
+  };
+
+  const translatedActivityType = () => {
+    switch (activityType) {
+      case "priority":
+        return t("priority");
+      case "state":
+        return t("state");
+      case "estimate":
+        return t("estimate");
+      case "cycle":
+      case "cycles":
+      case "cycle_view":
+        return t("cycles");
+      case "module":
+      case "modules":
+      case "module_view":
+        return t("modules");
+      case "page":
+      case "page_view":
+        return t("pages");
+      case "label":
+      case "labels":
+        return t("labels");
+      case "inbox":
+      case "intake_view":
+        return t("inbox");
+      default:
+        return t("settings");
+    }
   };
 
   switch (activityType) {
@@ -100,26 +151,29 @@ export const messages = (
       return {
         message: (
           <>
-            set the priority to <span className="font-medium text-primary">{newValue || "none"}</span>
+            {t("legacy_ui.set_the_priority_to")}{" "}
+            <span className="font-medium text-primary">{newValue || t("none")}</span>
           </>
         ),
       };
     case "archived_at":
       return {
-        message: newValue === "restore" ? "restored the project" : "archived the project",
+        message: newValue === "restore" ? t("legacy_ui.restored_the_project") : t("legacy_ui.archived_the_project"),
         customUserName: newValue === "archive" ? "Plane" : undefined,
       };
     case "name":
       return {
         message: (
           <>
-            renamed the project to <span className="font-medium text-primary">{newValue}</span>
+            {t("legacy_ui.renamed_the_project_to")} <span className="font-medium text-primary">{newValue}</span>
           </>
         ),
       };
     case "description":
       return {
-        message: newValue ? "updated the project description" : "removed the project description",
+        message: newValue
+          ? t("legacy_ui.updated_the_project_description")
+          : t("legacy_ui.removed_the_project_description"),
       };
     case "start_date":
       return {
@@ -127,10 +181,10 @@ export const messages = (
           <>
             {newValue ? (
               <>
-                set the start date to <span className="font-medium text-primary">{newValue}</span>
+                {t("legacy_ui.set_the_start_date_to")} <span className="font-medium text-primary">{newValue}</span>
               </>
             ) : (
-              "removed the start date"
+              t("legacy_ui.removed_the_start_date")
             )}
           </>
         ),
@@ -141,10 +195,10 @@ export const messages = (
           <>
             {newValue ? (
               <>
-                set the target date to <span className="font-medium text-primary">{newValue}</span>
+                {t("legacy_ui.set_the_target_date_to")} <span className="font-medium text-primary">{newValue}</span>
               </>
             ) : (
-              "removed the target date"
+              t("legacy_ui.removed_the_target_date")
             )}
           </>
         ),
@@ -153,7 +207,7 @@ export const messages = (
       return {
         message: (
           <>
-            set the state to <span className="font-medium text-primary">{newValue || "none"}</span>
+            {t("legacy_ui.set_the_state_to")} <span className="font-medium text-primary">{newValue || t("none")}</span>
           </>
         ),
       };
@@ -163,11 +217,11 @@ export const messages = (
           <>
             {newValue ? (
               <>
-                set the estimate point to <span className="font-medium text-primary">{newValue}</span>
+                {t("legacy_ui.set_the_estimate_point_to")} <span className="font-medium text-primary">{newValue}</span>
               </>
             ) : (
               <>
-                removed the estimate point
+                {t("legacy_ui.removed_the_estimate_point")}
                 {oldValue && (
                   <>
                     {" "}
@@ -184,7 +238,8 @@ export const messages = (
         message: (
           <>
             <span>
-              {verb} this project {verb === "removed" ? "from" : "to"} the cycle{" "}
+              {translateVerb(verb)} {t("legacy_ui.this_project")}{" "}
+              {verb === "removed" ? t("legacy_ui.from") : t("legacy_ui.to")} {t("legacy_ui.the_cycle")}{" "}
             </span>
             {verb !== "removed" ? (
               <a
@@ -196,7 +251,7 @@ export const messages = (
                 {activity.new_value}
               </a>
             ) : (
-              <span className="font-medium text-primary">{activity.old_value || "Unknown cycle"}</span>
+              <span className="font-medium text-primary">{activity.old_value || t("legacy_ui.unknown_cycle")}</span>
             )}
           </>
         ),
@@ -206,10 +261,11 @@ export const messages = (
         message: (
           <>
             <span>
-              {verb} this project {verb === "removed" ? "from" : "to"} the module{" "}
+              {translateVerb(verb)} {t("legacy_ui.this_project")}{" "}
+              {verb === "removed" ? t("legacy_ui.from") : t("legacy_ui.to")} {t("legacy_ui.the_module")}{" "}
             </span>
             <span className="font-medium text-primary">
-              {verb === "removed" ? oldValue : newValue || "Unknown module"}
+              {verb === "removed" ? oldValue : newValue || t("legacy_ui.unknown_module")}
             </span>
           </>
         ),
@@ -218,33 +274,44 @@ export const messages = (
       return {
         message: (
           <>
-            {verb} the label{" "}
-            <span className="font-medium text-primary">{newValue || oldValue || "Untitled label"}</span>
+            {translateVerb(verb)} {t("legacy_ui.the_label")}{" "}
+            <span className="font-medium text-primary">{newValue || oldValue || t("legacy_ui.untitled_label")}</span>
           </>
         ),
       };
     case "inbox":
       return {
-        message: <>{newValue ? "enabled" : "disabled"} inbox</>,
+        message: (
+          <>
+            {newValue ? t("legacy_ui.enabled") : t("legacy_ui.disabled")} {t("legacy_ui.inbox")}
+          </>
+        ),
       };
     case "page":
       return {
         message: (
           <>
-            {newValue ? "created" : "removed"} the project page{" "}
-            <span className="font-medium text-primary">{newValue || oldValue || "Untitled page"}</span>
+            {newValue ? t("studio.forms.action_created") : t("legacy_ui.removed")} {t("legacy_ui.the_project_page")}{" "}
+            <span className="font-medium text-primary">
+              {newValue || oldValue || t("templates.settings.form.page.name.placeholder")}
+            </span>
           </>
         ),
       };
     case "network":
       return {
-        message: <>{newValue ? "enabled" : "disabled"} network access</>,
+        message: (
+          <>
+            {newValue ? t("legacy_ui.enabled") : t("legacy_ui.disabled")} {t("legacy_ui.network_access")}
+          </>
+        ),
       };
     case "identifier":
       return {
         message: (
           <>
-            updated project identifier to <span className="font-medium text-primary">{newValue || "none"}</span>
+            {t("legacy_ui.updated_project_identifier_to")}{" "}
+            <span className="font-medium text-primary">{newValue || t("none")}</span>
           </>
         ),
       };
@@ -252,7 +319,8 @@ export const messages = (
       return {
         message: (
           <>
-            changed project timezone to <span className="font-medium text-primary">{newValue || "default"}</span>
+            {t("legacy_ui.changed_project_timezone_to")}{" "}
+            <span className="font-medium text-primary">{newValue || t("common.default")}</span>
           </>
         ),
       };
@@ -264,37 +332,53 @@ export const messages = (
       return {
         message: (
           <>
-            {getBooleanActionText(newValue)} {activityType.replace(/_view$/, "").replace(/_/g, " ")} view
+            {translateVerb(newValue)} {translatedActivityType()} {t("legacy_ui.view")}
           </>
         ),
       };
     case "is_project_updates_enabled":
       return {
-        message: <>{getBooleanActionText(newValue)} project updates</>,
+        message: (
+          <>
+            {translateVerb(newValue)} {t("legacy_ui.project_updates")}
+          </>
+        ),
       };
     case "is_epic_enabled":
       return {
-        message: <>{getBooleanActionText(newValue)} epics</>,
+        message: (
+          <>
+            {translateVerb(newValue)} {t("legacy_ui.epics")}
+          </>
+        ),
       };
     case "is_workflow_enabled":
       return {
-        message: <>{getBooleanActionText(newValue)} custom workflow</>,
+        message: (
+          <>
+            {translateVerb(newValue)} {t("legacy_ui.custom_workflow")}
+          </>
+        ),
       };
     case "is_time_tracking_enabled":
       return {
-        message: <>{getBooleanActionText(newValue)} time tracking</>,
+        message: (
+          <>
+            {translateVerb(newValue)} {t("legacy_ui.time_tracking")}
+          </>
+        ),
       };
     case "is_issue_type_enabled":
       return {
         message: (
           <>
-            {getBooleanActionText(newValue)} {t("work_item_types.label")}
+            {translateVerb(newValue)} {t("work_item_types.label")}
           </>
         ),
       };
     default:
       return {
-        message: `${verb} ${activityType?.replace(/_/g, " ")} `,
+        message: `${translateVerb(verb)} ${translatedActivityType()}`,
       };
   }
 };

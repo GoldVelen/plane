@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export const FilterStateGroup = observer(function FilterStateGroup(props: Props) {
+  const { t } = useTranslation();
   const { appliedFilters, handleUpdate, searchQuery } = props;
 
   const [itemsToRender, setItemsToRender] = useState(5);
@@ -38,7 +40,9 @@ export const FilterStateGroup = observer(function FilterStateGroup(props: Props)
   return (
     <>
       <FilterHeader
-        title={`State group${appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : ""}`}
+        title={t("legacy_ui.state_group_value0", {
+          value0: appliedFiltersCount > 0 ? ` (${appliedFiltersCount})` : "",
+        })}
         isPreviewEnabled={previewEnabled}
         handleIsPreviewEnabled={() => setPreviewEnabled(!previewEnabled)}
       />
@@ -52,7 +56,7 @@ export const FilterStateGroup = observer(function FilterStateGroup(props: Props)
                   isChecked={appliedFilters?.includes(stateGroup.key) ? true : false}
                   onClick={() => handleUpdate(stateGroup.key)}
                   icon={<StateGroupIcon stateGroup={stateGroup.key} />}
-                  title={stateGroup.label}
+                  title={t(stateGroup.labelTranslationKey)}
                 />
               ))}
               {filteredOptions.length > 5 && (
@@ -61,7 +65,7 @@ export const FilterStateGroup = observer(function FilterStateGroup(props: Props)
                   className="ml-8 text-11 font-medium text-accent-primary"
                   onClick={handleViewToggle}
                 >
-                  {itemsToRender === filteredOptions.length ? "View less" : "View all"}
+                  {itemsToRender === filteredOptions.length ? t("legacy_ui.view_less") : t("legacy_ui.view_all")}
                 </button>
               )}
             </>

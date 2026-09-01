@@ -90,7 +90,7 @@ export function LabelCreate(props: ILabelCreate) {
         <div className="flex-shrink-0">
           {isCreateToggle ? <CloseIcon className="h-2.5 w-2.5" /> : <PlusIcon className="h-2.5 w-2.5" />}
         </div>
-        <div className="flex-shrink-0">{isCreateToggle ? "Cancel" : "New"}</div>
+        <div className="flex-shrink-0">{isCreateToggle ? t("cancel") : t("legacy_ui.new")}</div>
       </div>
 
       {isCreateToggle && (
@@ -133,7 +133,7 @@ export function LabelCreate(props: ILabelCreate) {
             control={control}
             name="name"
             rules={{
-              required: "This is required",
+              required: t("legacy_ui.this_is_required"),
             }}
             render={({ field: { value, onChange, ref } }) => (
               <Input

@@ -58,7 +58,7 @@ export const IssueLinkItem = observer(function IssueLinkItem(props: TIssueLinkIt
       >
         <div className="flex min-w-0 flex-1 items-center gap-2.5">
           {faviconUrl ? (
-            <img src={faviconUrl} alt="favicon" className="size-4 flex-shrink-0" />
+            <img src={faviconUrl} alt="" className="size-4 flex-shrink-0" />
           ) : (
             <LinkIcon className="size-4 flex-shrink-0 text-tertiary group-hover:text-primary" />
           )}

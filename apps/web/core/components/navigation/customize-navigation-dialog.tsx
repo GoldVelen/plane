@@ -188,8 +188,7 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
           <div>
             <h2 className="text-18 font-semibold text-primary">{t("customize_navigation")}</h2>
             <p className="mt-1 text-13 text-tertiary">
-              Selected items will always stay visible in your sidebar. You can still find the others anytime from the
-              More menu. These changes are personal to you and won&apos;t affect anyone else on your workspace.
+              {t("legacy_ui.selected_items_will_always_stay_visible_in_your_sidebar_you_can_still_find_the_o")}
             </p>
           </div>
           <button
@@ -282,7 +281,7 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
                     <div className="flex-1">
                       <div className="text-13 text-primary">{t("accordion_navigation_control")}</div>
                       <div className="text-11 text-secondary">
-                        Feature tabs will appear as nested items under project and acts as accordion.
+                        {t("legacy_ui.feature_tabs_will_appear_as_nested_items_under_project_and_acts_as_accordion")}
                       </div>
                     </div>
                   </label>
@@ -300,7 +299,7 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
                     <div className="flex-1">
                       <div className="text-13 text-primary">{t("horizontal_navigation_bar")}</div>
                       <div className="text-11 text-secondary">
-                        Feature tabs will appear as horizontal tabs inside a project.
+                        {t("legacy_ui.feature_tabs_will_appear_as_horizontal_tabs_inside_a_project")}
                       </div>
                     </div>
                   </label>
@@ -339,7 +338,9 @@ export const CustomizeNavigationDialog = observer(function CustomizeNavigationDi
                           />
                         </div>
                         {parseInt(projectCountInput) < 1 && projectCountInput !== "" && (
-                          <span className="pl-0.5 text-11 text-danger-primary">Minimum value is 1</span>
+                          <span className="pl-0.5 text-11 text-danger-primary">
+                            {t("legacy_ui.minimum_value_is_1")}
+                          </span>
                         )}
                       </div>
                     </div>

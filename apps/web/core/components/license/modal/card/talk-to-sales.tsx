@@ -49,7 +49,7 @@ export const TalkToSalesCard = observer(function TalkToSalesCard(props: TalkToSa
 
   const renderPriceContent = (price: TSubscriptionPrice) => (
     <>
-      {price.recurring === "month" && "Monthly"}
+      {price.recurring === "month" && t("studio.enums.routine_cadence.MONTHLY")}
       {price.recurring === "year" && "Yearly"}
     </>
   );
@@ -63,10 +63,10 @@ export const TalkToSalesCard = observer(function TalkToSalesCard(props: TalkToSa
               <Loader.Item height="36px" width="4rem" />
             </Loader>
           ) : (
-            <>Quote on request</>
+            <>{t("legacy_ui.quote_on_request")}</>
           )}
         </div>
-        <div className="text-caption-md-medium text-tertiary">per user per month</div>
+        <div className="text-caption-md-medium text-tertiary">{t("legacy_ui.per_user_per_month")}</div>
       </div>
       {isLoading ? (
         <Loader className="flex flex-col items-center justify-center">

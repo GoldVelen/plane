@@ -43,50 +43,31 @@ export const PROFILE_ADMINS_TAB = [
   },
 ];
 
-export const PREFERENCE_OPTIONS: {
-  id: string;
-  title: string;
-  description: string;
-}[] = [
-  {
-    id: "theme",
-    title: "theme",
-    description: "select_or_customize_your_interface_color_scheme",
-  },
-];
-
 /**
- * @description The options for the start of the week
- * @type {Array<{value: EStartOfTheWeek, label: string}>}
+ * @description The locale-independent options for the start of the week
+ * @type {Array<{value: EStartOfTheWeek}>}
  * @constant
  */
 export const START_OF_THE_WEEK_OPTIONS = [
   {
     value: EStartOfTheWeek.SUNDAY,
-    label: "Sunday",
   },
   {
     value: EStartOfTheWeek.MONDAY,
-    label: "Monday",
   },
   {
     value: EStartOfTheWeek.TUESDAY,
-    label: "Tuesday",
   },
   {
     value: EStartOfTheWeek.WEDNESDAY,
-    label: "Wednesday",
   },
   {
     value: EStartOfTheWeek.THURSDAY,
-    label: "Thursday",
   },
   {
     value: EStartOfTheWeek.FRIDAY,
-    label: "Friday",
   },
   {
     value: EStartOfTheWeek.SATURDAY,
-    label: "Saturday",
   },
 ];

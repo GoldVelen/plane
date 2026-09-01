@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import {
   useFloating,
   autoUpdate,
@@ -42,6 +43,7 @@ export type BlockMenuOption = {
 };
 
 export function BlockMenu(props: Props) {
+  const { t } = useTranslation();
   const { editor } = props;
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimatedIn, setIsAnimatedIn] = useState(false);
@@ -152,7 +154,7 @@ export function BlockMenu(props: Props) {
     {
       icon: TrashIcon,
       key: "delete",
-      label: "Delete",
+      label: t("delete"),
       onClick: (_e) => {
         // Execute the delete action
         editor.chain().deleteSelection().focus().run();
@@ -161,7 +163,7 @@ export function BlockMenu(props: Props) {
     {
       icon: CopyIcon,
       key: "duplicate",
-      label: "Duplicate",
+      label: t("inbox_issue.status.duplicate.title"),
       isDisabled:
         editor.state.selection.content().content.firstChild?.type.name === CORE_EXTENSIONS.IMAGE ||
         editor.isActive(CORE_EXTENSIONS.CUSTOM_IMAGE),

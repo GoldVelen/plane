@@ -4,11 +4,13 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import * as React from "react";
 
 import type { ISvgIcons } from "./type";
 
 export function WorkspaceIcon({ className }: ISvgIcons) {
+  const { t } = useTranslation();
   return (
     <svg
       viewBox="0 0 24 24"
@@ -16,7 +18,7 @@ export function WorkspaceIcon({ className }: ISvgIcons) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       role="img"
-      aria-label="Workspace icon"
+      aria-label={t("legacy_ui.workspace_icon")}
     >
       <path
         fillRule="evenodd"

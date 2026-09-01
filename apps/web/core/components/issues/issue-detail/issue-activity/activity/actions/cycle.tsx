@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 // hooks
 import { CycleIcon } from "@plane/propel/icons";
@@ -15,6 +16,7 @@ import { IssueActivityBlockComponent } from "./";
 type TIssueCycleActivity = { activityId: string; ends: "top" | "bottom" | undefined };
 
 export const IssueCycleActivity = observer(function IssueCycleActivity(props: TIssueCycleActivity) {
+  const { t } = useTranslation();
   const { activityId, ends } = props;
   // hooks
   const {
@@ -33,7 +35,7 @@ export const IssueCycleActivity = observer(function IssueCycleActivity(props: TI
       <>
         {activity.verb === "created" ? (
           <>
-            <span>added this work item to the cycle </span>
+            <span>{t("legacy_ui.added_this_work_item_to_the_cycle")}</span>
             <a
               href={`/${activity.workspace_detail?.slug}/projects/${activity.project}/cycles/${activity.new_identifier}`}
               target="_blank"
@@ -45,7 +47,7 @@ export const IssueCycleActivity = observer(function IssueCycleActivity(props: TI
           </>
         ) : activity.verb === "updated" ? (
           <>
-            <span>set the cycle to </span>
+            <span>{t("legacy_ui.set_the_cycle_to")}</span>
             <a
               href={`/${activity.workspace_detail?.slug}/projects/${activity.project}/cycles/${activity.new_identifier}`}
               target="_blank"
@@ -57,7 +59,7 @@ export const IssueCycleActivity = observer(function IssueCycleActivity(props: TI
           </>
         ) : (
           <>
-            <span>removed the work item from the cycle </span>
+            <span>{t("legacy_ui.removed_the_work_item_from_the_cycle")}</span>
             <a
               href={`/${activity.workspace_detail?.slug}/projects/${activity.project}/cycles/${activity.old_identifier}`}
               target="_blank"

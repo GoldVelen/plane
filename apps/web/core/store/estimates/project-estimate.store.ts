@@ -7,6 +7,7 @@
 import { unset, orderBy, set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
+import { i18nInstance } from "@plane/i18n";
 // types
 import type { IEstimate as IEstimateType, IEstimateFormData, TEstimateSystemKeys } from "@plane/types";
 // plane web services
@@ -205,7 +206,7 @@ export class ProjectEstimateStore implements IProjectEstimateStore {
       this.loader = undefined;
       this.error = {
         status: "error",
-        message: "Error fetching estimates",
+        message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
       };
       throw error;
     }
@@ -245,7 +246,7 @@ export class ProjectEstimateStore implements IProjectEstimateStore {
       this.loader = undefined;
       this.error = {
         status: "error",
-        message: "Error fetching estimates",
+        message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
       };
       throw error;
     }
@@ -292,7 +293,7 @@ export class ProjectEstimateStore implements IProjectEstimateStore {
     } catch (error) {
       this.error = {
         status: "error",
-        message: "Error creating estimate",
+        message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
       };
       throw error;
     }
@@ -311,7 +312,7 @@ export class ProjectEstimateStore implements IProjectEstimateStore {
     } catch (error) {
       this.error = {
         status: "error",
-        message: "Error deleting estimate",
+        message: String(i18nInstance.t("legacy_ui.we_were_unable_to_delete_the_estimate_please_try_again")),
       };
       throw error;
     }

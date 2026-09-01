@@ -58,7 +58,7 @@ export const IssueRelationSelect = observer(function IssueRelationSelect(props: 
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: "Please select at least one work item.",
+        message: t("legacy_ui.please_select_at_least_one_work_item"),
       });
       return;
     }
@@ -121,7 +121,7 @@ export const IssueRelationSelect = observer(function IssueRelationSelect(props: 
                     key={relationIssueId}
                     className={`group flex items-center gap-1 rounded-sm px-1.5 pt-1 pb-1 leading-3 hover:bg-surface-2 ${currRelationOption?.className}`}
                   >
-                    <Tooltip tooltipHeading="Title" tooltipContent={currentIssue.name} isMobile={isMobile}>
+                    <Tooltip tooltipHeading={t("common.title")} tooltipContent={currentIssue.name} isMobile={isMobile}>
                       <Link
                         href={generateWorkItemLink({
                           workspaceSlug,

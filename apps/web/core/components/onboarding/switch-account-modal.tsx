@@ -94,12 +94,13 @@ export function SwitchAccountModal(props: Props) {
                     </div>
                     <div className="flex flex-col gap-y-6 py-3">
                       <Dialog.Title as="h3" className="text-20 leading-6 font-medium text-primary">
-                        Switch account
+                        {t("legacy_ui.switch_account")}
                       </Dialog.Title>
                       {userData?.email && (
                         <div className="text-14 font-regular text-secondary">
-                          If you have signed up via <span className="text-accent-primary">{userData.email}</span>{" "}
-                          un-intentionally, you can switch your account to a different one from here.
+                          {t("legacy_ui.if_you_have_signed_up_via")}
+                          <span className="text-accent-primary">{userData.email}</span>{" "}
+                          {t("legacy_ui.un_intentionally_you_can_switch_your_account_to_a_different_one_from_here")}
                         </div>
                       )}
                     </div>
@@ -107,7 +108,7 @@ export function SwitchAccountModal(props: Props) {
                 </div>
                 <div className="mb-2 flex items-center justify-end gap-3 p-4 sm:px-6">
                   <Button variant="secondary" size="lg" onClick={handleSwitchAccount} disabled={switchingAccount}>
-                    {switchingAccount ? "Switching..." : "Switch account"}
+                    {switchingAccount ? t("legacy_ui.switching") : t("legacy_ui.switch_account")}
                   </Button>
                 </div>
               </Dialog.Panel>

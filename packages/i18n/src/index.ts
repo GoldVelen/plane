@@ -17,6 +17,7 @@ export type { TTranslationKeys } from "./types";
 export type { TNamespace } from "./constants/namespaces";
 
 // Utilities
+export { i18nInstance } from "./core/instance";
 export { setLanguage } from "./core/set-language";
 
 // Constants

@@ -45,7 +45,7 @@ export const ReadonlyLabels = observer(function ReadonlyLabels(props: TReadonlyL
         <>
           <Tooltip
             position="top"
-            tooltipHeading="Labels"
+            tooltipHeading={t("common.labels")}
             tooltipContent={labels.map((l) => l?.name).join(", ")}
             isMobile={isMobile}
             disabled={labels.length === 0}

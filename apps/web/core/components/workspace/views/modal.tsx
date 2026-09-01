@@ -55,7 +55,7 @@ export const CreateUpdateWorkspaceViewModal = observer(function CreateUpdateWork
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: t("toast.success"),
-        message: "View created successfully.",
+        message: t("legacy_ui.view_created_successfully"),
       });
       router.push(`/${workspaceSlug}/workspace-views/${res.id}`);
       handleClose();
@@ -63,7 +63,7 @@ export const CreateUpdateWorkspaceViewModal = observer(function CreateUpdateWork
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: "View could not be created. Please try again.",
+        message: t("legacy_ui.view_could_not_be_created_please_try_again"),
       });
     }
   };
@@ -84,7 +84,7 @@ export const CreateUpdateWorkspaceViewModal = observer(function CreateUpdateWork
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "View updated successfully.",
+          message: t("legacy_ui.view_updated_successfully"),
         });
         handleClose();
       }
@@ -92,7 +92,7 @@ export const CreateUpdateWorkspaceViewModal = observer(function CreateUpdateWork
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: "View could not be updated. Please try again.",
+        message: t("legacy_ui.view_could_not_be_updated_please_try_again"),
       });
     }
   };

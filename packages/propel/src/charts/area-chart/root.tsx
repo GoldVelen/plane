@@ -8,6 +8,7 @@ import React, { useMemo, useState } from "react";
 import { Area, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, Line, ComposedChart, CartesianGrid } from "recharts";
 // plane imports
 import { AXIS_LABEL_CLASSNAME } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import type { TAreaChartProps } from "@plane/types";
 // local components
 import { getLegendProps } from "../components/legend";
@@ -17,6 +18,7 @@ import { CustomTooltip } from "../components/tooltip";
 export const AreaChart = React.memo(function AreaChart<K extends string, T extends string>(
   props: TAreaChartProps<K, T>
 ) {
+  const { t } = useTranslation();
   const {
     data,
     areas,
@@ -200,7 +202,7 @@ export const AreaChart = React.memo(function AreaChart<K extends string, T exten
               strokeDasharray={comparisonLine.dashedLine ? "4 4" : "none"}
               activeDot={false}
               legendType="none"
-              name="Comparison line"
+              name={t("legacy_ui.comparison_line")}
             />
           )}
         </ComposedChart>

@@ -94,8 +94,8 @@ export function GptAssistantPopover(props: Props) {
     const error = err?.data?.error;
     const errorMessage =
       err?.status === 429
-        ? error || "You have reached the maximum number of requests of 50 requests per month per user."
-        : error || "Some error occurred. Please try again.";
+        ? error || t("legacy_ui.you_have_reached_the_maximum_number_of_requests_of_50_requests_per_month_per_use")
+        : error || t("legacy_ui.some_error_occurred_please_try_again");
 
     setToast({
       type: TOAST_TYPE.ERROR,
@@ -126,7 +126,7 @@ export function GptAssistantPopover(props: Props) {
     setToast({
       type: TOAST_TYPE.ERROR,
       title: t("toast.error"),
-      message: "Please enter some task to get AI assistance.",
+      message: t("legacy_ui.please_enter_some_task_to_get_ai_assistance"),
     });
   };
 
@@ -187,15 +187,15 @@ export function GptAssistantPopover(props: Props) {
         onClose();
       }}
     >
-      Use this response
+      {t("legacy_ui.use_this_response")}
     </Button>
   );
 
   const generateResponseButtonText = isSubmitting
-    ? "Generating response..."
+    ? t("legacy_ui.generating_response")
     : response === ""
-      ? "Generate response"
-      : "Generate again";
+      ? t("legacy_ui.generate_response")
+      : t("legacy_ui.generate_again");
 
   return (
     <Popover as="div" className={`relative w-min text-left`}>
@@ -224,7 +224,7 @@ export function GptAssistantPopover(props: Props) {
           <div className="vertical-scroll-enable max-h-72 space-y-4 overflow-y-auto">
             {prompt && (
               <div className="text-13">
-                Content:
+                {t("legacy_ui.content")}
                 <RichTextEditor
                   editable={false}
                   id="ai-assistant-content"
@@ -239,7 +239,7 @@ export function GptAssistantPopover(props: Props) {
             )}
             {response !== "" && (
               <div className="page-block-section max-h-[8rem] text-13">
-                Response:
+                {t("legacy_ui.response")}
                 <RichTextEditor
                   editable={false}
                   id="ai-assistant-response"
@@ -253,8 +253,7 @@ export function GptAssistantPopover(props: Props) {
             )}
             {invalidResponse && (
               <div className="text-13 text-danger-primary">
-                No response could be generated. This may be due to insufficient content or task information. Please try
-                again.
+                {t("legacy_ui.no_response_could_be_generated_this_may_be_due_to_insufficient_content_or_task_i")}
               </div>
             )}
           </div>
@@ -269,9 +268,9 @@ export function GptAssistantPopover(props: Props) {
                 value={value}
                 onChange={onChange}
                 ref={ref}
-                placeholder={`${
-                  prompt && prompt !== "" ? "Tell AI what action to perform on this content..." : "Ask AI anything..."
-                }`}
+                placeholder={
+                  prompt && prompt !== "" ? t("legacy_ui.tell_ai_what_to_do") : t("legacy_ui.ask_ai_anything")
+                }
                 className="w-full"
                 autoFocus
               />

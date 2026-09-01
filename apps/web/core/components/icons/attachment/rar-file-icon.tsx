@@ -11,5 +11,5 @@ import RarFileIcon from "@/app/assets/attachment/rar-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function RarIcon({ width, height }: ImageIconPros) {
-  return <img src={RarFileIcon} width={width} height={height} alt="RarFileIcon" />;
+  return <img src={RarFileIcon} width={width} height={height} alt="" />;
 }

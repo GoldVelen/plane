@@ -94,14 +94,16 @@ export const DeleteWorkspaceForm = observer(function DeleteWorkspaceForm(props: 
           <div className="text-center sm:text-left">
             <h3 className="text-h5-medium">{t("workspace_settings.settings.general.delete_modal.title")}</h3>
             <p className="mt-1 text-body-xs-regular text-secondary">
-              You are about to delete the workspace{" "}
-              <span className="text-body-xs-semibold break-words">{data?.name}</span>. If you confirm, you will lose
-              access to all your work data in this workspace without any way to restore it. Tread very carefully.
+              {t("legacy_ui.you_are_about_to_delete_the_workspace")}{" "}
+              <span className="text-body-xs-semibold break-words">{data?.name}</span>
+              {t("legacy_ui.if_you_confirm_you_will_lose_access_to_all_your_work_data_in_this_workspace_with")}
             </p>
           </div>
 
           <div className="mt-4 text-secondary">
-            <p className="text-body-xs-regular break-words">Type in this workspace&apos;s name to continue.</p>
+            <p className="text-body-xs-regular break-words">
+              {t("legacy_ui.type_in_this_workspace_s_name_to_continue")}
+            </p>
             <Controller
               control={control}
               name="workspaceName"
@@ -124,9 +126,9 @@ export const DeleteWorkspaceForm = observer(function DeleteWorkspaceForm(props: 
 
           <div className="mt-4 text-secondary">
             <p className="text-body-xs-regular">
-              For final confirmation, type{" "}
-              <span className="text-body-xs-medium text-primary">delete my workspace </span>
-              below.
+              {t("legacy_ui.for_final_confirmation_type")}{" "}
+              <span className="text-body-xs-medium text-primary">{t("legacy_ui.delete_my_workspace")}</span>
+              {t("legacy_ui.below")}
             </p>
             <Controller
               control={control}

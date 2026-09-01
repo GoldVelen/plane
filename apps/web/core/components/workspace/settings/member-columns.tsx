@@ -153,7 +153,7 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
         <Controller
           name="role"
           control={control}
-          rules={{ required: "Role is required." }}
+          rules={{ required: t("project_settings.members.errors.role_required") }}
           render={({ field: { value } }) => (
             <CustomSelect
               value={value as EUserPermissions}

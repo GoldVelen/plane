@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 import { EstimatePropertyIcon } from "@plane/propel/icons";
 // hooks
@@ -14,6 +15,7 @@ import { IssueActivityBlockComponent, IssueLink } from "./";
 type TIssueEstimateActivity = { activityId: string; showIssue?: boolean; ends: "top" | "bottom" | undefined };
 
 export const IssueEstimateActivity = observer(function IssueEstimateActivity(props: TIssueEstimateActivity) {
+  const { t } = useTranslation();
   const { activityId, showIssue = true, ends } = props;
   // hooks
   const {
@@ -31,9 +33,9 @@ export const IssueEstimateActivity = observer(function IssueEstimateActivity(pro
       ends={ends}
     >
       <>
-        {activity.new_value ? `set the estimate point to ` : `removed the estimate point`}
+        {activity.new_value ? t("legacy_ui.set_the_estimate_point_to") : t("legacy_ui.removed_the_estimate_point")}
         {activity.new_value ? activity.new_value : activity?.old_value}
-        {showIssue && (activity.new_value ? ` to ` : ` from `)}
+        {showIssue && (activity.new_value ? "to" : "from")}
         {showIssue && <IssueLink activityId={activityId} />}.
       </>
     </IssueActivityBlockComponent>

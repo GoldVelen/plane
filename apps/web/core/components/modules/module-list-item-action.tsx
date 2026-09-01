@@ -70,14 +70,14 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
     );
 
     setPromiseToast(addToFavoritePromise, {
-      loading: "Adding module to favorites...",
+      loading: t("legacy_ui.adding_module_to_favorites"),
       success: {
         title: t("toast.success"),
-        message: () => "Module added to favorites.",
+        message: () => t("legacy_ui.module_added_to_favorites"),
       },
       error: {
         title: t("toast.error"),
-        message: () => "Couldn't add the module to favorites. Please try again.",
+        message: () => t("legacy_ui.couldn_t_add_the_module_to_favorites_please_try_again"),
       },
     });
   };
@@ -94,14 +94,14 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
     );
 
     setPromiseToast(removeFromFavoritePromise, {
-      loading: "Removing module from favorites...",
+      loading: t("legacy_ui.removing_module_from_favorites"),
       success: {
         title: t("toast.success"),
-        message: () => "Module removed from favorites.",
+        message: () => t("legacy_ui.module_removed_from_favorites"),
       },
       error: {
         title: t("toast.error"),
-        message: () => "Couldn't remove the module from favorites. Please try again.",
+        message: () => t("legacy_ui.couldn_t_remove_the_module_from_favorites_please_try_again"),
       },
     });
   };
@@ -114,14 +114,14 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
-          message: "Module updated successfully.",
+          message: t("legacy_ui.module_updated_successfully"),
         });
       })
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
-          message: err?.detail ?? "Module could not be updated. Please try again.",
+          message: err?.detail ?? t("legacy_ui.module_could_not_be_updated_please_try_again"),
         });
       });
   };
@@ -166,7 +166,7 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
           <ButtonAvatars showTooltip={false} userIds={moduleLeadDetails?.id} />
         </span>
       ) : (
-        <Tooltip tooltipContent="No lead">
+        <Tooltip tooltipContent={t("legacy_ui.no_lead")}>
           <SquareUser className="h-4 w-4 text-tertiary" />
         </Tooltip>
       )}

@@ -5,6 +5,7 @@
  */
 
 import { observable, action, makeObservable, runInAction } from "mobx";
+import { i18nInstance } from "@plane/i18n";
 // types
 import type { IInstance, IInstanceConfig } from "@plane/types";
 // services
@@ -69,7 +70,7 @@ export class InstanceStore implements IInstanceStore {
         this.isLoading = false;
         this.error = {
           status: "error",
-          message: "Failed to fetch instance info",
+          message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
       throw error;

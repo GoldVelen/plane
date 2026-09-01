@@ -66,9 +66,9 @@ export const IssueAttachmentDeleteModal = observer(function IssueAttachmentDelet
       content={
         <>
           {/* TODO: Translate here */}
-          Are you sure you want to delete attachment-{" "}
-          <span className="font-bold">{getFileName(attachment.attributes.name)}</span>? This attachment will be
-          permanently removed. This action cannot be undone.
+          {t("legacy_ui.are_you_sure_you_want_to_delete_attachment")}{" "}
+          <span className="font-bold">{getFileName(attachment.attributes.name)}</span>
+          {t("legacy_ui.this_attachment_will_be_permanently_removed_this_action_cannot_be_undone")}
         </>
       }
     />

@@ -287,7 +287,7 @@ export const IssueFormRoot = observer(function IssueFormRoot(props: IssueFormPro
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: "Failed to move work item to project. Please try again.",
+        message: t("legacy_ui.failed_to_move_work_item_to_project_please_try_again"),
       });
     } finally {
       setIsMoving(false);
@@ -470,7 +470,7 @@ export const IssueFormRoot = observer(function IssueFormRoot(props: IssueFormPro
                             setToast({
                               type: TOAST_TYPE.ERROR,
                               title: t("toast.error"),
-                              message: "Editor is still processing changes. Please wait before proceeding.",
+                              message: t("legacy_ui.editor_is_still_processing_changes_please_wait_before_proceeding"),
                             });
                           }
                         }}

@@ -77,16 +77,16 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
       },
       {
         key: "images",
-        title: "Images",
+        title: t("legacy_ui.images"),
         isEnabled: true,
       },
       {
         key: "upload",
-        title: "Upload",
+        title: t("legacy_ui.upload"),
         isEnabled: true,
       },
     ],
-    [hasUnsplashConfigured]
+    [hasUnsplashConfigured, t]
   );
 
   const enabledTabs = useMemo(() => tabOptions.filter((tab) => tab.isEnabled), [tabOptions]);
@@ -142,9 +142,9 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
           console.error("Error uploading user cover image:", error);
           setIsImageUploading(false);
           setToast({
-            message: error?.error ?? "The image could not be uploaded",
+            message: error?.error ?? t("legacy_ui.the_image_could_not_be_uploaded"),
             type: TOAST_TYPE.ERROR,
-            title: "Image not uploaded",
+            title: t("legacy_ui.image_not_uploaded"),
           });
         });
     } else {
@@ -163,9 +163,9 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
           console.error("Error uploading project cover image:", error);
           setIsImageUploading(false);
           setToast({
-            message: error?.error ?? "The image could not be uploaded",
+            message: error?.error ?? t("legacy_ui.the_image_could_not_be_uploaded"),
             type: TOAST_TYPE.ERROR,
-            title: "Image not uploaded",
+            title: t("legacy_ui.image_not_uploaded"),
           });
         });
     }
@@ -235,7 +235,7 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
                               value={value}
                               onChange={(e) => setFormData({ ...formData, search: e.target.value })}
                               ref={ref}
-                              placeholder="Search for images"
+                              placeholder={t("legacy_ui.search_for_images")}
                               className="w-full text-13"
                             />
                           )}
@@ -265,7 +265,7 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
                             ))}
                           </div>
                         ) : (
-                          <p className="pt-7 text-center text-11 text-secondary">No images found.</p>
+                          <p className="pt-7 text-center text-11 text-secondary">{t("legacy_ui.no_images_found")}</p>
                         )
                       ) : (
                         <Loader className="grid grid-cols-4 gap-4">
@@ -292,7 +292,7 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
                       >
                         <img
                           src={imageUrl}
-                          alt={`Cover image ${index + 1}`}
+                          alt={t("cover_image")}
                           className="absolute top-0 left-0 h-full w-full cursor-pointer rounded-sm object-cover transition-opacity hover:opacity-80"
                         />
                       </div>
@@ -320,14 +320,16 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
                           <>
                             <img
                               src={image ? URL.createObjectURL(image) : getCoverImageDisplayURL(value, "")}
-                              alt="image"
+                              alt={t("legacy_ui.image")}
                               className="h-full w-full rounded-lg object-cover"
                             />
                           </>
                         ) : (
                           <div>
                             <span className="mt-2 block text-13 font-medium text-secondary">
-                              {isDragActive ? "Drop image here to upload" : "Drag & drop image here"}
+                              {isDragActive
+                                ? t("legacy_ui.drop_image_here_to_upload")
+                                : t("legacy_ui.drag_drop_image_here")}
                             </span>
                           </div>
                         )}
@@ -338,12 +340,12 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
                     {fileRejections.length > 0 && (
                       <p className="text-13 text-danger-primary">
                         {fileRejections[0].errors[0].code === "file-too-large"
-                          ? "The image size cannot exceed 5 MB."
-                          : "Please upload a file in a valid format."}
+                          ? t("legacy_ui.the_image_size_cannot_exceed_5_mb")
+                          : t("legacy_ui.please_upload_a_file_in_a_valid_format")}
                       </p>
                     )}
 
-                    <p className="text-13 text-secondary">File formats supported- .jpeg, .jpg, .png, .webp</p>
+                    <p className="text-13 text-secondary">{t("legacy_ui.file_formats_supported_jpeg_jpg_png_webp")}</p>
 
                     <div className="flex h-12 items-start justify-end gap-2">
                       <Button
@@ -362,7 +364,9 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
                         disabled={!image}
                         loading={isImageUploading}
                       >
-                        {isImageUploading ? "Uploading" : "Upload & Save"}
+                        {isImageUploading
+                          ? t("templates.settings.form.publish.cover_image.uploading")
+                          : t("workspace_settings.settings.applications.upload_and_save")}
                       </Button>
                     </div>
                   </div>

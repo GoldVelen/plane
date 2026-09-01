@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { ImageIcon, RotateCcw } from "lucide-react";
 import type { ChangeEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
@@ -30,6 +31,7 @@ type CustomImageUploaderProps = CustomImageNodeViewProps & {
 };
 
 export function CustomImageUploader(props: CustomImageUploaderProps) {
+  const { t } = useTranslation();
   const {
     editor,
     extension,
@@ -184,19 +186,19 @@ export function CustomImageUploader(props: CustomImageUploaderProps) {
   const getDisplayMessage = useCallback(() => {
     const isUploading = isImageBeingUploaded;
     if (isErrorState) {
-      return "Error loading image";
+      return t("legacy_ui.error_loading_image");
     }
 
     if (isUploading) {
-      return "Uploading...";
+      return t("workspace_settings.settings.applications.uploading");
     }
 
     if (draggedInside && editor.isEditable) {
-      return "Drop image here";
+      return t("legacy_ui.drop_image_here");
     }
 
-    return "Add an image";
-  }, [draggedInside, editor.isEditable, isErrorState, isImageBeingUploaded]);
+    return t("legacy_ui.add_an_image");
+  }, [draggedInside, editor.isEditable, isErrorState, isImageBeingUploaded, t]);
 
   const handleRetryClick = useCallback(
     (e: React.MouseEvent) => {
@@ -247,10 +249,10 @@ export function CustomImageUploader(props: CustomImageUploaderProps) {
               "hover:bg-danger-subtle-hover": selected,
             }
           )}
-          title="Retry duplication"
+          title={t("legacy_ui.retry_duplication")}
         >
           <RotateCcw className="size-3" />
-          <span className="text-11">Retry</span>
+          <span className="text-11">{t("common.retry")}</span>
         </button>
       )}
       <input

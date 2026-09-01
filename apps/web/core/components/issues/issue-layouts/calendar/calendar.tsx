@@ -22,9 +22,7 @@ import type {
 import { EIssuesStoreType, EIssueLayoutTypes } from "@plane/types";
 // ui
 import { Spinner } from "@plane/ui";
-import { renderFormattedPayloadDate, cn } from "@plane/utils";
-// constants
-import { MONTHS_LIST } from "@plane/constants";
+import { renderFormattedDate, renderFormattedPayloadDate, cn } from "@plane/utils";
 // helpers
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
@@ -205,11 +203,7 @@ export const CalendarChart = observer(function CalendarChart(props: Props) {
 
             {/* mobile view */}
             <div className="md:hidden">
-              <p className="p-4 text-18 font-semibold">
-                {`${selectedDate.getDate()} ${
-                  MONTHS_LIST[selectedDate.getMonth() + 1].title
-                }, ${selectedDate.getFullYear()}`}
-              </p>
+              <p className="p-4 text-18 font-semibold">{renderFormattedDate(selectedDate)}</p>
               <CalendarIssueBlocks
                 date={selectedDate}
                 issueIdList={issueIdList}
@@ -233,11 +227,7 @@ export const CalendarChart = observer(function CalendarChart(props: Props) {
 
         {/* mobile view */}
         <div className="md:hidden">
-          <p className="p-4 text-18 font-semibold">
-            {`${selectedDate.getDate()} ${
-              MONTHS_LIST[selectedDate.getMonth() + 1].title
-            }, ${selectedDate.getFullYear()}`}
-          </p>
+          <p className="p-4 text-18 font-semibold">{renderFormattedDate(selectedDate)}</p>
           <CalendarIssueBlocks
             date={selectedDate}
             issueIdList={issueIdList}

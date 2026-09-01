@@ -11,5 +11,5 @@ import PDFFileIcon from "@/app/assets/attachment/pdf-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function PdfIcon({ width, height }: ImageIconPros) {
-  return <img src={PDFFileIcon} width={width} height={height} alt="PDFFileIcon" />;
+  return <img src={PDFFileIcon} width={width} height={height} alt="" />;
 }

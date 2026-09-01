@@ -5,6 +5,7 @@
  */
 
 import { action, makeObservable, observable, runInAction } from "mobx";
+import { i18nInstance } from "@plane/i18n";
 // plane imports
 import type { IUserSettings } from "@plane/types";
 // services
@@ -98,7 +99,7 @@ export class UserSettingsStore implements IUserSettingsStore {
         this.isLoading = false;
         this.error = {
           status: "error",
-          message: "Failed to fetch user settings",
+          message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
       throw error;

@@ -11,5 +11,5 @@ import HtmlFileIcon from "@/app/assets/attachment/html-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function HtmlIcon({ width, height }: ImageIconPros) {
-  return <img src={HtmlFileIcon} width={width} height={height} alt="HtmlFileIcon" />;
+  return <img src={HtmlFileIcon} width={width} height={height} alt="" />;
 }

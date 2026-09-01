@@ -7,7 +7,7 @@
 import { cloneDeep, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 // plane imports
-import { setLanguage } from "@plane/i18n";
+import { i18nInstance, setLanguage } from "@plane/i18n";
 import type { TLanguage } from "@plane/i18n";
 // types
 import type { IUserTheme, TUserProfile } from "@plane/types";
@@ -120,7 +120,7 @@ export class ProfileStore implements IUserProfileStore {
         this.isLoading = false;
         this.error = {
           status: "user-profile-fetch-error",
-          message: "Failed to fetch user profile",
+          message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
       throw error;
@@ -150,7 +150,7 @@ export class ProfileStore implements IUserProfileStore {
       runInAction(() => {
         this.error = {
           status: "user-profile-update-error",
-          message: "Failed to update user profile",
+          message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
     }
@@ -193,7 +193,7 @@ export class ProfileStore implements IUserProfileStore {
       runInAction(() => {
         this.error = {
           status: "user-profile-onboard-finish-error",
-          message: "Failed to finish user onboarding",
+          message: String(i18nInstance.t("legacy_ui.failed_to_finish_onboarding_please_try_again_later")),
         };
       });
       throw error;
@@ -215,7 +215,7 @@ export class ProfileStore implements IUserProfileStore {
         this.mutateUserProfile({ is_tour_completed: isUserProfileTourCompleted });
         this.error = {
           status: "user-profile-tour-complete-error",
-          message: "Failed to update user profile is_tour_completed",
+          message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
       throw error;
@@ -247,7 +247,7 @@ export class ProfileStore implements IUserProfileStore {
         });
         this.error = {
           status: "user-profile-theme-update-error",
-          message: "Failed to update user profile theme",
+          message: String(i18nInstance.t("legacy_ui.some_error_occurred_please_try_again")),
         };
       });
       throw error;

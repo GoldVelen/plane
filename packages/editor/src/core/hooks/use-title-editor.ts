@@ -9,6 +9,8 @@ import type { Extensions } from "@tiptap/core";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { useEditor } from "@tiptap/react";
 import { useImperativeHandle } from "react";
+// plane imports
+import { useTranslation } from "@plane/i18n";
 // constants
 import { CORE_EDITOR_META } from "@/constants/meta";
 // extensions
@@ -38,6 +40,7 @@ type TUseTitleEditorProps = {
  * Uses the same Y.Doc as the main editor but a different field
  */
 export const useTitleEditor = (props: TUseTitleEditorProps) => {
+  const { t } = useTranslation();
   const {
     editable = true,
     id,
@@ -64,14 +67,14 @@ export const useTitleEditor = (props: TUseTitleEditorProps) => {
         ...TitleExtensions,
         ...(extensions ?? []),
         Placeholder.configure({
-          placeholder: () => "Untitled",
+          placeholder: () => t("legacy_ui.untitled"),
           includeChildren: true,
           showOnlyWhenEditable: false,
         }),
       ],
       content: typeof initialValue === "string" && initialValue.trim() !== "" ? initialValue : "<h1></h1>",
     },
-    [editable, initialValue, docKey]
+    [editable, initialValue, docKey, t]
   );
 
   useImperativeHandle(titleRef, () => ({

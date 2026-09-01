@@ -7,6 +7,7 @@
 //
 import type { ChartDataType } from "@plane/types";
 import { EStartOfTheWeek } from "@plane/types";
+import { i18nInstance } from "@plane/i18n";
 import { months, generateWeeks } from "../data";
 import { getNumberOfDaysBetweenTwoDates, getWeekNumberByDate } from "./helpers";
 export interface IDayBlock {
@@ -161,7 +162,7 @@ export const getWeeksBetweenTwoDates = (
       weekNumber,
       weekData: {
         shortTitle: `w${weekNumber}`,
-        title: `Week ${weekNumber}`,
+        title: i18nInstance.t("legacy_ui.week_value0", { value0: weekNumber }),
       },
       title:
         monthAtStartOfTheWeek === monthAtEndOfTheWeek

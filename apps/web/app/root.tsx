@@ -10,7 +10,7 @@ import { Links, Meta, Outlet, Scripts } from "react-router";
 import type { LinksFunction } from "react-router";
 import { ThemeProvider, useTheme } from "next-themes";
 // plane imports
-import { SITE_DESCRIPTION, SITE_NAME } from "@plane/constants";
+import { i18nInstance } from "@plane/i18n";
 import { cn } from "@plane/utils";
 // types
 // assets
@@ -35,7 +35,7 @@ import interVariableWoff2 from "@fontsource-variable/inter/files/inter-latin-wgh
 import "@fontsource/material-symbols-rounded";
 import "@fontsource/ibm-plex-mono";
 
-const APP_TITLE = "Plane | Simple, extensible, open-source project management tool.";
+const appTitle = () => i18nInstance.t("legacy_ui.plane_simple_extensible_open_source_project_management_tool");
 
 export const links: LinksFunction = () => [
   { rel: "icon", type: "image/png", sizes: "32x32", href: favicon32 },
@@ -60,7 +60,7 @@ export function Layout({ children }: { children: ReactNode }) {
   const isSessionRecorderEnabled = parseInt(process.env.VITE_ENABLE_SESSION_RECORDER || "0");
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={i18nInstance.resolvedLanguage ?? "en"} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -69,7 +69,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <meta name="application-name" content="Plane" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
+        <meta name="apple-mobile-web-app-title" content={appTitle()} />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <Meta />
@@ -97,18 +97,25 @@ export function Layout({ children }: { children: ReactNode }) {
 }
 
 export const meta: Route.MetaFunction = () => [
-  { title: APP_TITLE },
-  { name: "description", content: SITE_DESCRIPTION },
-  { property: "og:title", content: APP_TITLE },
+  { title: appTitle() },
+  {
+    name: "description",
+    content: i18nInstance.t(
+      "legacy_ui.open_source_project_management_tool_to_manage_work_items_cycles_and_product_road"
+    ),
+  },
+  { property: "og:title", content: appTitle() },
   {
     property: "og:description",
-    content: "Open-source project management tool to manage work items, cycles, and product roadmaps easily",
+    content: i18nInstance.t(
+      "legacy_ui.open_source_project_management_tool_to_manage_work_items_cycles_and_product_road"
+    ),
   },
   { property: "og:url", content: "https://app.plane.so/" },
   { property: "og:image", content: ogImage },
   { property: "og:image:width", content: "1200" },
   { property: "og:image:height", content: "630" },
-  { property: "og:image:alt", content: "Plane - Modern project management" },
+  { property: "og:image:alt", content: i18nInstance.t("legacy_ui.plane_modern_project_management") },
   {
     name: "keywords",
     content:
@@ -119,7 +126,7 @@ export const meta: Route.MetaFunction = () => [
   { name: "twitter:image", content: ogImage },
   { name: "twitter:image:width", content: "1200" },
   { name: "twitter:image:height", content: "630" },
-  { name: "twitter:image:alt", content: "Plane - Modern project management" },
+  { name: "twitter:image:alt", content: i18nInstance.t("legacy_ui.plane_modern_project_management") },
 ];
 
 export default function Root() {

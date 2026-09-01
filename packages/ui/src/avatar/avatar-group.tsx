@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React from "react";
 // ui
 import { Tooltip } from "@plane/propel/tooltip";
@@ -39,6 +40,7 @@ type Props = {
 };
 
 export function AvatarGroup(props: Props) {
+  const { t } = useTranslation();
   const { children, max = 2, showTooltip = true, size = "md" } = props;
 
   // calculate total length of avatars inside the group
@@ -71,7 +73,7 @@ export function AvatarGroup(props: Props) {
         </div>
       ))}
       {maxAvatarsToRender < totalAvatars && (
-        <Tooltip tooltipContent={`${totalAvatars} total`} disabled={!showTooltip}>
+        <Tooltip tooltipContent={t("legacy_ui.value0_total", { value0: totalAvatars })} disabled={!showTooltip}>
           <div
             className={cn(
               "grid place-items-center rounded-full border border-subtle-1 bg-accent-subtle text-9 text-accent-primary",

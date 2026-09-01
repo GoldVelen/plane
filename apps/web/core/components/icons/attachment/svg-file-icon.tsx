@@ -11,5 +11,5 @@ import SvgFileIcon from "@/app/assets/attachment/svg-icon.png?url";
 import type { ImageIconPros } from "../types";
 
 export function SvgIcon({ width, height }: ImageIconPros) {
-  return <img src={SvgFileIcon} width={width} height={height} alt="SvgFileIcon" />;
+  return <img src={SvgFileIcon} width={width} height={height} alt="" />;
 }
