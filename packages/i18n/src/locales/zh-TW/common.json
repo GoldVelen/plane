@@ -423,6 +423,13 @@
     "state": "狀態",
     "state_groups": "狀態群組",
     "state_group": "狀態群組",
+    "default_state": {
+      "backlog": "待辦",
+      "todo": "待處理",
+      "in_progress": "進行中",
+      "done": "已完成",
+      "cancelled": "已取消"
+    },
     "priorities": "優先順序",
     "priority": "優先順序",
     "team_project": "團隊專案",

@@ -423,6 +423,13 @@
     "state": "Stare",
     "state_groups": "Grupuri de stări",
     "state_group": "Grup de stare",
+    "default_state": {
+      "backlog": "Backlog",
+      "todo": "De făcut",
+      "in_progress": "În curs",
+      "done": "Finalizat",
+      "cancelled": "Anulat"
+    },
     "priorities": "Priorități",
     "priority": "Prioritate",
     "team_project": "Proiect de echipă",

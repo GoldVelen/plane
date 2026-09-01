@@ -430,6 +430,13 @@
     "state": "状态",
     "state_groups": "状态组",
     "state_group": "状态组",
+    "default_state": {
+      "backlog": "待办",
+      "todo": "待处理",
+      "in_progress": "进行中",
+      "done": "已完成",
+      "cancelled": "已取消"
+    },
     "priorities": "优先级",
     "priority": "优先级",
     "team_project": "团队项目",

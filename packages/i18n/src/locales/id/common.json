@@ -423,6 +423,13 @@
     "state": "Negara",
     "state_groups": "Kelompok negara",
     "state_group": "Kelompok negara",
+    "default_state": {
+      "backlog": "Backlog",
+      "todo": "Todo",
+      "in_progress": "Sedang berjalan",
+      "done": "Selesai",
+      "cancelled": "Dibatalkan"
+    },
     "priorities": "Prioritas",
     "priority": "Prioritas",
     "team_project": "Proyek tim",

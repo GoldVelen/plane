@@ -91,6 +91,7 @@ export const DeleteIssueModal = observer(function DeleteIssueModal(props: Props)
             }),
           });
           onClose();
+          return undefined;
         })
         .catch((errors) => {
           const isPermissionError =
@@ -119,10 +120,10 @@ export const DeleteIssueModal = observer(function DeleteIssueModal(props: Props)
         <>
           {t("legacy_ui.are_you_sure_you_want_to_delete_value0", {
             value0: isEpic ? t("common.epic") : t("common.work_item"),
-          })}
+          })}{" "}
           <span className="font-medium break-words text-primary">
             {projectDetails?.identifier}-{issue?.sequence_id}
-          </span>
+          </span>{" "}
           {t("legacy_ui.all_of_the_data_related_to_the_value0_will_be_permanently_removed_this_action_ca", {
             value0: isEpic ? t("common.epic") : t("common.work_item"),
           })}

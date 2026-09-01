@@ -423,6 +423,13 @@
     "state": "Trạng thái",
     "state_groups": "Nhóm trạng thái",
     "state_group": "Nhóm trạng thái",
+    "default_state": {
+      "backlog": "Backlog",
+      "todo": "Cần làm",
+      "in_progress": "Đang thực hiện",
+      "done": "Hoàn thành",
+      "cancelled": "Đã hủy"
+    },
     "priorities": "Ưu tiên",
     "priority": "Ưu tiên",
     "team_project": "Dự án nhóm",

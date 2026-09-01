@@ -423,6 +423,13 @@
     "state": "Durum",
     "state_groups": "Durum grupları",
     "state_group": "Durum grubu",
+    "default_state": {
+      "backlog": "Backlog",
+      "todo": "Yapılacak",
+      "in_progress": "Devam ediyor",
+      "done": "Tamamlandı",
+      "cancelled": "İptal edildi"
+    },
     "priorities": "Öncelikler",
     "priority": "Öncelik",
     "team_project": "Takım projesi",

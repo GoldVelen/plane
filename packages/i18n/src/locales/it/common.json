@@ -423,6 +423,13 @@
     "state": "Stato",
     "state_groups": "Gruppi di stati",
     "state_group": "Gruppo di stati",
+    "default_state": {
+      "backlog": "Backlog",
+      "todo": "Da fare",
+      "in_progress": "In corso",
+      "done": "Completato",
+      "cancelled": "Annullato"
+    },
     "priorities": "Priorità",
     "priority": "Priorità",
     "team_project": "Progetto di squadra",

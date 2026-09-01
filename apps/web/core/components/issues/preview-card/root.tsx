@@ -6,8 +6,10 @@
 
 import { observer } from "mobx-react";
 // plane imports
+import { useTranslation } from "@plane/i18n";
 import { PriorityIcon, StateGroupIcon } from "@plane/propel/icons";
 import type { TIssue, TStateGroups } from "@plane/types";
+import { getTranslatedStateName } from "@plane/utils";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
@@ -28,6 +30,7 @@ type Props = {
 
 export const WorkItemPreviewCard = observer(function WorkItemPreviewCard(props: Props) {
   const { projectId, stateDetails, workItem } = props;
+  const { t } = useTranslation();
   // store hooks
   const { getProjectIdentifierById } = useProject();
   const { getStateById } = useProjectState();
@@ -50,7 +53,7 @@ export const WorkItemPreviewCard = observer(function WorkItemPreviewCard(props: 
         />
         <div className="flex shrink-0 items-center gap-1">
           <StateGroupIcon stateGroup={stateGroup} className="size-3 shrink-0" />
-          <p className="text-11 font-medium">{stateName}</p>
+          <p className="text-11 font-medium">{getTranslatedStateName(stateName, t)}</p>
         </div>
       </div>
       <div>

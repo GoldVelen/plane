@@ -13,6 +13,7 @@ import { StateGroupIcon } from "@plane/propel/icons";
 import type { IState } from "@plane/types";
 // components
 import { Loader } from "@plane/ui";
+import { getTranslatedStateName } from "@plane/utils";
 import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 // ui
 // types
@@ -34,7 +35,11 @@ export const FilterState = observer(function FilterState(props: Props) {
   const appliedFiltersCount = appliedFilters?.length ?? 0;
 
   const sortedOptions = useMemo(() => {
-    const filteredOptions = (states ?? []).filter((s) => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    const filteredOptions = (states ?? []).filter((s) => {
+      const displayName = getTranslatedStateName(s.name, t);
+      const q = searchQuery.toLowerCase();
+      return s.name.toLowerCase().includes(q) || displayName.toLowerCase().includes(q);
+    });
 
     return sortBy(filteredOptions, [(s) => !(appliedFilters ?? []).includes(s.id)]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,7 +67,7 @@ export const FilterState = observer(function FilterState(props: Props) {
                 {sortedOptions.slice(0, itemsToRender).map((state) => (
                   <FilterOption
                     key={state.id}
-                    isChecked={appliedFilters?.includes(state.id) ? true : false}
+                    isChecked={Boolean(appliedFilters?.includes(state.id))}
                     onClick={() => handleUpdate(state.id)}
                     icon={
                       <StateGroupIcon
@@ -72,7 +77,7 @@ export const FilterState = observer(function FilterState(props: Props) {
                         percentage={state?.order}
                       />
                     }
-                    title={state.name}
+                    title={getTranslatedStateName(state.name, t)}
                   />
                 ))}
                 {sortedOptions.length > 5 && (

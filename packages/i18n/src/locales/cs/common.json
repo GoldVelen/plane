@@ -423,6 +423,13 @@
     "state": "Stav",
     "state_groups": "Skupiny stavů",
     "state_group": "Skupina stavů",
+    "default_state": {
+      "backlog": "Backlog",
+      "todo": "K udělání",
+      "in_progress": "Probíhá",
+      "done": "Hotovo",
+      "cancelled": "Zrušeno"
+    },
     "priorities": "Priority",
     "priority": "Priorita",
     "team_project": "Týmový projekt",

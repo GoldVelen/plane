@@ -423,6 +423,13 @@
     "state": "상태",
     "state_groups": "상태 그룹",
     "state_group": "상태 그룹",
+    "default_state": {
+      "backlog": "백로그",
+      "todo": "할 일",
+      "in_progress": "진행 중",
+      "done": "완료",
+      "cancelled": "취소됨"
+    },
     "priorities": "우선순위",
     "priority": "우선순위",
     "team_project": "팀 프로젝트",

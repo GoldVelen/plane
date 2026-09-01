@@ -423,6 +423,13 @@
     "state": "ステータス",
     "state_groups": "ステータスグループ",
     "state_group": "ステート グループ",
+    "default_state": {
+      "backlog": "バックログ",
+      "todo": "未着手",
+      "in_progress": "進行中",
+      "done": "完了",
+      "cancelled": "キャンセル"
+    },
     "priorities": "優先度",
     "priority": "優先度",
     "team_project": "チームプロジェクト",

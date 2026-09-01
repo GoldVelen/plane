@@ -122,3 +122,22 @@ export const PROGRESS_STATE_GROUPS_DETAILS = [
 ];
 
 export const DISPLAY_WORKFLOW_PRO_CTA = false;
+
+/**
+ * i18n keys for the default project state names created by the backend.
+ * Looked up case-insensitively against the stored state name so custom
+ * (renamed) states keep their original label.
+ */
+export const DEFAULT_STATE_NAME_TRANSLATION_KEYS: Record<string, string> = {
+  backlog: "common.default_state.backlog",
+  todo: "common.default_state.todo",
+  "in progress": "common.default_state.in_progress",
+  done: "common.default_state.done",
+  cancelled: "common.default_state.cancelled",
+  canceled: "common.default_state.cancelled",
+};
+
+export function getStateNameTranslationKey(name?: string | null): string | undefined {
+  if (!name) return undefined;
+  return DEFAULT_STATE_NAME_TRANSLATION_KEYS[name.trim().toLowerCase()];
+}

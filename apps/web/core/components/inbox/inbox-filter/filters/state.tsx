@@ -11,6 +11,7 @@ import { EIconSize } from "@plane/constants";
 import { StateGroupIcon } from "@plane/propel/icons";
 import type { IState } from "@plane/types";
 import { Loader } from "@plane/ui";
+import { getTranslatedStateName } from "@plane/utils";
 // components
 import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 // hooks
@@ -34,7 +35,11 @@ export const FilterState = observer(function FilterState(props: Props) {
 
   const appliedFiltersCount = filterValue?.length ?? 0;
 
-  const filteredOptions = states?.filter((state) => state.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredOptions = states?.filter((state) => {
+    const displayName = getTranslatedStateName(state.name, t);
+    const q = searchQuery.toLowerCase();
+    return state.name.toLowerCase().includes(q) || displayName.toLowerCase().includes(q);
+  });
 
   const handleViewToggle = () => {
     if (!filteredOptions) return;
@@ -61,7 +66,7 @@ export const FilterState = observer(function FilterState(props: Props) {
                 {filteredOptions.slice(0, itemsToRender).map((state) => (
                   <FilterOption
                     key={state?.id}
-                    isChecked={filterValue?.includes(state?.id) ? true : false}
+                    isChecked={Boolean(filterValue?.includes(state?.id))}
                     onClick={() => handleInboxIssueFilters("state", handleFilterValue(state.id))}
                     icon={
                       <StateGroupIcon
@@ -71,7 +76,7 @@ export const FilterState = observer(function FilterState(props: Props) {
                         percentage={state?.order}
                       />
                     }
-                    title={state.name}
+                    title={getTranslatedStateName(state.name, t)}
                   />
                 ))}
                 {filteredOptions.length > 5 && (

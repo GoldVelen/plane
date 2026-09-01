@@ -14,6 +14,7 @@ import { useTranslation } from "@plane/i18n";
 import { StateGroupIcon, StatePropertyIcon } from "@plane/propel/icons";
 import type { IProject } from "@plane/types";
 import { CustomSelect, CustomSearchSelect, ToggleSwitch, Loader } from "@plane/ui";
+import { getTranslatedStateName } from "@plane/utils";
 import { SelectMonthModal } from "@/components/automation";
 import { SettingsControlItem } from "@/components/settings/control-item";
 // hooks
@@ -43,11 +44,11 @@ export const AutoCloseAutomation = observer(function AutoCloseAutomation(props: 
     ?.filter((state) => state.group === "cancelled")
     .map((state) => ({
       value: state.id,
-      query: state.name,
+      query: `${state.name} ${getTranslatedStateName(state.name, t)}`,
       content: (
         <div className="flex items-center gap-2">
           <StateGroupIcon stateGroup={state.group} color={state.color} size={EIconSize.LG} />
-          {state.name}
+          {getTranslatedStateName(state.name, t)}
         </div>
       ),
     }));
@@ -58,6 +59,11 @@ export const AutoCloseAutomation = observer(function AutoCloseAutomation(props: 
 
   const selectedOption = projectStates?.find((s) => s.id === (currentProjectDetails?.default_state ?? defaultState));
   const currentDefaultState = projectStates?.find((s) => s.id === defaultState);
+  const selectedStateLabel = selectedOption?.name
+    ? getTranslatedStateName(selectedOption.name, t)
+    : currentDefaultState?.name
+      ? getTranslatedStateName(currentDefaultState.name, t)
+      : null;
 
   const initialValues: Partial<IProject> = {
     close_in: 1,
@@ -170,9 +176,7 @@ export const AutoCloseAutomation = observer(function AutoCloseAutomation(props: 
                           ) : (
                             <StatePropertyIcon className="h-3.5 w-3.5 text-secondary" />
                           )}
-                          {selectedOption?.name
-                            ? selectedOption.name
-                            : (currentDefaultState?.name ?? <span className="text-secondary">{t("state")}</span>)}
+                          {selectedStateLabel ?? <span className="text-secondary">{t("state")}</span>}
                         </div>
                       }
                       onChange={(val: string) => void handleChange({ default_state: val })}

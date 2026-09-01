@@ -423,6 +423,13 @@
     "state": "Стан",
     "state_groups": "Групи станів",
     "state_group": "Група станів",
+    "default_state": {
+      "backlog": "Беклог",
+      "todo": "До виконання",
+      "in_progress": "В роботі",
+      "done": "Готово",
+      "cancelled": "Скасовано"
+    },
     "priorities": "Пріоритети",
     "priority": "Пріоритет",
     "team_project": "Командний проєкт",
