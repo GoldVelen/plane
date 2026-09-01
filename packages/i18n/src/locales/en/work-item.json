@@ -184,6 +184,7 @@
       }
     },
     "relation": {
+      "add_related": "Add related work items",
       "relates_to": "Relates to",
       "duplicate": "Duplicate of",
       "blocked_by": "Blocked by",
@@ -208,6 +209,7 @@
     },
     "select": {
       "error": "Please select at least one work item",
+      "current_project_only": "Only work items within the current project can be selected.",
       "empty": "No work items selected",
       "add_selected": "Add selected work items",
       "select_all": "Select all",

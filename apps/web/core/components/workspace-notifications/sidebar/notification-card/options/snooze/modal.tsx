@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 // plane imports
@@ -36,6 +37,7 @@ const defaultValues: FormValues = {
 const timeStamps = allTimeIn30MinutesInterval12HoursFormat;
 
 export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
+  const { t } = useTranslation();
   const { isOpen, onClose, onSubmit: handleSubmitSnooze } = props;
 
   const { workspaceSlug } = useParams();
@@ -135,7 +137,9 @@ export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
               render={({ field: { value, onChange } }) => (
                 <DateDropdown
                   value={value || null}
-                  placeholder="Select date"
+                  placeholder={t(
+                    "automations.action.configuration.change_property.placeholders.property_value_select_date"
+                  )}
                   onChange={(val) => {
                     setValue("time", undefined);
                     onChange(val);
@@ -216,7 +220,7 @@ export function NotificationSnoozeModal(props: TNotificationSnoozeModal) {
         <div className="mt-5 flex items-center justify-between gap-2">
           <div className="flex w-full items-center justify-end gap-2">
             <Button variant="secondary" size="lg" onClick={handleClose}>
-              Cancel
+              {t("cancel")}
             </Button>
             <Button variant="primary" size="lg" type="submit" loading={isSubmitting}>
               {isSubmitting ? "Submitting..." : "Submit"}

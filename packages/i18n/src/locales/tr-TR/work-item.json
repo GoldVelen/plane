@@ -193,7 +193,8 @@
       "finish_before": "Finishes Bifor",
       "finish_after": "Finishes Aftır",
       "implements": "Implemente",
-      "implemented_by": "Implemente edilen"
+      "implemented_by": "Implemente edilen",
+      "add_related": "Add related work items"
     },
     "copy_link": "İş öğesi bağlantısını kopyala",
     "delete": {
@@ -211,7 +212,8 @@
       "empty": "Hiç iş öğesi seçilmedi",
       "add_selected": "Seçilen iş öğelerini ekle",
       "select_all": "Tümünü seç",
-      "deselect_all": "Tümünü seçme"
+      "deselect_all": "Tümünü seçme",
+      "current_project_only": "Only work items within the current project can be selected."
     },
     "open_in_full_screen": "İş öğesini tam ekranda aç",
     "duplicate": {

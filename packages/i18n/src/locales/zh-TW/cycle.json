@@ -20,7 +20,8 @@
   },
   "cycle": {
     "label": "{count, plural, one {週期} other {週期}}",
-    "no_cycle": "無週期"
+    "no_cycle": "無週期",
+    "select": "Select cycle"
   },
   "active_cycle_analytics": {
     "empty_state": {

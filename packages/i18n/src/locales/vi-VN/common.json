@@ -817,7 +817,8 @@
     "all_issues": "Tất cả mục công việc",
     "assigned": "Đã giao",
     "created": "Đã tạo",
-    "subscribed": "Đã đăng ký"
+    "subscribed": "Đã đăng ký",
+    "unassigned": "Chưa phân công"
   },
   "description_versions": {
     "last_edited_by": "Chỉnh sửa lần cuối bởi",
@@ -872,5 +873,17 @@
       "description": "Xuất mục công việc thành tệp JSON.",
       "short_description": "Xuất sang JSON"
     }
-  }
+  },
+  "project_work_item_count": "{count, plural, one {There is # work item in this project} other {There are # work items in this project}}",
+  "archived_work_item_count": "{count, plural, one {# archived work item} other {# archived work items}}",
+  "count": {
+    "link": "{count, plural, one {# link} other {# links}}",
+    "attachment": "{count, plural, one {# attachment} other {# attachments}}",
+    "sub_work_item": "{count, plural, one {# sub-work item} other {# sub-work items}}"
+  },
+  "identifier": "Identifier",
+  "access": "Access",
+  "join": "Tham gia",
+  "enabled": "Đã bật",
+  "disabled": "Đã tắt"
 }

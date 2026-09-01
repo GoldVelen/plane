@@ -367,6 +367,9 @@
     "role": "角色"
   },
   "project": {
+    "filters": {
+      "applied_summary": "共 {total} 个项目，其中 {filtered} 个符合当前筛选条件。"
+    },
     "members_import": {
       "title": "从CSV导入成员",
       "description": "上传包含以下列的CSV：电子邮箱和角色（5=访客，15=成员，20=管理员）。用户必须是工作区成员。",

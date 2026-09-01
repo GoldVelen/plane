@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
@@ -36,6 +37,7 @@ type TIssueRelationSelect = {
 };
 
 export const IssueRelationSelect = observer(function IssueRelationSelect(props: TIssueRelationSelect) {
+  const { t } = useTranslation();
   const { className = "", workspaceSlug, projectId, issueId, relationKey, disabled = false } = props;
   // hooks
   const { getProjectById } = useProject();
@@ -55,7 +57,7 @@ export const IssueRelationSelect = observer(function IssueRelationSelect(props: 
     if (data.length === 0) {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
+        title: t("toast.error"),
         message: "Please select at least one work item.",
       });
       return;
@@ -137,7 +139,7 @@ export const IssueRelationSelect = observer(function IssueRelationSelect(props: 
                       </Link>
                     </Tooltip>
                     {!disabled && (
-                      <Tooltip tooltipContent="Remove" position="bottom" isMobile={isMobile}>
+                      <Tooltip tooltipContent={t("remove")} position="bottom" isMobile={isMobile}>
                         {/* eslint-disable-next-line jsx_a11y/click-events-have-key-events oxlint-disable-next-line jsx_a11y/no-static-element-interactions */}
                         <span
                           onClick={(e) => {
@@ -155,7 +157,9 @@ export const IssueRelationSelect = observer(function IssueRelationSelect(props: 
               })}
             </div>
           ) : (
-            <span className="text-body-xs-regular text-placeholder">{currRelationOption?.placeholder}</span>
+            <span className="text-body-xs-regular text-placeholder">
+              {currRelationOption ? t(currRelationOption.i18n_placeholder) : null}
+            </span>
           )}
           {!disabled && (
             <span

@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import Link from "next/link";
 // ui
 import { Button } from "@plane/propel/button";
@@ -11,6 +12,7 @@ import { Button } from "@plane/propel/button";
 import DefaultLayout from "@/layouts/default-layout";
 
 export function NotAWorkspaceMember() {
+  const { t } = useTranslation();
   return (
     <DefaultLayout>
       <div className="grid h-full place-items-center p-4">
@@ -18,8 +20,9 @@ export function NotAWorkspaceMember() {
           <div className="space-y-2">
             <h3 className="text-16 font-semibold">Not Authorized!</h3>
             <p className="mx-auto w-1/2 text-13 text-secondary">
-              You{"'"}re not a member of this workspace. Please contact the workspace admin to get an invitation or
-              check your pending invitations.
+              {t("you")}
+              {"'"}re not a member of this workspace. Please contact the workspace admin to get an invitation or check
+              your pending invitations.
             </p>
           </div>
           <div className="flex items-center justify-center gap-2">

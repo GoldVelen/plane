@@ -46,13 +46,13 @@ export const usePowerKModuleContextBasedActions = (): TPowerKCommandConfig[] => 
         () => {
           setToast({
             type: TOAST_TYPE.ERROR,
-            title: "Error!",
+            title: t("toast.error"),
             message: "Module could not be updated. Please try again.",
           });
         }
       );
     },
-    [moduleDetails, projectId, updateModuleDetails, workspaceSlug]
+    [moduleDetails, projectId, updateModuleDetails, workspaceSlug, t]
   );
 
   const handleUpdateMember = useCallback(

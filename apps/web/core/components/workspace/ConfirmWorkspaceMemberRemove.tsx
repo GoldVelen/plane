@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { AlertTriangle } from "lucide-react";
@@ -13,6 +14,7 @@ import { useUser } from "@/hooks/store/user";
 import type { Props } from "./confirm-workspace-member-remove";
 
 export const ConfirmWorkspaceMemberRemove = observer(function ConfirmWorkspaceMemberRemove(props: Props) {
+  const { t } = useTranslation();
   const { isOpen, onClose, onSubmit, userDetails } = props;
   // states
   const [isRemoving, setIsRemoving] = useState(false);
@@ -73,8 +75,7 @@ export const ConfirmWorkspaceMemberRemove = observer(function ConfirmWorkspaceMe
                       <div className="mt-2">
                         {currentUser?.id === userDetails.id ? (
                           <p className="text-13 text-secondary">
-                            Are you sure you want to leave the workspace? You will no longer have access to this
-                            workspace. This action cannot be undone.
+                            {t("workspace_settings.settings.members.leave_confirmation")}
                           </p>
                         ) : (
                           <p className="text-13 text-secondary">
@@ -89,7 +90,7 @@ export const ConfirmWorkspaceMemberRemove = observer(function ConfirmWorkspaceMe
                 </div>
                 <div className="flex justify-end gap-2 p-4 sm:px-6">
                   <Button variant="secondary" onClick={handleClose}>
-                    Cancel
+                    {t("cancel")}
                   </Button>
                   <Button variant="error-fill" tabIndex={1} onClick={handleDeletion} loading={isRemoving}>
                     {currentUser?.id === userDetails.id

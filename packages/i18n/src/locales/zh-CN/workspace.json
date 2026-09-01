@@ -68,6 +68,8 @@
   "workspace_analytics": {
     "label": "分析",
     "page_label": "{workspace} - 分析",
+    "modal_title": "{title} 的分析",
+    "in_context": "位于 {name}",
     "open_tasks": "总开放任务",
     "error": "获取数据时出现错误。",
     "work_items_closed_in": "已关闭的工作项",
@@ -103,6 +105,20 @@
     "project_insights": "项目洞察",
     "summary_of_projects": "项目概览",
     "all_projects": "所有项目",
+    "project_count_above": "{count} 个以上项目",
+    "duration": {
+      "label": "时间范围",
+      "yesterday": "昨天",
+      "last_7_days": "最近 7 天",
+      "last_30_days": "最近 30 天",
+      "last_3_months": "最近 3 个月"
+    },
+    "controls": {
+      "add_property": "添加属性",
+      "no_value": "无值",
+      "add_metric": "添加指标",
+      "count": "数量"
+    },
     "trend_on_charts": "图表趋势",
     "active_projects": "活跃项目",
     "customized_insights": "自定义洞察",
@@ -189,6 +205,11 @@
       "my_projects": "我的项目",
       "archived_projects": "已归档"
     },
+    "card": {
+      "created_on": "创建于 {date}",
+      "no_member": "暂无成员",
+      "joined": "已加入"
+    },
     "common": {
       "months_count": "{months, plural, one{# 个月} other{# 个月}}",
       "days_count": "{days, plural, one{# 天} other{# 天}}"
@@ -208,6 +229,7 @@
       "no_projects": {
         "title": "没有项目",
         "description": "要创建工作项或管理您的工作，您需要创建一个项目或成为项目的一部分。",
+        "learn_more": "了解项目",
         "primary_button": {
           "text": "开始您的第一个项目",
           "comic": {

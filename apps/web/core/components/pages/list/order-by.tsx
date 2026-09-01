@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
 // plane imports
 import { getButtonStyling } from "@plane/propel/button";
@@ -20,14 +21,15 @@ type Props = {
 
 const PAGE_SORTING_KEY_OPTIONS: {
   key: TPageFiltersSortKey;
-  label: string;
+  i18nKey: string;
 }[] = [
-  { key: "name", label: "Name" },
-  { key: "created_at", label: "Date created" },
-  { key: "updated_at", label: "Date modified" },
+  { key: "name", i18nKey: "page_sorting.name" },
+  { key: "created_at", i18nKey: "page_sorting.created_at" },
+  { key: "updated_at", i18nKey: "page_sorting.updated_at" },
 ];
 
 export function PageOrderByDropdown(props: Props) {
+  const { t } = useTranslation();
   const { onChange, sortBy, sortKey } = props;
 
   const orderByDetails = PAGE_SORTING_KEY_OPTIONS.find((option) => sortKey === option.key);
@@ -38,7 +40,7 @@ export function PageOrderByDropdown(props: Props) {
       customButton={
         <div className={getButtonStyling("secondary", "lg")}>
           {!isDescending ? <ArrowUpWideNarrow className="size-3" /> : <ArrowDownWideNarrow className="size-3" />}
-          {orderByDetails?.label}
+          {orderByDetails ? t(orderByDetails.i18nKey) : null}
         </div>
       }
       placement="bottom-end"
@@ -55,7 +57,7 @@ export function PageOrderByDropdown(props: Props) {
             })
           }
         >
-          {option.label}
+          {t(option.i18nKey)}
           {sortKey === option.key && <CheckIcon className="h-3 w-3" />}
         </CustomMenu.MenuItem>
       ))}
@@ -69,7 +71,7 @@ export function PageOrderByDropdown(props: Props) {
             });
         }}
       >
-        Ascending
+        {t("common.sort.asc")}
         {!isDescending && <CheckIcon className="h-3 w-3" />}
       </CustomMenu.MenuItem>
       <CustomMenu.MenuItem
@@ -81,7 +83,7 @@ export function PageOrderByDropdown(props: Props) {
             });
         }}
       >
-        Descending
+        {t("common.sort.desc")}
         {isDescending && <CheckIcon className="h-3 w-3" />}
       </CustomMenu.MenuItem>
     </CustomMenu>

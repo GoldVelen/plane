@@ -193,7 +193,8 @@
       "finish_before": "Končí pred",
       "finish_after": "Končí po",
       "implements": "Implementuje",
-      "implemented_by": "Implementované"
+      "implemented_by": "Implementované",
+      "add_related": "Add related work items"
     },
     "copy_link": "Kopírovať odkaz na pracovnú položku",
     "delete": {
@@ -211,7 +212,8 @@
       "empty": "Nie sú vybrané žiadne pracovné položky",
       "add_selected": "Pridať vybrané pracovné položky",
       "select_all": "Vybrať všetko",
-      "deselect_all": "Zrušiť výber všetkého"
+      "deselect_all": "Zrušiť výber všetkého",
+      "current_project_only": "Only work items within the current project can be selected."
     },
     "open_in_full_screen": "Otvoriť pracovnú položku na celú obrazovku",
     "duplicate": {

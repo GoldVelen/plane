@@ -501,9 +501,9 @@
         "AD_HOC": "按需"
       },
       "github_kind": {
-        "PULL_REQUEST": "Pull request",
+        "PULL_REQUEST": "拉取请求",
         "CI": "CI",
-        "RELEASE": "Release",
+        "RELEASE": "发布",
         "LAST_COMMIT": "最近提交"
       }
     },

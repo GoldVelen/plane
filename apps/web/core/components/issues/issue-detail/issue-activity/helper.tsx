@@ -162,13 +162,13 @@ export const useWorkItemCommentOperations = (
           if (!workspaceSlug || !projectId || !commentId) throw new Error("Missing fields");
           await createCommentReaction(workspaceSlug, projectId, commentId, reaction);
           setToast({
-            title: "Success!",
+            title: t("toast.success"),
             type: TOAST_TYPE.SUCCESS,
             message: "Reaction created successfully",
           });
         } catch {
           setToast({
-            title: "Error!",
+            title: t("toast.error"),
             type: TOAST_TYPE.ERROR,
             message: "Reaction creation failed",
           });
@@ -179,13 +179,13 @@ export const useWorkItemCommentOperations = (
           if (!workspaceSlug || !projectId || !commentId || !currentUser?.id) throw new Error("Missing fields");
           removeCommentReaction(workspaceSlug, projectId, commentId, reaction, currentUser.id);
           setToast({
-            title: "Success!",
+            title: t("toast.success"),
             type: TOAST_TYPE.SUCCESS,
             message: "Reaction removed successfully",
           });
         } catch {
           setToast({
-            title: "Error!",
+            title: t("toast.error"),
             type: TOAST_TYPE.ERROR,
             message: "Reaction remove failed",
           });
@@ -210,7 +210,7 @@ export const useWorkItemCommentOperations = (
       },
     };
     return ops;
-  }, [workspaceSlug, projectId, issueId, createComment, updateComment, uploadEditorAsset, removeComment]);
+  }, [workspaceSlug, projectId, issueId, createComment, updateComment, uploadEditorAsset, removeComment, t]);
 
   return operations;
 };

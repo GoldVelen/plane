@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -25,6 +26,7 @@ import { CommonProjectBreadcrumbs } from "@/components/breadcrumbs/common";
 import { EPageStoreType, usePageStore } from "@/hooks/store";
 
 export const PagesListHeader = observer(function PagesListHeader() {
+  const { t } = useTranslation();
   // states
   const [isCreatingPage, setIsCreatingPage] = useState(false);
   // router
@@ -52,7 +54,7 @@ export const PagesListHeader = observer(function PagesListHeader() {
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message: err?.data?.error || "Page could not be created. Please try again.",
         });
       })
@@ -67,7 +69,7 @@ export const PagesListHeader = observer(function PagesListHeader() {
           <Breadcrumbs.Item
             component={
               <BreadcrumbLink
-                label="Pages"
+                label={t("pages")}
                 href={`/${workspaceSlug}/projects/${currentProjectDetails?.id}/pages/`}
                 icon={<PageIcon className="h-4 w-4 text-tertiary" />}
                 isLast

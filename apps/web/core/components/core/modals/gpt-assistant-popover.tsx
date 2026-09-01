@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import type { Ref } from "react";
 import React, { useEffect, useState, useRef, Fragment } from "react";
 import type { Placement } from "@popperjs/core";
@@ -42,6 +43,7 @@ type FormData = {
 };
 
 export function GptAssistantPopover(props: Props) {
+  const { t } = useTranslation();
   const {
     isOpen,
     handleClose,
@@ -97,7 +99,7 @@ export function GptAssistantPopover(props: Props) {
 
     setToast({
       type: TOAST_TYPE.ERROR,
-      title: "Error!",
+      title: t("toast.error"),
       message: errorMessage,
     });
 
@@ -123,7 +125,7 @@ export function GptAssistantPopover(props: Props) {
   const handleInvalidTask = () => {
     setToast({
       type: TOAST_TYPE.ERROR,
-      title: "Error!",
+      title: t("toast.error"),
       message: "Please enter some task to get AI assistance.",
     });
   };
@@ -282,13 +284,13 @@ export function GptAssistantPopover(props: Props) {
               <>
                 <div className="flex items-start justify-center gap-2 text-13 text-accent-primary">
                   <AlertCircle className="h-4 w-4" />
-                  <p>By using this feature, you consent to sharing the message with a 3rd party service. </p>
+                  <p>{t("page_ai.third_party_consent")}</p>
                 </div>
               </>
             )}
             <div className="flex items-center gap-2">
               <Button variant="secondary" onClick={onClose}>
-                Close
+                {t("close")}
               </Button>
               <Button variant="primary" onClick={handleSubmit(handleAIResponse)} loading={isSubmitting}>
                 {generateResponseButtonText}

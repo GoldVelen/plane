@@ -35,6 +35,11 @@
       "close_workspace_menu": "Close workspace menu",
       "open_extended_sidebar": "Open extended sidebar",
       "close_extended_sidebar": "Close extended sidebar"
+    },
+    "resizable_sidebar": {
+      "main": "Main sidebar",
+      "resize": "Resize sidebar",
+      "peek": "Sidebar peek view"
     }
   }
 }

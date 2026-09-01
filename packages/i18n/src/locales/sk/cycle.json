@@ -20,7 +20,8 @@
   },
   "cycle": {
     "label": "{count, plural, one {Cyklus} few {Cykly} other {Cyklov}}",
-    "no_cycle": "Žiadny cyklus"
+    "no_cycle": "Žiadny cyklus",
+    "select": "Select cycle"
   },
   "active_cycle_analytics": {
     "empty_state": {

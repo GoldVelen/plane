@@ -37,6 +37,29 @@
         "states": {
           "sending": "Odesílání…"
         }
+      },
+      "general": {
+        "cover_image_alt": "Profile cover image",
+        "validation": {
+          "first_name_required": "Please enter your first name",
+          "person_name_invalid": "Use letters, spaces, hyphens, or apostrophes only (up to 50 characters).",
+          "display_name_required": "Display name is required.",
+          "display_name_invalid": "Use letters, numbers, periods, hyphens, or underscores only (up to 50 characters).",
+          "email_required": "Email is required."
+        },
+        "placeholders": {
+          "first_name": "Enter your first name",
+          "last_name": "Enter your last name",
+          "display_name": "Enter your display name",
+          "email": "Zadejte svůj e-mail"
+        },
+        "toasts": {
+          "picture_deleted": "Profile picture deleted successfully.",
+          "picture_delete_failed": "We couldn't delete your profile picture. Please try again.",
+          "cover_process_failed": "We couldn't process the cover image. Please try again.",
+          "update_failed": "We couldn't update your profile. Please try again.",
+          "update_success": "Profile updated successfully."
+        }
       }
     },
     "preferences": {
@@ -94,7 +117,9 @@
         "empty": "Nenalezena žádná aktivita.",
         "button": "Stáhnout dnešní aktivitu",
         "button_loading": "Stahování"
-      }
+      },
+      "unassigned": "Work items awaiting assignment",
+      "open_queue": "Open queue"
     },
     "actions": {
       "profile": "Profil",

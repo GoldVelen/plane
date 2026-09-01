@@ -65,7 +65,7 @@ const CreatedVsResolved = observer(function CreatedVsResolved() {
     () => [
       {
         key: "completed_issues",
-        label: "Resolved",
+        label: t("common.resolved"),
         fill: "#19803833",
         fillOpacity: 1,
         stackId: "bar-one",
@@ -76,7 +76,7 @@ const CreatedVsResolved = observer(function CreatedVsResolved() {
       },
       {
         key: "created_issues",
-        label: "Created",
+        label: t("created"),
         fill: "#1192E833",
         fillOpacity: 1,
         stackId: "bar-one",
@@ -86,13 +86,13 @@ const CreatedVsResolved = observer(function CreatedVsResolved() {
         strokeOpacity: 1,
       },
     ],
-    []
+    [t]
   );
 
   return (
     <AnalyticsSectionWrapper
       title={t("workspace_analytics.created_vs_resolved")}
-      subtitle={selectedDurationLabel}
+      subtitle={selectedDurationLabel ? t(selectedDurationLabel) : undefined}
       className="col-span-1"
     >
       {isCreatedVsResolvedLoading ? (

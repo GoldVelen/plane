@@ -305,7 +305,7 @@ export function InviteMembers(props: Props) {
       });
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: t("common.toast.success"),
+        title: t("toast.success"),
         message: t("workspace_settings.settings.members.invitations_sent_successfully"),
       });
       await nextStep();
@@ -313,7 +313,7 @@ export function InviteMembers(props: Props) {
       const error = err as { error?: string };
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: t("common.toast.error"),
+        title: t("toast.error"),
         message: error.error,
       });
     }
@@ -357,8 +357,8 @@ export function InviteMembers(props: Props) {
           >
             <div className="w-full py-4 text-13">
               <div className="group relative mx-8 grid grid-cols-10 gap-4 py-2">
-                <div className="col-span-6 px-1 text-13 font-medium text-secondary">Email</div>
-                <div className="col-span-4 px-1 text-13 font-medium text-secondary">Role</div>
+                <div className="col-span-6 px-1 text-13 font-medium text-secondary">{t("email")}</div>
+                <div className="col-span-4 px-1 text-13 font-medium text-secondary">{t("role")}</div>
               </div>
               <div className="mb-3 space-y-3 sm:space-y-4">
                 {fields.map((field, index) => (

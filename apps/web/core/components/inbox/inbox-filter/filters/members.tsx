@@ -13,7 +13,7 @@ import type { TInboxIssueFilterMemberKeys } from "@plane/types";
 import { Avatar, Loader } from "@plane/ui";
 // components
 import { getFileURL } from "@plane/utils";
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 // helpers
 // hooks
 import { useMember } from "@/hooks/store/use-member";
@@ -107,7 +107,7 @@ export const FilterMember = observer(function FilterMember(props: Props) {
                 )}
               </>
             ) : (
-              <p className="text-11 text-placeholder italic">No matches found</p>
+              <FilterNoMatches />
             )
           ) : (
             <Loader className="space-y-2">

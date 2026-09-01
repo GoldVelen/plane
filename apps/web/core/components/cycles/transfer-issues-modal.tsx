@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export const TransferIssuesModal = observer(function TransferIssuesModal(props: Props) {
+  const { t } = useTranslation();
   const { isOpen, handleClose, cycleId } = props;
   // states
   const [query, setQuery] = useState("");
@@ -41,7 +43,7 @@ export const TransferIssuesModal = observer(function TransferIssuesModal(props: 
       .then(async () => {
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Success!",
+          title: t("toast.success"),
           message: "Work items have been transferred successfully",
         });
         await getCycleDetails(payload.new_cycle_id);
@@ -49,7 +51,7 @@ export const TransferIssuesModal = observer(function TransferIssuesModal(props: 
       .catch(() => {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message: "Unable to transfer work items. Please try again.",
         });
       });
@@ -64,7 +66,7 @@ export const TransferIssuesModal = observer(function TransferIssuesModal(props: 
     await Promise.all(cyclesFetch).catch((error) => {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error",
+        title: t("error"),
         message: error.error || "Unable to fetch cycle details",
       });
     });
@@ -82,7 +84,7 @@ export const TransferIssuesModal = observer(function TransferIssuesModal(props: 
         <div className="flex items-center justify-between px-5">
           <div className="flex items-center gap-1">
             <TransferIcon className="w-5 fill-primary" />
-            <h4 className="text-18 font-medium text-primary">Transfer work items</h4>
+            <h4 className="text-18 font-medium text-primary">{t("product_tour.cycle.step_four.title")}</h4>
           </div>
           <button onClick={handleClose}>
             <CloseIcon className="h-4 w-4" />

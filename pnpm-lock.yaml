@@ -1493,6 +1493,9 @@ importers:
 
   packages/i18n:
     dependencies:
+      date-fns:
+        specifier: 'catalog:'
+        version: 4.1.0
       i18next:
         specifier: 'catalog:'
         version: 25.10.9(typescript@5.8.3)
@@ -1972,6 +1975,9 @@ importers:
       tsdown:
         specifier: 'catalog:'
         version: 0.16.0(oxc-resolver@11.20.0)(typescript@5.8.3)
+      tsx:
+        specifier: 'catalog:'
+        version: 4.20.6
       typescript:
         specifier: 5.8.3
         version: 5.8.3

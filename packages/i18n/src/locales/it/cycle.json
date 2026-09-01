@@ -20,7 +20,8 @@
   },
   "cycle": {
     "label": "{count, plural, one {Ciclo} other {Cicli}}",
-    "no_cycle": "Nessun ciclo"
+    "no_cycle": "Nessun ciclo",
+    "select": "Select cycle"
   },
   "active_cycle_analytics": {
     "empty_state": {

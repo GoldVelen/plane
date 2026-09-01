@@ -72,7 +72,8 @@ export const ProfileActivity = observer(function ProfileActivity() {
                       <ActivityMessage activity={activity} showIssue />
                     ) : (
                       <span>
-                        created <IssueLink activity={activity} />
+                        {t("studio.forms.action_created")}
+                        <IssueLink activity={activity} />
                       </span>
                     )}
                   </p>

@@ -817,7 +817,8 @@
     "all_issues": "모든 작업 항목",
     "assigned": "할당됨",
     "created": "생성됨",
-    "subscribed": "구독됨"
+    "subscribed": "구독됨",
+    "unassigned": "미할당"
   },
   "description_versions": {
     "last_edited_by": "마지막 편집자",
@@ -872,5 +873,17 @@
       "description": "작업 항목을 JSON 파일로 내보냅니다.",
       "short_description": "JSON으로 내보내기"
     }
-  }
+  },
+  "project_work_item_count": "{count, plural, one {There is # work item in this project} other {There are # work items in this project}}",
+  "archived_work_item_count": "{count, plural, one {# archived work item} other {# archived work items}}",
+  "count": {
+    "link": "{count, plural, one {# link} other {# links}}",
+    "attachment": "{count, plural, one {# attachment} other {# attachments}}",
+    "sub_work_item": "{count, plural, one {# sub-work item} other {# sub-work items}}"
+  },
+  "identifier": "Identifier",
+  "access": "Access",
+  "join": "참여",
+  "enabled": "활성화됨",
+  "disabled": "비활성화됨"
 }

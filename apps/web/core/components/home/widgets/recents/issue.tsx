@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 // plane types
 import { PriorityIcon, StateGroupIcon, WorkItemsIcon } from "@plane/propel/icons";
@@ -27,6 +28,7 @@ type BlockProps = {
   workspaceSlug: string;
 };
 export const RecentIssue = observer(function RecentIssue(props: BlockProps) {
+  const { t } = useTranslation();
   const { activity, ref, workspaceSlug } = props;
   // hooks
   const { getStateById } = useProjectState();
@@ -124,7 +126,7 @@ export const RecentIssue = observer(function RecentIssue(props: BlockProps) {
                 buttonVariant={issueDetails?.assignees?.length > 0 ? "transparent-without-text" : "border-without-text"}
                 buttonClassName={issueDetails?.assignees?.length > 0 ? "hover:bg-transparent px-0" : ""}
                 showTooltip={issueDetails?.assignees?.length === 0}
-                placeholder="Assignees"
+                placeholder={t("assignees")}
                 optionsClassName="z-10"
                 tooltipContent=""
               />

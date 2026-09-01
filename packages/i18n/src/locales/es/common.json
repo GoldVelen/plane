@@ -817,7 +817,8 @@
     "all_issues": "Todos los elementos de trabajo",
     "assigned": "Asignados",
     "created": "Creados",
-    "subscribed": "Suscritos"
+    "subscribed": "Suscritos",
+    "unassigned": "Sin asignar"
   },
   "description_versions": {
     "last_edited_by": "Última edición por",
@@ -872,5 +873,17 @@
       "description": "Exporta elementos de trabajo a un archivo JSON.",
       "short_description": "Exportar como json"
     }
-  }
+  },
+  "project_work_item_count": "{count, plural, one {There is # work item in this project} other {There are # work items in this project}}",
+  "archived_work_item_count": "{count, plural, one {# archived work item} other {# archived work items}}",
+  "count": {
+    "link": "{count, plural, one {# link} other {# links}}",
+    "attachment": "{count, plural, one {# attachment} other {# attachments}}",
+    "sub_work_item": "{count, plural, one {# sub-work item} other {# sub-work items}}"
+  },
+  "identifier": "Identifier",
+  "access": "Access",
+  "join": "Unirse",
+  "enabled": "Habilitado",
+  "disabled": "Deshabilitado"
 }

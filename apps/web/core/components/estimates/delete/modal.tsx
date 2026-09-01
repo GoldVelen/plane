@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 // ui
@@ -24,6 +25,7 @@ type TDeleteEstimateModal = {
 };
 
 export const DeleteEstimateModal = observer(function DeleteEstimateModal(props: TDeleteEstimateModal) {
+  const { t } = useTranslation();
   // props
   const { workspaceSlug, projectId, estimateId, isOpen, handleClose } = props;
   // hooks
@@ -52,7 +54,7 @@ export const DeleteEstimateModal = observer(function DeleteEstimateModal(props: 
       setButtonLoader(false);
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Estimate creation failed",
+        title: t("project_settings.estimates.toasts.created.error.title"),
         message: "We were unable to delete the estimate, please try again.",
       });
     }
@@ -77,7 +79,7 @@ export const DeleteEstimateModal = observer(function DeleteEstimateModal(props: 
 
         <div className="relative flex items-center justify-end gap-3 border-t border-subtle px-5 pt-5">
           <Button variant="secondary" size="lg" onClick={handleClose} disabled={buttonLoader}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button variant="error-fill" size="lg" onClick={handleDeleteEstimate} disabled={buttonLoader}>
             {buttonLoader ? "Deleting" : "Delete Estimate"}

@@ -46,7 +46,9 @@ export function ModuleStatusSelect({ control, error, tabIndex }: Props) {
                   <StatePropertyIcon className={`h-3 w-3 ${error ? "text-danger-primary" : "text-secondary"}`} />
                 )}
                 {(selectedValue && t(selectedValue?.i18n_label)) ?? (
-                  <span className={`${error ? "text-danger-primary" : "text-secondary"}`}>Status</span>
+                  <span className={`${error ? "text-danger-primary" : "text-secondary"}`}>
+                    {t("sso.domain_management.verified_domains.list.status")}
+                  </span>
                 )}
               </div>
             }

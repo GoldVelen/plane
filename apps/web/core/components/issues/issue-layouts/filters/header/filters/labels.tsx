@@ -10,7 +10,7 @@ import { observer } from "mobx-react";
 import type { IIssueLabel } from "@plane/types";
 // components
 import { Loader } from "@plane/ui";
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 
 // ui
 // types
@@ -85,7 +85,7 @@ export const FilterLabels = observer(function FilterLabels(props: Props) {
                 )}
               </>
             ) : (
-              <p className="text-11 text-placeholder italic">No matches found</p>
+              <FilterNoMatches />
             )
           ) : (
             <Loader className="space-y-2">

@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 // plane imports
 import { ROLE } from "@plane/constants";
@@ -30,6 +31,7 @@ type Props = {
 const workspaceService = new WorkspaceService();
 
 export function Invitations(props: Props) {
+  const { t } = useTranslation();
   const { invitations, handleNextStep, handleCurrentViewChange } = props;
   // states
   const [isJoiningWorkspaces, setIsJoiningWorkspaces] = useState(false);
@@ -108,7 +110,7 @@ export function Invitations(props: Props) {
       </Button>
       <div className="mx-auto mt-4 flex items-center sm:w-96">
         <hr className="w-full border-strong" />
-        <p className="mx-3 flex-shrink-0 text-center text-13 text-placeholder">or</p>
+        <p className="mx-3 flex-shrink-0 text-center text-13 text-placeholder">{t("common.or")}</p>
         <hr className="w-full border-strong" />
       </div>
       <Button

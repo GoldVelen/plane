@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState, useEffect, useRef } from "react";
 import { observer } from "mobx-react";
 import { LockKeyhole, LockKeyholeOpen } from "lucide-react";
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export const PageLockControl = observer(function PageLockControl({ page }: Props) {
+  const { t } = useTranslation();
   // Initial state: if locked, then "locked", otherwise default to "neutral"
   const [displayState, setDisplayState] = useState<LockDisplayState>(page.is_locked ? "locked" : "neutral");
   // derived values
@@ -78,12 +80,12 @@ export const PageLockControl = observer(function PageLockControl({ page }: Props
   return (
     <>
       {displayState === "neutral" && (
-        <Tooltip tooltipContent="Lock" position="bottom">
+        <Tooltip tooltipContent={t("power_k.contextual_actions.page.lock")} position="bottom">
           <button
             type="button"
             onClick={toggleLock}
             className="grid size-6 flex-shrink-0 place-items-center rounded-sm text-secondary transition-colors hover:bg-layer-1 hover:text-primary"
-            aria-label="Lock"
+            aria-label={t("power_k.contextual_actions.page.lock")}
           >
             <LockKeyhole className="size-3.5" />
           </button>

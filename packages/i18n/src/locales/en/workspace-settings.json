@@ -118,7 +118,11 @@
         "title": "Billing & Plans",
         "current_plan": "Current plan",
         "free_plan": "You are currently using the free plan",
-        "view_plans": "View plans"
+        "view_plans": "View plans",
+        "community": "Community edition",
+        "community_description": "Unlimited projects, work items, cycles, modules, pages, and storage",
+        "all_plans": "All plans",
+        "version": "Version: v{{version}}"
       },
       "exports": {
         "heading": "Exports",
@@ -164,6 +168,14 @@
           "all": "Send me everything",
           "individual": "Select individual events"
         },
+        "events": {
+          "project": "Project created, updated, or deleted",
+          "cycle": "Cycle created, updated, or deleted",
+          "work_item": "Work item created, updated, deleted, added to a cycle or module",
+          "module": "Module created, updated, or deleted",
+          "work_item_comments": "Work item comments",
+          "comment": "Comment posted, updated, or deleted"
+        },
         "toasts": {
           "created": {
             "title": "Webhook created",
@@ -206,6 +218,37 @@
         "never_expires": "Never expires",
         "generate_token": "Generate token",
         "generating": "Generating",
+        "expiration_required": "Please select an expiration date.",
+        "expiration_options": {
+          "one_week": "1 week",
+          "one_month": "1 month",
+          "three_months": "3 months",
+          "one_year": "1 year",
+          "custom": "Custom"
+        },
+        "custom_date": "Custom date",
+        "set_expiration_date": "Set expiration date",
+        "set_date": "Set date",
+        "expires_at": "Expires {{date}} at {{time}}",
+        "expired_ago": "Expired {{time}}",
+        "status": {
+          "active": "Active",
+          "expired": "Expired"
+        },
+        "delete_token": "Delete token",
+        "copy_secret_key": "Copy secret key",
+        "csv": {
+          "title": "Title",
+          "description": "Description",
+          "expiry": "Expiry",
+          "secret_key": "Secret key"
+        },
+        "empty_state": {
+          "image_alt": "No API tokens",
+          "title": "No API tokens",
+          "description": "Create API tokens for safe and easy data sharing with external apps, maintaining control and security.",
+          "add": "Add token"
+        },
         "delete": {
           "title": "Delete access token",
           "description": "Any application using this token will no longer have the access to Plane data. This action cannot be undone.",

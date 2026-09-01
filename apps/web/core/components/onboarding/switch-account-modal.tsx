@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useState } from "react";
 
 import { useTheme } from "next-themes";
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export function SwitchAccountModal(props: Props) {
+  const { t } = useTranslation();
   const { isOpen, onClose } = props;
   // states
   const [switchingAccount, setSwitchingAccount] = useState(false);
@@ -49,8 +51,8 @@ export function SwitchAccountModal(props: Props) {
       .catch(() =>
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
-          message: "Failed to sign out. Please try again.",
+          title: t("toast.error"),
+          message: t("auth.sign_out.toast.error.message"),
         })
       )
       .finally(() => setSwitchingAccount(false));

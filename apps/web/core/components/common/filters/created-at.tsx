@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
@@ -11,7 +12,7 @@ import { DATE_BEFORE_FILTER_OPTIONS } from "@plane/constants";
 import { isInDateFormat } from "@plane/utils";
 // components
 import { DateFilterModal } from "@/components/core/filters/date-filter-modal";
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 
 type Props = {
   appliedFilters: string[] | null;
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export const FilterCreatedDate = observer(function FilterCreatedDate(props: Props) {
+  const { t } = useTranslation();
   const { appliedFilters, handleUpdate, searchQuery } = props;
 
   const [previewEnabled, setPreviewEnabled] = useState(true);
@@ -49,7 +51,7 @@ export const FilterCreatedDate = observer(function FilterCreatedDate(props: Prop
           handleClose={() => setIsDateFilterModalOpen(false)}
           isOpen={isDateFilterModalOpen}
           onSelect={(val) => handleUpdate(val)}
-          title="Created date"
+          title={t("workspace_projects.sort.created_at")}
         />
       )}
       <FilterHeader
@@ -70,10 +72,15 @@ export const FilterCreatedDate = observer(function FilterCreatedDate(props: Prop
                   multiple
                 />
               ))}
-              <FilterOption isChecked={isCustomDateSelected()} onClick={handleCustomDate} title="Custom" multiple />
+              <FilterOption
+                isChecked={isCustomDateSelected()}
+                onClick={handleCustomDate}
+                title={t("notification.snooze.custom")}
+                multiple
+              />
             </>
           ) : (
-            <p className="text-11 text-placeholder italic">No matches found</p>
+            <FilterNoMatches />
           )}
         </div>
       )}

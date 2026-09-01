@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { TContextMenuItem } from "@plane/ui";
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export const LayoutQuickActions = observer(function LayoutQuickActions(props: Props) {
+  const { t } = useTranslation();
   const { workspaceSlug, projectId, storeType } = props;
 
   const layoutLink = `${workspaceSlug}/projects/${projectId}/${storeType === "EPIC" ? "epics" : "issues"}`;
@@ -28,7 +30,7 @@ export const LayoutQuickActions = observer(function LayoutQuickActions(props: Pr
     copyUrlToClipboard(layoutLink).then(() => {
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: "Link copied",
+        title: t("link_copied"),
         message: `${storeType === "EPIC" ? "Epics" : "Work items"} link copied to clipboard.`,
       });
     });

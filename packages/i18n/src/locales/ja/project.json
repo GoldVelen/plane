@@ -413,6 +413,9 @@
           "message": "問題が発生しました。"
         }
       }
+    },
+    "filters": {
+      "applied_summary": "{filtered} of {total} projects match the applied filters."
     }
   }
 }

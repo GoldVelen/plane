@@ -16,6 +16,7 @@ import {
   EUserPermissionsLevel,
   WORK_ITEM_TRACKER_ELEMENTS,
 } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 import { LockIcon, ViewsIcon } from "@plane/propel/icons";
 import { Tooltip } from "@plane/propel/tooltip";
@@ -39,6 +40,7 @@ import { useAppRouter } from "@/hooks/use-app-router";
 import { CommonProjectBreadcrumbs } from "@/components/breadcrumbs/common";
 
 export const ProjectViewIssuesHeader = observer(function ProjectViewIssuesHeader() {
+  const { t } = useTranslation();
   // refs
   const parentRef = useRef(null);
   // router
@@ -128,7 +130,7 @@ export const ProjectViewIssuesHeader = observer(function ProjectViewIssuesHeader
           <Breadcrumbs.Item
             component={
               <BreadcrumbLink
-                label="Views"
+                label={t("views")}
                 href={`/${workspaceSlug}/projects/${projectId}/views/`}
                 icon={<ViewsIcon className="h-4 w-4 text-tertiary" />}
               />
@@ -181,7 +183,7 @@ export const ProjectViewIssuesHeader = observer(function ProjectViewIssuesHeader
           )}
           {viewId && <WorkItemFiltersToggle entityType={EIssuesStoreType.PROJECT_VIEW} entityId={viewId} />}
           {!viewDetails.is_locked && (
-            <FiltersDropdown title="Display" placement="bottom-end">
+            <FiltersDropdown title={t("common.display")} placement="bottom-end">
               <DisplayFiltersSelection
                 layoutDisplayFiltersOptions={
                   activeLayout ? ISSUE_DISPLAY_FILTERS_BY_PAGE.issues.layoutOptions[activeLayout] : undefined
@@ -205,7 +207,7 @@ export const ProjectViewIssuesHeader = observer(function ProjectViewIssuesHeader
             }}
             data-ph-element={WORK_ITEM_TRACKER_ELEMENTS.HEADER_ADD_BUTTON.PROJECT_VIEW}
           >
-            Add work item
+            {t("add_work_item")}
           </Button>
         )}
         <div className="hidden md:block">

@@ -5,6 +5,7 @@
  */
 
 // plane imports
+import { useTranslation } from "@plane/i18n";
 import { CloseIcon, ModuleIcon, ChevronDownIcon } from "@plane/propel/icons";
 import { Tooltip } from "@plane/propel/tooltip";
 import { cn } from "@plane/utils";
@@ -27,6 +28,7 @@ type ModuleButtonContentProps = {
 };
 
 export function ModuleButtonContent(props: ModuleButtonContentProps) {
+  const { t } = useTranslation();
   const {
     disabled,
     dropdownArrow,
@@ -86,7 +88,7 @@ export function ModuleButtonContent(props: ModuleButtonContentProps) {
                   )}
                   {!disabled && (
                     <Tooltip
-                      tooltipContent="Remove"
+                      tooltipContent={t("remove")}
                       disabled={!showTooltip}
                       isMobile={isMobile}
                       renderByDefault={false}

@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { Download } from "lucide-react";
 import type { IExportData } from "@plane/types";
 import { getDate, getFileURL, renderFormattedDate } from "@plane/utils";
@@ -17,6 +18,7 @@ const checkExpiry = (inputDateString: string) => {
   return expiryDate > currentDate;
 };
 export const useExportColumns = () => {
+  const { t } = useTranslation();
   const columns = [
     {
       key: "Exported By",
@@ -102,7 +104,7 @@ export const useExportColumns = () => {
               <a target="_blank" href={rowData?.url} rel="noopener noreferrer">
                 <button className="flex w-full items-center gap-1 font-medium text-accent-primary">
                   <Download className="h-4 w-4" />
-                  <div>Download</div>
+                  <div>{t("page_navigation_pane.tabs.assets.download_button")}</div>
                 </button>
               </a>
             ) : (
@@ -110,7 +112,9 @@ export const useExportColumns = () => {
             )}
           </>
         ) : (
-          <div className="text-11 text-danger-primary">Expired</div>
+          <div className="text-11 text-danger-primary">
+            {t("workspace_settings.settings.api_tokens.status.expired")}
+          </div>
         ),
     },
   ];

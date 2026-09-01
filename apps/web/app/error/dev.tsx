@@ -5,6 +5,7 @@
  */
 
 // plane imports
+import { useTranslation } from "@plane/i18n";
 import { isRouteErrorResponse } from "react-router";
 import { Banner } from "@plane/propel/banner";
 import { Button } from "@plane/propel/button";
@@ -17,10 +18,11 @@ interface ErrorActionsProps {
 }
 
 function ErrorActions({ onGoHome, onReload }: ErrorActionsProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex gap-3 pt-2">
       <Button variant="primary" size="lg" onClick={onGoHome}>
-        Go to home
+        {t("power_k.navigation_actions.nav_home")}
       </Button>
       {onReload && (
         <Button variant="secondary" size="lg" onClick={onReload}>
@@ -38,6 +40,7 @@ interface DevErrorComponentProps {
 }
 
 export function DevErrorComponent({ error, onGoHome, onReload }: DevErrorComponentProps) {
+  const { t } = useTranslation();
   if (isRouteErrorResponse(error)) {
     return (
       <div className="flex min-h-screen items-start justify-center bg-surface-2 p-6 transition-none">
@@ -86,7 +89,7 @@ export function DevErrorComponent({ error, onGoHome, onReload }: DevErrorCompone
           <Card variant={ECardVariant.WITH_SHADOW} className="!p-6 transition-none">
             <div className="space-y-4">
               <div>
-                <h2 className="mb-2 text-20 font-semibold text-danger-primary">Error</h2>
+                <h2 className="mb-2 text-20 font-semibold text-danger-primary">{t("error")}</h2>
                 <div className="bg-subtle-1 h-px w-full" />
               </div>
 

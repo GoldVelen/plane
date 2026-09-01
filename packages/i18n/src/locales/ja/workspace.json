@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "解決済み vs 保留中の作業項目",
     "projects_by_status": "ステータス別のプロジェクト",
     "active_users": "アクティブユーザー",
-    "intake_trends": "受け入れの傾向"
+    "intake_trends": "受け入れの傾向",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "期間",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "プロパティを追加",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {プロジェクト} other {プロジェクト}}",
@@ -214,7 +230,8 @@
             "title": "Planeではすべてがプロジェクトから始まります",
             "description": "プロジェクトは製品のロードマップ、マーケティングキャンペーン、新車の発売などになります。"
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "一致するプロジェクトがありません",
@@ -223,6 +240,11 @@
       "search": {
         "description": "条件に一致するプロジェクトが見つかりません。\n代わりに新しいプロジェクトを作成してください。"
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

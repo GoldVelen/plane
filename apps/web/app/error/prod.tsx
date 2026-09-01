@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useTheme } from "next-themes";
 // plane imports
 import { Button } from "@plane/propel/button";
@@ -37,6 +38,7 @@ interface ProdErrorComponentProps {
 }
 
 export function ProdErrorComponent({ onGoHome }: ProdErrorComponentProps) {
+  const { t } = useTranslation();
   // hooks
   const { resolvedTheme } = useTheme();
 
@@ -81,7 +83,7 @@ export function ProdErrorComponent({ onGoHome }: ProdErrorComponentProps) {
 
           <div className="flex items-center justify-start gap-6">
             <Button variant="primary" size="lg" onClick={onGoHome}>
-              Go to home
+              {t("power_k.navigation_actions.nav_home")}
             </Button>
           </div>
         </div>

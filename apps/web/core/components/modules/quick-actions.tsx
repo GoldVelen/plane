@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { MoreHorizontal } from "lucide-react";
@@ -31,6 +32,7 @@ type Props = {
 };
 
 export const ModuleQuickActions = observer(function ModuleQuickActions(props: Props) {
+  const { t } = useTranslation();
   const { parentRef, moduleId, projectId, workspaceSlug, customClassName } = props;
   // router
   const router = useAppRouter();
@@ -69,14 +71,14 @@ export const ModuleQuickActions = observer(function ModuleQuickActions(props: Pr
       await restoreModule(workspaceSlug, projectId, moduleId);
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: "Restore success",
+        title: t("issue.restore.success.title"),
         message: "Your module can be found in project modules.",
       });
       router.push(`/${workspaceSlug}/projects/${projectId}/archives/modules`);
     } catch (_error) {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
+        title: t("toast.error"),
         message: "Module could not be restored. Please try again.",
       });
     }

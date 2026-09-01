@@ -81,6 +81,7 @@ export interface MenuItemFactoryProps {
 
 // Common action handlers hook
 export const useIssueActionHandlers = (props: MenuItemFactoryProps) => {
+  const { t } = useTranslation();
   const { issue, workspaceSlug, projectIdentifier, handleRestore } = props;
 
   const workItemLink = useMemo(
@@ -99,8 +100,8 @@ export const useIssueActionHandlers = (props: MenuItemFactoryProps) => {
     copyUrlToClipboard(workItemLink).then(() =>
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: "Link copied",
-        message: "Work item link copied to clipboard",
+        title: t("link_copied"),
+        message: t("common.copied_to_clipboard"),
       })
     );
 
@@ -116,15 +117,15 @@ export const useIssueActionHandlers = (props: MenuItemFactoryProps) => {
       .then(() => {
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Restore success",
-          message: "Your work item can be found in project work items.",
+          title: t("issue.restore.success.title"),
+          message: t("issue.restore.success.message"),
         });
       })
       .catch(() => {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
-          message: "Work item could not be restored. Please try again.",
+          title: t("toast.error"),
+          message: t("issue.restore.failed.message"),
         });
       });
   };
@@ -235,7 +236,7 @@ export const useMenuItemFactory = (props: MenuItemFactoryProps) => {
 
   const createRestoreMenuItem = (): TContextMenuItem => ({
     key: "restore",
-    title: "Restore",
+    title: t("restore"),
     icon: ArchiveRestoreIcon,
     action: actionHandlers.handleIssueRestore,
     shouldRender: isRestoringAllowed,

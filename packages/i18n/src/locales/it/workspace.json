@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "Elementi di lavoro risolti vs in sospeso",
     "projects_by_status": "Progetti per stato",
     "active_users": "Utenti attivi",
-    "intake_trends": "Tendenze di ammissione"
+    "intake_trends": "Tendenze di ammissione",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "Durata",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "Aggiungi proprietà",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {Progetto} other {Progetti}}",
@@ -214,7 +230,8 @@
             "title": "Tutto inizia con un progetto in Plane",
             "description": "Un progetto può essere la roadmap di un prodotto, una campagna di marketing o il lancio di una nuova auto."
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "Nessun progetto corrispondente",
@@ -223,6 +240,11 @@
       "search": {
         "description": "Nessun progetto rilevato con i criteri di ricerca corrispondenti.\nCrea un nuovo progetto invece"
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

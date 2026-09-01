@@ -138,6 +138,38 @@
         "description": "在首选项中自定义您看到的内容以及导航方式。"
       }
     },
+    "onboarding": {
+      "welcome": {
+        "title": "欢迎使用 Plane，{name}",
+        "description": "很高兴你选择试用 Plane。现在可以轻松管理项目，从创建一个项目开始吧。",
+        "take_tour": "开始产品导览",
+        "no_thanks": "不用了，我自己探索"
+      },
+      "work_items": {
+        "title": "使用工作项规划",
+        "description": "工作项是 Plane 的基本组成单元，大多数功能都围绕工作项及其属性展开。"
+      },
+      "cycles": {
+        "title": "使用周期推进",
+        "description": "周期类似敏捷开发中的迭代，帮助你和团队更快推进工作。"
+      },
+      "modules": {
+        "title": "拆分为模块",
+        "description": "模块把大型项目拆分为功能，让工作组织得更清晰。"
+      },
+      "views": {
+        "description": "创建自定义筛选，只显示你关注的工作项，并可快速保存和分享筛选条件。"
+      },
+      "pages": {
+        "title": "使用页面记录",
+        "description": "开会或开始一天工作时，可使用页面快速记录工作项。"
+      },
+      "sidebar": {
+        "title": "让我们开始吧！",
+        "description": "充分发挥 Plane 的能力。"
+      },
+      "create_first_project": "创建你的第一个项目"
+    },
     "actions": {
       "close": "关闭",
       "next": "下一步",

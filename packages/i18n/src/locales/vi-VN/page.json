@@ -111,5 +111,33 @@
       "success_message": "Đã xóa trang khỏi bộ sưu tập.",
       "error_message": "Không thể xóa trang khỏi bộ sưu tập. Vui lòng thử lại."
     }
+  },
+  "page_sorting": {
+    "name": "Name",
+    "created_at": "Date created",
+    "updated_at": "Date modified"
+  },
+  "page_export": {
+    "paper_sizes": {
+      "letter": "Letter",
+      "legal": "Legal",
+      "tabloid": "Tabloid"
+    },
+    "content": {
+      "everything": "Everything",
+      "no_images": "No images"
+    }
+  },
+  "page_ai": {
+    "tones": {
+      "default": "Default",
+      "professional": "💼 Professional",
+      "casual": "😃 Casual"
+    },
+    "replace_selection": "Replace selection",
+    "add_to_next_line": "Add to next line",
+    "regenerate_response": "Re-generate response",
+    "writing": "Pi is writing",
+    "third_party_consent": "By using this feature, you consent to sharing the message with a 3rd party service."
   }
 }

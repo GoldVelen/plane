@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
 // types
@@ -35,6 +36,7 @@ type CycleModalProps = {
 const cycleService = new CycleService();
 
 export function CycleCreateUpdateModal(props: CycleModalProps) {
+  const { t } = useTranslation();
   const { isOpen, handleClose, data, workspaceSlug, projectId } = props;
   // states
   const [activeProject, setActiveProject] = useState<string | null>(null);
@@ -63,14 +65,14 @@ export function CycleCreateUpdateModal(props: CycleModalProps) {
 
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Success!",
+          title: t("toast.success"),
           message: "Cycle created successfully.",
         });
       })
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message: err?.detail ?? "Error in creating cycle. Please try again.",
         });
       });
@@ -84,14 +86,14 @@ export function CycleCreateUpdateModal(props: CycleModalProps) {
       .then((_res) => {
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Success!",
-          message: "Cycle updated successfully.",
+          title: t("toast.success"),
+          message: t("project_cycles.action.update.success.description"),
         });
       })
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message: err?.detail ?? "Error in updating cycle. Please try again.",
         });
       });
@@ -152,7 +154,7 @@ export function CycleCreateUpdateModal(props: CycleModalProps) {
     } else
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
+        title: t("toast.error"),
         message: "You already have a cycle on the given dates, if you want to create a draft cycle, remove the dates.",
       });
   };

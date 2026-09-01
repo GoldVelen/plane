@@ -11,7 +11,7 @@ import { observer } from "mobx-react";
 import { Logo } from "@plane/propel/emoji-icon-picker";
 import { Loader } from "@plane/ui";
 // components
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 
@@ -86,7 +86,7 @@ export const FilterProjects = observer(function FilterProjects(props: Props) {
                 )}
               </>
             ) : (
-              <p className="text-11 text-placeholder italic">No matches found</p>
+              <FilterNoMatches />
             )
           ) : (
             <Loader className="space-y-2">

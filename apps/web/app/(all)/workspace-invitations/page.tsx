@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
@@ -28,6 +29,7 @@ import { WorkspaceService } from "@/services/workspace.service";
 const workspaceService = new WorkspaceService();
 
 function WorkspaceInvitationPage() {
+  const { t } = useTranslation();
   // router
   const router = useAppRouter();
   // query params
@@ -88,7 +90,7 @@ function WorkspaceInvitationPage() {
               title={`You have been invited to ${invitationDetail.workspace.name}`}
               description="Your workspace is where you'll create projects, collaborate on your work items, and organize different streams of work in your Plane account."
             >
-              <EmptySpaceItem Icon={CheckIcon} title="Accept" action={handleAccept} />
+              <EmptySpaceItem Icon={CheckIcon} title={t("inbox_issue.actions.accept")} action={handleAccept} />
               <EmptySpaceItem Icon={CloseIcon} title="Ignore" action={handleReject} />
             </EmptySpace>
           )
@@ -111,7 +113,7 @@ function WorkspaceInvitationPage() {
               ) : (
                 <EmptySpaceItem Icon={Boxes} title="Continue to home" href="/" />
               )}
-              <EmptySpaceItem Icon={Star} title="Star us on GitHub" href="https://github.com/makeplane" />
+              <EmptySpaceItem Icon={Star} title={t("home.star_us_on_github")} href="https://github.com/makeplane" />
               <EmptySpaceItem
                 Icon={Share2}
                 title="Join our community of active creators"

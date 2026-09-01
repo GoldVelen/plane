@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 // ui
 import { Button } from "@plane/propel/button";
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export function ConfirmIssueDiscard(props: Props) {
+  const { t } = useTranslation();
   const { isOpen, handleClose, onDiscard, onConfirm } = props;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -49,12 +51,12 @@ export function ConfirmIssueDiscard(props: Props) {
       <div className="flex justify-between gap-2 p-4 sm:px-6">
         <div>
           <Button variant="secondary" onClick={onDiscard}>
-            Discard
+            {t("discard")}
           </Button>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="secondary" onClick={onClose}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button variant="primary" onClick={handleDeletion} loading={isLoading}>
             {isLoading ? "Saving" : "Save to Drafts"}

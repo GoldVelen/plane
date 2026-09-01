@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
@@ -36,6 +37,7 @@ const defaultValues: Partial<IModule> = {
 };
 
 export const CreateUpdateModuleModal = observer(function CreateUpdateModuleModal(props: Props) {
+  const { t } = useTranslation();
   const { isOpen, onClose, data, workspaceSlug, projectId } = props;
   // states
   const [activeProject, setActiveProject] = useState<string | null>(null);
@@ -62,14 +64,14 @@ export const CreateUpdateModuleModal = observer(function CreateUpdateModuleModal
         handleClose();
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Success!",
+          title: t("toast.success"),
           message: "Module created successfully.",
         });
       })
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message: err?.detail ?? err?.error ?? "Module could not be created. Please try again.",
         });
       });
@@ -85,14 +87,14 @@ export const CreateUpdateModuleModal = observer(function CreateUpdateModuleModal
 
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Success!",
+          title: t("toast.success"),
           message: "Module updated successfully.",
         });
       })
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message: err?.detail ?? err?.error ?? "Module could not be updated. Please try again.",
         });
       });

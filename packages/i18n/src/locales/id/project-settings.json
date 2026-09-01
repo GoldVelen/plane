@@ -6,16 +6,34 @@
       "archive_project": {
         "title": "Arsipkan proyek",
         "description": "Mengarsipkan proyek akan menghapus proyek Anda dari navigasi samping meskipun Anda masih dapat mengaksesnya dari halaman proyek Anda. Anda dapat memulihkan proyek tersebut atau menghapusnya kapan saja.",
-        "button": "Arsipkan proyek"
+        "button": "Arsipkan proyek",
+        "modal_title": "Archive {project}",
+        "confirmation": "This project and its work items, cycles, modules, and pages will be archived. Its work items won't appear in search. Only project admins can restore the project.",
+        "archiving": "Mengarsipkan",
+        "success_title": "Archive successful",
+        "success_message": "{project} has been archived successfully.",
+        "error_message": "Project could not be archived. Please try again."
       },
       "delete_project": {
         "title": "Hapus proyek",
         "description": "Ketika menghapus proyek, semua data dan sumber daya di dalam proyek tersebut akan dihapus secara permanen dan tidak dapat dipulihkan.",
-        "button": "Hapus proyek saya"
+        "button": "Hapus proyek saya",
+        "confirmation_description": "Are you sure you want to delete project {project}? All data related to this project will be permanently removed. This action cannot be undone.",
+        "enter_project_name": "Enter the project name to continue:",
+        "enter_confirmation": "To confirm, type “{confirmation}” below:"
       },
       "toast": {
         "success": "Proyek berhasil diperbarui",
         "error": "Proyek tidak dapat diperbarui. Silakan coba lagi."
+      },
+      "project_name_max_char": "Project name should be less than 255 characters",
+      "restore_project": {
+        "modal_title": "Restore {project}",
+        "confirmation": "Restoring a project will activate it and make it visible to all project members. Are you sure you want to continue?",
+        "restoring": "Restoring",
+        "success_title": "Restore successful",
+        "success_message": "You can now find {project} in your projects.",
+        "error_message": "Project could not be restored. Please try again."
       }
     },
     "members": {
@@ -33,7 +51,45 @@
       "invite_members": {
         "title": "Undang anggota",
         "sub_heading": "Undang anggota untuk bekerja di proyek Anda.",
-        "select_co_worker": "Pilih rekan kerja"
+        "select_co_worker": "Pilih rekan kerja",
+        "member_required": "Please select a member",
+        "role_required": "Please select a role",
+        "select_role": "Select role",
+        "success": "Members added successfully."
+      },
+      "remove_confirmation": {
+        "leave_title": "Leave project?",
+        "remove_title": "Remove {name}?",
+        "leave_description": "Are you sure you want to leave {project}? You can join again if you are invited or if the project is public.",
+        "remove_description": "Are you sure you want to remove {name}? They will no longer have access to this project. This action cannot be undone."
+      },
+      "join_confirmation": {
+        "title": "Join project?",
+        "description": "Are you sure you want to join {project}? Select Join project below to continue.",
+        "joining": "Joining",
+        "button": "Bergabung dengan proyek"
+      },
+      "leave_confirmation": {
+        "title": "Tinggalkan proyek",
+        "description": "Are you sure you want to leave {project}? Work items assigned to you in this project will no longer be accessible.",
+        "enter_project_name": "Enter the project name {project} to continue:",
+        "confirmation_phrase": "Leave Project",
+        "enter_confirmation": "To confirm, type {confirmation} below:",
+        "project_name_placeholder": "Enter project name",
+        "confirmation_placeholder": "Enter the confirmation phrase",
+        "errors": {
+          "generic": "Something went wrong. Please try again later.",
+          "confirmation": "Enter the confirmation phrase exactly as shown.",
+          "project_name": "Enter the project name exactly as shown.",
+          "required": "Please fill in all fields."
+        }
+      },
+      "errors": {
+        "leave_failed_title": "You can’t leave this project yet.",
+        "remove_failed_title": "You can't remove the member from this project yet.",
+        "role_required": "Role is required.",
+        "role_failed_title": "You can’t change this role yet.",
+        "role_failed_message": "An error occurred while updating member role. Please try again."
       }
     },
     "states": {
@@ -428,6 +484,12 @@
         "loading": "Memperbarui fitur proyek...",
         "success": "Fitur proyek berhasil diperbarui.",
         "error": "Terjadi kesalahan saat memperbarui fitur proyek. Silakan coba lagi."
+      },
+      "pro_feature": "Pro feature",
+      "toast": {
+        "loading": "Updating project feature",
+        "success": "Fitur proyek berhasil diperbarui.",
+        "error": "Something went wrong while updating the project feature. Please try again."
       }
     },
     "project_updates": {
@@ -521,6 +583,32 @@
           }
         }
       }
+    },
+    "title": "Project settings",
+    "integrations": {
+      "github_description": "Select a GitHub repository to enable sync.",
+      "slack_description": "Get regular updates and choose which notifications you want to receive.",
+      "logo_alt": "{integration} logo",
+      "select_repository": "Select repository",
+      "repository_sync_success": "Repository {repository} was synced with the project.",
+      "repository_sync_error": "Repository could not be synced with the project. Please try again."
+    },
+    "publish": {
+      "title": "Publikasikan proyek",
+      "settings_updated": "Publish settings updated successfully.",
+      "unpublish_error": "Something went wrong while unpublishing the project.",
+      "layout_required": "Select at least one view layout to publish the project.",
+      "link_copied": "Published page link copied successfully.",
+      "unpublishing": "Unpublishing",
+      "unpublish": "Unpublish",
+      "live_on_web": "This project is now live on the web",
+      "views": "Tampilan",
+      "allow_comments": "Allow comments",
+      "allow_reactions": "Allow reactions",
+      "allow_voting": "Allow voting",
+      "link_access": "Anyone with the link can access",
+      "update_settings": "Update settings",
+      "publishing": "Publishing"
     }
   }
 }

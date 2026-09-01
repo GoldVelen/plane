@@ -30,7 +30,10 @@ export const WorkspaceEditionBadge = observer(function WorkspaceEditionBadge() {
         isOpen={isPaidPlanPurchaseModalOpen}
         handleClose={() => setIsPaidPlanPurchaseModalOpen(false)}
       />
-      <Tooltip tooltipContent={`Version: v${packageJson.version}`} isMobile={isMobile}>
+      <Tooltip
+        tooltipContent={t("workspace_settings.settings.billing_and_plans.version", { version: packageJson.version })}
+        isMobile={isMobile}
+      >
         <Button
           variant="tertiary"
           size="lg"
@@ -38,7 +41,7 @@ export const WorkspaceEditionBadge = observer(function WorkspaceEditionBadge() {
           aria-haspopup="dialog"
           aria-label={t("aria_labels.projects_sidebar.edition_badge")}
         >
-          Community
+          {t("workspace_settings.settings.billing_and_plans.community")}
         </Button>
       </Tooltip>
     </>

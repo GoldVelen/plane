@@ -367,6 +367,9 @@
     "role": "Role"
   },
   "project": {
+    "filters": {
+      "applied_summary": "{filtered} of {total} projects match the applied filters."
+    },
     "members_import": {
       "title": "Import Members from CSV",
       "description": "Upload a CSV with columns: Email and Role (5=Guest, 15=Member, 20=Admin). Users must already be workspace members.",

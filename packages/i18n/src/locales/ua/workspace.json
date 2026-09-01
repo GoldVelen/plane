@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "Вирішені vs очікуючі робочі елементи",
     "projects_by_status": "Проєкти за статусом",
     "active_users": "Активні користувачі",
-    "intake_trends": "Тенденції прийому"
+    "intake_trends": "Тенденції прийому",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "Тривалість",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "Додати властивість",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {Проєкт} few {Проєкти} other {Проєктів}}",
@@ -214,7 +230,8 @@
             "title": "Усе починається з проєкту в Plane",
             "description": "Проєкт може бути дорожньою картою продукту, маркетинговою кампанією або розробкою нового авто."
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "Немає проєктів за цим фільтром",
@@ -223,6 +240,11 @@
       "search": {
         "description": "Не знайдено проєктів, що відповідають критеріям.\nСтворіть новий."
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

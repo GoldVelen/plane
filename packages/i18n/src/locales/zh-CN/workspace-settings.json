@@ -118,7 +118,11 @@
         "title": "账单与计划",
         "current_plan": "当前计划",
         "free_plan": "您目前使用的是免费计划",
-        "view_plans": "查看计划"
+        "view_plans": "查看计划",
+        "community": "社区版",
+        "community_description": "项目、工作项、周期、模块、页面和存储空间均不限量",
+        "all_plans": "所有计划",
+        "version": "版本：v{{version}}"
       },
       "exports": {
         "heading": "导出",
@@ -145,9 +149,9 @@
         }
       },
       "webhooks": {
-        "heading": "Webhooks",
+        "heading": "网络钩子",
         "description": "在项目事件发生时自动向外部服务发送通知。",
-        "title": "Webhooks",
+        "title": "网络钩子",
         "add_webhook": "添加 webhook",
         "modal": {
           "title": "创建 webhook",
@@ -163,6 +167,14 @@
         "options": {
           "all": "发送所有内容",
           "individual": "选择单个事件"
+        },
+        "events": {
+          "project": "项目创建、更新或删除",
+          "cycle": "周期创建、更新或删除",
+          "work_item": "工作项创建、更新、删除，或加入周期或模块",
+          "module": "模块创建、更新或删除",
+          "work_item_comments": "工作项评论",
+          "comment": "评论发布、更新或删除"
         },
         "toasts": {
           "created": {
@@ -206,6 +218,37 @@
         "never_expires": "永不过期",
         "generate_token": "生成令牌",
         "generating": "生成中",
+        "expiration_required": "请选择到期日期。",
+        "expiration_options": {
+          "one_week": "1 周",
+          "one_month": "1 个月",
+          "three_months": "3 个月",
+          "one_year": "1 年",
+          "custom": "自定义"
+        },
+        "custom_date": "自定义日期",
+        "set_expiration_date": "设置到期日期",
+        "set_date": "设置日期",
+        "expires_at": "将于 {{date}} {{time}} 到期",
+        "expired_ago": "已于 {{time}} 到期",
+        "status": {
+          "active": "有效",
+          "expired": "已过期"
+        },
+        "delete_token": "删除令牌",
+        "copy_secret_key": "复制密钥",
+        "csv": {
+          "title": "标题",
+          "description": "描述",
+          "expiry": "到期时间",
+          "secret_key": "密钥"
+        },
+        "empty_state": {
+          "image_alt": "暂无 API 令牌",
+          "title": "暂无 API 令牌",
+          "description": "创建 API 令牌，以安全、便捷地与外部应用共享数据，同时保留控制权并保障安全。",
+          "add": "添加令牌"
+        },
         "delete": {
           "title": "删除 API 令牌",
           "description": "使用此令牌的任何应用程序将无法再访问 Plane 数据。此操作无法撤消。",

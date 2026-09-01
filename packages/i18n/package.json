@@ -21,11 +21,13 @@
     "check:lint": "oxlint --max-warnings=9 .",
     "check:types": "pnpm run generate:types && tsc --noEmit",
     "check:format": "oxfmt --check .",
+    "test": "tsx --test src/**/*.test.ts",
     "fix:lint": "oxlint --fix .",
     "fix:format": "oxfmt .",
     "clean": "rm -rf .turbo && rm -rf .next && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
+    "date-fns": "catalog:",
     "i18next": "catalog:",
     "i18next-icu": "catalog:",
     "i18next-resources-to-backend": "catalog:",

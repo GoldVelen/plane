@@ -117,7 +117,7 @@ export const CreateWorkspace = observer(function CreateWorkspace(props: Props) {
           </Button>
           <div className="mx-auto mt-4 flex items-center sm:w-96">
             <hr className="w-full border-strong" />
-            <p className="mx-3 flex-shrink-0 text-center text-13 text-placeholder">or</p>
+            <p className="mx-3 flex-shrink-0 text-center text-13 text-placeholder">{t("common.or")}</p>
             <hr className="w-full border-strong" />
           </div>
         </>

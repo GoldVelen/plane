@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { Loader } from "lucide-react";
@@ -25,6 +26,7 @@ type TStateDelete = {
 };
 
 export const StateDelete = observer(function StateDelete(props: TStateDelete) {
+  const { t } = useTranslation();
   const { totalStates, state, deleteStateCallback } = props;
   // hooks
   const { isMobile } = usePlatformOS();
@@ -47,14 +49,14 @@ export const StateDelete = observer(function StateDelete(props: TStateDelete) {
       if (errorStatus.status === 400) {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message:
             "This state contains some work items within it, please move them to some other state to delete this state.",
         });
       } else {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message: "State could not be deleted. Please try again.",
         });
       }

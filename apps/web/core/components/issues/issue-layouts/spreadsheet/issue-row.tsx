@@ -10,6 +10,7 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { SPREADSHEET_SELECT_GROUP } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 // plane helpers
 import { useOutsideClickDetector } from "@plane/hooks";
 import { ChevronRightIcon } from "@plane/propel/icons";
@@ -170,6 +171,7 @@ interface IssueRowDetailsProps {
 }
 
 const IssueRowDetails = observer(function IssueRowDetails(props: IssueRowDetailsProps) {
+  const { t } = useTranslation();
   const {
     displayProperties,
     issueId,
@@ -308,13 +310,7 @@ const IssueRowDetails = observer(function IssueRowDetails(props: IssueRowDetails
               {/* select checkbox */}
               {projectId && canSelectIssues && (
                 <Tooltip
-                  tooltipContent={
-                    <>
-                      Only work items within the current
-                      <br />
-                      project can be selected.
-                    </>
-                  }
+                  tooltipContent={<>{t("issue.select.current_project_only")}</>}
                   disabled={issueDetail.project_id === projectId}
                 >
                   <div className="absolute left-1 mr-1 grid w-3.5 flex-shrink-0 place-items-center">

@@ -12,7 +12,7 @@ import { StateGroupIcon } from "@plane/propel/icons";
 import type { IState } from "@plane/types";
 // components
 import { Loader } from "@plane/ui";
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 // ui
 // types
 
@@ -84,7 +84,7 @@ export const FilterState = observer(function FilterState(props: Props) {
                 )}
               </>
             ) : (
-              <p className="text-11 text-placeholder italic">No matches found</p>
+              <FilterNoMatches />
             )
           ) : (
             <Loader className="space-y-2">

@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "Решенные vs ожидающие рабочие элементы",
     "projects_by_status": "Проекты по статусу",
     "active_users": "Активные пользователи",
-    "intake_trends": "Тенденции приёма"
+    "intake_trends": "Тенденции приёма",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "Продолжительность",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "Добавить свойство",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {Проект} other {Проекты}}",
@@ -214,7 +230,8 @@
             "title": "Всё начинается с проекта в Plane",
             "description": "Проектом может быть дорожная карта продукта, маркетинговая кампания или запуск нового автомобиля."
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "Нет подходящих проектов",
@@ -223,6 +240,11 @@
       "search": {
         "description": "Не найдено проектов по заданным критериям.\nСоздайте новый проект"
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

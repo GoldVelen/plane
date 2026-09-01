@@ -118,10 +118,7 @@ export function ProjectAppliedFiltersList(props: Props) {
       <Header.RightItem>
         <Tooltip
           tooltipContent={
-            <p>
-              <span className="font-semibold">{filteredProjects}</span> of{" "}
-              <span className="font-semibold">{totalProjects}</span> projects match the applied filters.
-            </p>
+            <p>{t("project.filters.applied_summary", { filtered: filteredProjects, total: totalProjects })}</p>
           }
         >
           <span className="rounded-full bg-layer-1 px-2.5 py-1 text-13 font-medium">

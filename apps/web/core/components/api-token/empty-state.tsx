@@ -6,6 +6,7 @@
 
 import React from "react";
 // ui
+import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 // assets
 import emptyApiTokens from "@/app/assets/empty-state/api-token.svg?url";
@@ -16,19 +17,26 @@ type Props = {
 
 export function ApiTokenEmptyState(props: Props) {
   const { onClick } = props;
+  const { t } = useTranslation();
 
   return (
     <div
       className={`mx-auto flex w-full items-center justify-center rounded-xs border border-subtle bg-surface-2 px-16 py-10 lg:w-3/4`}
     >
       <div className="flex w-full flex-col items-center text-center">
-        <img src={emptyApiTokens} className="w-52 object-contain sm:w-60" alt="empty" />
-        <h6 className="mt-6 mb-3 text-18 font-semibold sm:mt-8">No API tokens</h6>
+        <img
+          src={emptyApiTokens}
+          className="w-52 object-contain sm:w-60"
+          alt={t("workspace_settings.settings.api_tokens.empty_state.image_alt")}
+        />
+        <h6 className="mt-6 mb-3 text-18 font-semibold sm:mt-8">
+          {t("workspace_settings.settings.api_tokens.empty_state.title")}
+        </h6>
         <p className="mb-7 text-tertiary sm:mb-8">
-          Create API tokens for safe and easy data sharing with external apps, maintaining control and security.
+          {t("workspace_settings.settings.api_tokens.empty_state.description")}
         </p>
         <Button className="flex items-center gap-1.5" onClick={onClick}>
-          Add token
+          {t("workspace_settings.settings.api_tokens.empty_state.add")}
         </Button>
       </div>
     </div>

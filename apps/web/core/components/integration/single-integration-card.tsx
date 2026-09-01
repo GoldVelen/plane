@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
@@ -50,6 +51,7 @@ const integrationDetails: { [key: string]: any } = {
 const integrationService = new IntegrationService();
 
 export const SingleIntegrationCard = observer(function SingleIntegrationCard({ integration }: Props) {
+  const { t } = useTranslation();
   // states
   const [deletingIntegration, setDeletingIntegration] = useState(false);
   // router
@@ -100,7 +102,7 @@ export const SingleIntegrationCard = observer(function SingleIntegrationCard({ i
 
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message: `${integration.title} integration could not be deleted. Please try again.`,
         });
       });

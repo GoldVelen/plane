@@ -5,11 +5,13 @@
  */
 
 import { initPromise, i18nInstance } from "./instance";
+import { setDateLocale } from "./date-locale";
 import { LANGUAGE_STORAGE_KEY } from "../constants/language";
 import type { TLanguage } from "../types";
 
 export async function setLanguage(lng: TLanguage): Promise<void> {
   await initPromise;
+  await setDateLocale(lng);
   await i18nInstance.changeLanguage(lng);
   if (typeof window !== "undefined") {
     localStorage.setItem(LANGUAGE_STORAGE_KEY, lng);

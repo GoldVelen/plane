@@ -5,6 +5,7 @@
  */
 
 import { observer } from "mobx-react";
+import { useTranslation } from "@plane/i18n";
 import { ArrowDown, ArrowUp } from "lucide-react";
 // plane imports
 import { Button } from "@plane/propel/button";
@@ -31,6 +32,7 @@ export const shouldRenderPlanDetail = (planKey: TPlanePlans) => {
 };
 
 export const PlansComparisonBase = observer(function PlansComparisonBase(props: TPlansComparisonBaseProps) {
+  const { t } = useTranslation();
   const { planeDetails, isSelfManaged, isCompareAllFeaturesSectionOpen, setIsCompareAllFeaturesSectionOpen } = props;
   // plan details
   const { planDetails, planHighlights, planComparison } = PLANE_PLANS;
@@ -82,7 +84,7 @@ export const PlansComparisonBase = observer(function PlansComparisonBase(props: 
               {planComparison.map((section, sectionIdx) => (
                 <section key={sectionIdx} className="flex-shrink-0">
                   <h2 className="mb-2 flex items-start gap-2 pl-2 text-h5-semibold text-secondary">
-                    {section.title} {section.comingSoon && <ComingSoonBadge />}
+                    {section.i18nKey ? t(section.i18nKey) : section.title} {section.comingSoon && <ComingSoonBadge />}
                   </h2>
                   <div className="border-t border-subtle">
                     {section.features.map((feature, featureIdx) => (
@@ -93,7 +95,8 @@ export const PlansComparisonBase = observer(function PlansComparisonBase(props: 
                       >
                         <div className="col-span-1 flex items-center p-3 text-body-sm-medium">
                           <div className="flex w-full items-start justify-between gap-2">
-                            {feature.title} {feature.comingSoon && <ComingSoonBadge />}
+                            {feature.i18nKey ? t(feature.i18nKey) : feature.title}{" "}
+                            {feature.comingSoon && <ComingSoonBadge />}
                           </div>
                         </div>
                         {PLANS_LIST.map(

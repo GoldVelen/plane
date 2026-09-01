@@ -193,7 +193,8 @@
       "finish_before": "Kết thúc Trước",
       "finish_after": "Kết thúc Sau",
       "implements": "Thực hiện",
-      "implemented_by": "Được thực hiện bởi"
+      "implemented_by": "Được thực hiện bởi",
+      "add_related": "Add related work items"
     },
     "copy_link": "Sao chép liên kết mục công việc",
     "delete": {
@@ -211,7 +212,8 @@
       "empty": "Chưa chọn mục công việc",
       "add_selected": "Thêm mục công việc đã chọn",
       "select_all": "Chọn tất cả",
-      "deselect_all": "Bỏ chọn tất cả"
+      "deselect_all": "Bỏ chọn tất cả",
+      "current_project_only": "Only work items within the current project can be selected."
     },
     "open_in_full_screen": "Mở mục công việc trong chế độ toàn màn hình",
     "duplicate": {

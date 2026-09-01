@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useState, useRef, useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
@@ -49,6 +50,7 @@ type Props = {
 const fileService = new FileService();
 
 export const ImagePickerPopover = observer(function ImagePickerPopover(props: Props) {
+  const { t } = useTranslation();
   const { label, value, control, onChange, disabled = false, tabIndex, isProfileCover = false, projectId } = props;
   // states
   const [image, setImage] = useState<File | null>(null);
@@ -239,7 +241,7 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
                           )}
                         />
                         <Button variant="primary" size="xl" onClick={() => setSearchParams(formData.search)}>
-                          Search
+                          {t("search")}
                         </Button>
                       </div>
                       {unsplashImages ? (
@@ -312,7 +314,7 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
                           type="button"
                           className="absolute top-0 right-0 z-40 -translate-y-1/2 rounded-sm bg-surface-2 px-2 py-0.5 text-11 font-medium text-secondary"
                         >
-                          Edit
+                          {t("edit")}
                         </button>
                         {image !== null || (value && value !== "") ? (
                           <>
@@ -351,7 +353,7 @@ export const ImagePickerPopover = observer(function ImagePickerPopover(props: Pr
                           setImage(null);
                         }}
                       >
-                        Cancel
+                        {t("cancel")}
                       </Button>
                       <Button
                         variant="primary"

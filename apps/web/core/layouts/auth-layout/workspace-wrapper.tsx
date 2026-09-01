@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
@@ -47,6 +48,7 @@ interface IWorkspaceAuthWrapper {
 }
 
 export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props: IWorkspaceAuthWrapper) {
+  const { t } = useTranslation();
   const { children, isLoading: isParentLoading = false } = props;
   // router params
   const { workspaceSlug } = useParams();
@@ -131,8 +133,8 @@ export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props
     await signOut().catch(() =>
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
-        message: "Failed to sign out. Please try again.",
+        title: t("toast.error"),
+        message: t("auth.sign_out.toast.error.message"),
       })
     );
   };
@@ -180,7 +182,7 @@ export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props
             <div className="flex items-center justify-center gap-2 pt-4">
               {allWorkspaces && allWorkspaces.length > 0 && (
                 <Link href="/" className={cn(getButtonStyling("primary", "base"))}>
-                  Go Home
+                  {t("go_home")}
                 </Link>
               )}
               {allWorkspaces?.length > 0 && (
@@ -211,8 +213,9 @@ export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props
             <div className="space-y-2">
               <h3 className="text-16 font-semibold">Not Authorized!</h3>
               <p className="mx-auto w-1/2 text-13 text-secondary">
-                You{"'"}re not a member of this workspace. Please contact the workspace admin to get an invitation or
-                check your pending invitations.
+                {t("you")}
+                {"'"}re not a member of this workspace. Please contact the workspace admin to get an invitation or check
+                your pending invitations.
               </p>
             </div>
             <div className="flex items-center justify-center gap-2">

@@ -413,6 +413,9 @@
           "message": "Une erreur s'est produite."
         }
       }
+    },
+    "filters": {
+      "applied_summary": "{filtered} of {total} projects match the applied filters."
     }
   }
 }

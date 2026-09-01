@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "Çözülen vs bekleyen iş öğeleri",
     "projects_by_status": "Durumuna göre projeler",
     "active_users": "Aktif kullanıcılar",
-    "intake_trends": "Alım Eğilimleri"
+    "intake_trends": "Alım Eğilimleri",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "Süre",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "Özellik ekle",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {Proje} other {Projeler}}",
@@ -214,7 +230,8 @@
             "title": "Plane'de her şey bir projeyle başlar",
             "description": "Bir proje, bir ürünün yol haritası, bir pazarlama kampanyası veya yeni bir araba lansmanı olabilir."
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "Eşleşen proje yok",
@@ -223,6 +240,11 @@
       "search": {
         "description": "Eşleşen kriterlerle proje bulunamadı.\nBunun yerine yeni bir proje oluşturun"
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

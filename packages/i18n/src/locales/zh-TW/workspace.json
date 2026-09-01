@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "已解決 vs 待處理的工作項目",
     "projects_by_status": "按狀態分類的專案",
     "active_users": "活躍使用者",
-    "intake_trends": "入學趨勢"
+    "intake_trends": "入學趨勢",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "時長",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "新增屬性",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {專案} other {專案}}",
@@ -214,7 +230,8 @@
             "title": "在 Plane 中，一切都始於專案",
             "description": "專案可以是產品的藍圖、行銷活動，或是推出新車。"
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "沒有符合的專案",
@@ -223,6 +240,11 @@
       "search": {
         "description": "找不到符合篩選條件的專案。\n改為建立新專案"
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

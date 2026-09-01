@@ -413,6 +413,9 @@
           "message": "Ceva nu a funcționat."
         }
       }
+    },
+    "filters": {
+      "applied_summary": "{filtered} of {total} projects match the applied filters."
     }
   }
 }

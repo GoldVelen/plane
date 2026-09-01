@@ -11,7 +11,7 @@ import { INBOX_STATUS } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import type { TInboxIssueStatus } from "@plane/types";
 // components
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 // constants
 // hooks
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
@@ -66,7 +66,7 @@ export const FilterStatus = observer(function FilterStatus(props: Props) {
               />
             ))
           ) : (
-            <p className="text-11 text-placeholder italic">No matches found</p>
+            <FilterNoMatches />
           )}
         </div>
       )}

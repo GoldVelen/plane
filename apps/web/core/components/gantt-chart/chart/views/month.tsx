@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 // components
 import { cn } from "@plane/utils";
@@ -16,6 +17,7 @@ import type { IMonthView } from "../../views";
 import { getNumberOfDaysBetweenTwoDates } from "../../views/helpers";
 
 export const MonthChartView = observer(function MonthChartView(_props: any) {
+  const { t } = useTranslation();
   // chart hook
   const { currentViewData, renderView } = useTimeLineChartStore();
   const monthView: IMonthView = renderView;
@@ -57,7 +59,7 @@ export const MonthChartView = observer(function MonthChartView(_props: any) {
                     {monthBlock?.title}
                     {monthBlock.today && (
                       <span className={cn("ml-2 rounded-sm bg-accent-primary px-1 text-9 font-medium text-on-color")}>
-                        Current
+                        {t("current")}
                       </span>
                     )}
                   </div>

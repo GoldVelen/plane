@@ -6,16 +6,34 @@
       "archive_project": {
         "title": "封存專案",
         "description": "封存專案將不再從您的側邊導覽列中列出您的專案，但您仍然可以從專案頁面存取它。您可以隨時還原專案或刪除它。",
-        "button": "封存專案"
+        "button": "封存專案",
+        "modal_title": "Archive {project}",
+        "confirmation": "This project and its work items, cycles, modules, and pages will be archived. Its work items won't appear in search. Only project admins can restore the project.",
+        "archiving": "封存中",
+        "success_title": "Archive successful",
+        "success_message": "{project} has been archived successfully.",
+        "error_message": "Project could not be archived. Please try again."
       },
       "delete_project": {
         "title": "刪除專案",
         "description": "刪除專案時，該專案內的所有資料和資源都將被永久移除且無法復原。",
-        "button": "刪除我的專案"
+        "button": "刪除我的專案",
+        "confirmation_description": "Are you sure you want to delete project {project}? All data related to this project will be permanently removed. This action cannot be undone.",
+        "enter_project_name": "Enter the project name to continue:",
+        "enter_confirmation": "To confirm, type “{confirmation}” below:"
       },
       "toast": {
         "success": "專案更新成功",
         "error": "無法更新專案。請再試一次。"
+      },
+      "project_name_max_char": "Project name should be less than 255 characters",
+      "restore_project": {
+        "modal_title": "Restore {project}",
+        "confirmation": "Restoring a project will activate it and make it visible to all project members. Are you sure you want to continue?",
+        "restoring": "Restoring",
+        "success_title": "Restore successful",
+        "success_message": "You can now find {project} in your projects.",
+        "error_message": "Project could not be restored. Please try again."
       }
     },
     "members": {
@@ -33,7 +51,45 @@
       "invite_members": {
         "title": "邀請成員",
         "sub_heading": "邀請成員參與您的專案。",
-        "select_co_worker": "選擇同事"
+        "select_co_worker": "選擇同事",
+        "member_required": "Please select a member",
+        "role_required": "Please select a role",
+        "select_role": "Select role",
+        "success": "Members added successfully."
+      },
+      "remove_confirmation": {
+        "leave_title": "Leave project?",
+        "remove_title": "Remove {name}?",
+        "leave_description": "Are you sure you want to leave {project}? You can join again if you are invited or if the project is public.",
+        "remove_description": "Are you sure you want to remove {name}? They will no longer have access to this project. This action cannot be undone."
+      },
+      "join_confirmation": {
+        "title": "Join project?",
+        "description": "Are you sure you want to join {project}? Select Join project below to continue.",
+        "joining": "Joining",
+        "button": "加入專案"
+      },
+      "leave_confirmation": {
+        "title": "離開專案",
+        "description": "Are you sure you want to leave {project}? Work items assigned to you in this project will no longer be accessible.",
+        "enter_project_name": "Enter the project name {project} to continue:",
+        "confirmation_phrase": "Leave Project",
+        "enter_confirmation": "To confirm, type {confirmation} below:",
+        "project_name_placeholder": "Enter project name",
+        "confirmation_placeholder": "Enter the confirmation phrase",
+        "errors": {
+          "generic": "Something went wrong. Please try again later.",
+          "confirmation": "Enter the confirmation phrase exactly as shown.",
+          "project_name": "Enter the project name exactly as shown.",
+          "required": "Please fill in all fields."
+        }
+      },
+      "errors": {
+        "leave_failed_title": "You can’t leave this project yet.",
+        "remove_failed_title": "You can't remove the member from this project yet.",
+        "role_required": "Role is required.",
+        "role_failed_title": "You can’t change this role yet.",
+        "role_failed_message": "An error occurred while updating member role. Please try again."
       }
     },
     "states": {
@@ -428,6 +484,12 @@
         "loading": "正在更新專案功能...",
         "success": "專案功能更新成功。",
         "error": "更新專案功能時發生錯誤。請再試一次。"
+      },
+      "pro_feature": "Pro feature",
+      "toast": {
+        "loading": "Updating project feature",
+        "success": "專案功能更新成功。",
+        "error": "Something went wrong while updating the project feature. Please try again."
       }
     },
     "project_updates": {
@@ -521,6 +583,32 @@
           }
         }
       }
+    },
+    "title": "Project settings",
+    "integrations": {
+      "github_description": "Select a GitHub repository to enable sync.",
+      "slack_description": "Get regular updates and choose which notifications you want to receive.",
+      "logo_alt": "{integration} logo",
+      "select_repository": "Select repository",
+      "repository_sync_success": "Repository {repository} was synced with the project.",
+      "repository_sync_error": "Repository could not be synced with the project. Please try again."
+    },
+    "publish": {
+      "title": "發佈專案",
+      "settings_updated": "Publish settings updated successfully.",
+      "unpublish_error": "Something went wrong while unpublishing the project.",
+      "layout_required": "Select at least one view layout to publish the project.",
+      "link_copied": "Published page link copied successfully.",
+      "unpublishing": "Unpublishing",
+      "unpublish": "Unpublish",
+      "live_on_web": "This project is now live on the web",
+      "views": "檢視",
+      "allow_comments": "Allow comments",
+      "allow_reactions": "Allow reactions",
+      "allow_voting": "Allow voting",
+      "link_access": "Anyone with the link can access",
+      "update_settings": "Update settings",
+      "publishing": "Publishing"
     }
   }
 }

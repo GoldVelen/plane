@@ -193,7 +193,8 @@
       "finish_before": "Selesai Sebelum",
       "finish_after": "Selesai Setelah",
       "implements": "Menerapkan",
-      "implemented_by": "Diterapkan oleh"
+      "implemented_by": "Diterapkan oleh",
+      "add_related": "Add related work items"
     },
     "copy_link": "Salin tautan item kerja",
     "delete": {
@@ -211,7 +212,8 @@
       "empty": "Tidak ada item kerja yang dipilih",
       "add_selected": "Tambah item kerja yang dipilih",
       "select_all": "Pilih semua item kerja",
-      "deselect_all": "Batalkan pilihan semua item kerja"
+      "deselect_all": "Batalkan pilihan semua item kerja",
+      "current_project_only": "Only work items within the current project can be selected."
     },
     "open_in_full_screen": "Buka item kerja dalam layar penuh",
     "duplicate": {

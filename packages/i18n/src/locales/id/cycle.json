@@ -20,7 +20,8 @@
   },
   "cycle": {
     "label": "{count, plural, one {Siklus} other {Siklus}}",
-    "no_cycle": "Tidak ada siklus"
+    "no_cycle": "Tidak ada siklus",
+    "select": "Select cycle"
   },
   "active_cycle_analytics": {
     "empty_state": {

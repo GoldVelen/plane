@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "Vyriešené vs. čakajúce pracovné položky",
     "projects_by_status": "Projekty podľa stavu",
     "active_users": "Aktívni používatelia",
-    "intake_trends": "Trendy prijímania"
+    "intake_trends": "Trendy prijímania",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "Trvanie",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "Pridať vlastnosť",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {Projekt} few {Projekty} other {Projektov}}",
@@ -214,7 +230,8 @@
             "title": "Všetko začína projektom v Plane",
             "description": "Projektom môže byť roadmapa produktu, marketingová kampaň alebo uvedenie nového auta."
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "Žiadne zodpovedajúce projekty",
@@ -223,6 +240,11 @@
       "search": {
         "description": "Nenašli sa projekty zodpovedajúce kritériám.\nVytvorte nový."
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

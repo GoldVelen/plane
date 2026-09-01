@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 // components
 import { ModuleIcon } from "@plane/propel/icons";
 import { Loader } from "@plane/ui";
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 import { useModule } from "@/hooks/store/use-module";
 // ui
 
@@ -85,7 +85,7 @@ export const FilterModule = observer(function FilterModule(props: Props) {
                 )}
               </>
             ) : (
-              <p className="text-11 text-placeholder italic">No matches found</p>
+              <FilterNoMatches />
             )
           ) : (
             <Loader className="space-y-2">

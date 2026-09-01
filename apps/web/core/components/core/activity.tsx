@@ -7,6 +7,7 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
+import { useTranslation } from "@plane/i18n";
 // store hooks
 // icons
 import {
@@ -152,7 +153,12 @@ const getInboxUserActivityMessage = (activity: IIssueActivity, showIssue: boolea
 
 const activityDetails: {
   [key: string]: {
-    message: (activity: IIssueActivity, showIssue: boolean, workspaceSlug: string) => React.ReactNode;
+    message: (
+      activity: IIssueActivity,
+      showIssue: boolean,
+      workspaceSlug: string,
+      t: (key: string, params?: Record<string, unknown>) => string
+    ) => React.ReactNode;
     icon: React.ReactNode;
   };
 } = {
@@ -275,11 +281,11 @@ const activityDetails: {
     icon: <TriangleIcon size={12} className="text-secondary" aria-hidden="true" />,
   },
   issue: {
-    message: (activity) => {
+    message: (activity, _showIssue, _workspaceSlug, t) => {
       if (activity.verb === "created")
         return (
           <>
-            created <IssueLink activity={activity} />
+            {t("studio.forms.action_created")} <IssueLink activity={activity} />
           </>
         );
       else if (activity.verb === "converted")
@@ -298,11 +304,11 @@ const activityDetails: {
     icon: <WorkItemsIcon width={12} height={12} className="text-secondary" aria-hidden="true" />,
   },
   epic: {
-    message: (activity) => {
+    message: (activity, _showIssue, _workspaceSlug, t) => {
       if (activity.verb === "created")
         return (
           <>
-            created <IssueLink activity={activity} />
+            {t("studio.forms.action_created")} <IssueLink activity={activity} />
           </>
         );
       else if (activity.verb === "converted")
@@ -759,6 +765,7 @@ type ActivityMessageProps = {
 };
 
 export function ActivityMessage({ activity, showIssue = false }: ActivityMessageProps) {
+  const { t } = useTranslation();
   // router params
   const { workspaceSlug } = useParams();
   const activityField = activity.field ?? "issue";
@@ -768,7 +775,8 @@ export function ActivityMessage({ activity, showIssue = false }: ActivityMessage
       {activityDetails[activityField as keyof typeof activityDetails]?.message(
         activity,
         showIssue,
-        workspaceSlug ? workspaceSlug.toString() : (activity.workspace_detail?.slug ?? "")
+        workspaceSlug ? workspaceSlug.toString() : (activity.workspace_detail?.slug ?? ""),
+        t
       )}
     </>
   );

@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import Link from "next/link";
+import { useTranslation } from "@plane/i18n";
 import { GOD_MODE_URL } from "@plane/constants";
 // assets
 import GradientLogo from "@/app/assets/auth/gradient-logo.webp?url";
@@ -14,6 +14,7 @@ import { PlaneLockup } from "@plane/propel/icons";
 import { Button } from "@plane/propel/button";
 
 export function InstanceNotReady() {
+  const { t } = useTranslation();
   return (
     <DefaultLayout>
       <div className="relative z-10 flex h-screen w-screen overflow-hidden">
@@ -47,7 +48,7 @@ export function InstanceNotReady() {
             </div>
             <a href={GOD_MODE_URL} className="w-72">
               <Button variant="primary" className="w-full" size="xl">
-                Get started
+                {t("common.get_started")}
               </Button>
             </a>
           </div>

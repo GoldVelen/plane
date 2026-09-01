@@ -12,7 +12,7 @@ import { CycleGroupIcon } from "@plane/propel/icons";
 import type { TCycleGroups } from "@plane/types";
 // components
 import { Loader } from "@plane/ui";
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 import { useCycle } from "@/hooks/store/use-cycle";
 // ui
 // types
@@ -95,7 +95,7 @@ export const FilterCycle = observer(function FilterCycle(props: Props) {
                 )}
               </>
             ) : (
-              <p className="text-11 text-placeholder italic">No matches found</p>
+              <FilterNoMatches />
             )
           ) : (
             <Loader className="space-y-2">

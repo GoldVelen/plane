@@ -193,7 +193,8 @@
       "finish_before": "在之前完成",
       "finish_after": "在之後完成",
       "implements": "實現",
-      "implemented_by": "實現者"
+      "implemented_by": "實現者",
+      "add_related": "Add related work items"
     },
     "copy_link": "複製工作事項連結",
     "delete": {
@@ -211,7 +212,8 @@
       "empty": "未選擇工作事項",
       "add_selected": "新增已選取的工作事項",
       "select_all": "全選",
-      "deselect_all": "取消全選"
+      "deselect_all": "取消全選",
+      "current_project_only": "Only work items within the current project can be selected."
     },
     "open_in_full_screen": "以全螢幕開啟工作事項",
     "duplicate": {

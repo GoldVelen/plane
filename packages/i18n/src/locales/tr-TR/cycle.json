@@ -20,7 +20,8 @@
   },
   "cycle": {
     "label": "{count, plural, one {Döngü} other {Döngüler}}",
-    "no_cycle": "Döngü yok"
+    "no_cycle": "Döngü yok",
+    "select": "Select cycle"
   },
   "active_cycle_analytics": {
     "empty_state": {

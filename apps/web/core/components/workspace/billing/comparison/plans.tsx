@@ -26,7 +26,8 @@ export type TPlanDetail = {
 };
 
 type TPlanFeatureDetails = {
-  title: React.ReactNode;
+  title?: React.ReactNode;
+  i18nKey?: string;
   description?: React.ReactNode;
   selfHostedDescription?: React.ReactNode;
   comingSoon?: boolean;
@@ -37,7 +38,8 @@ type TPlanFeatureDetails = {
 
 type TPlansComparisonDetails = {
   id: string;
-  title: React.ReactNode;
+  title?: React.ReactNode;
+  i18nKey?: string;
   comingSoon?: boolean;
   cloudOnly?: boolean;
   selfHostedOnly?: boolean;
@@ -75,7 +77,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
     title: "Project + work tracking",
     features: [
       {
-        title: "Projects",
+        i18nKey: "projects",
         description: "Add projects to house work items, cycles, and modules.",
         cloud: {
           free: true,
@@ -86,7 +88,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Work items",
+        i18nKey: "work_items",
         description: "Add work via work items, set properties for tracking, and add to\ncycles or modules.",
         cloud: {
           free: true,
@@ -97,7 +99,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Comments",
+        i18nKey: "comments",
         description: "Respond to work items, @mention members, and brainstorm\ntogether without leaving Plane.",
         cloud: {
           free: true,
@@ -108,7 +110,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Cycles",
+        i18nKey: "cycles",
         description: "Track work in timeboxes with differing frequency.",
         cloud: {
           free: true,
@@ -119,7 +121,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Modules",
+        i18nKey: "modules",
         description: "Group replicable work in modules with their own\nleads.",
         cloud: {
           free: true,
@@ -130,7 +132,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Intake",
+        i18nKey: "intake",
         description:
           "See suggestions and feedback from viewers and\nguests before you decide to add them to your\nproject.",
         cloud: {
@@ -142,7 +144,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Estimates",
+        i18nKey: "project_settings.estimates.title",
         description: "Measure effort in points in a system that works for\nyou.",
         cloud: {
           free: "Basic",
@@ -202,7 +204,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Work item Types",
+        i18nKey: "work_item_types.label",
         description: "Create your own work item types with your own\nproperties.",
         cloud: {
           free: false,
@@ -258,7 +260,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Epics",
+        i18nKey: "common.epics",
         description: "Organize long-term work in epics that house work items,\ncycles, and modules.",
         cloud: {
           free: false,
@@ -485,7 +487,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Views",
+        i18nKey: "views",
         description: "Save sort, filter, and display options on a layout to a\nview.",
         cloud: {
           free: true,
@@ -703,7 +705,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Guests",
+        i18nKey: "common.roles.guests",
         description: "Let some users see everything or just their work items in\na project.",
         cloud: {
           free: false,
@@ -806,7 +808,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
     title: "Knowledge management",
     features: [
       {
-        title: "Pages",
+        i18nKey: "pages",
         description: "Build knowledge bases for your teams which are\naccessible & shareable.",
         cloud: {
           free: true,
@@ -850,7 +852,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Publish",
+        i18nKey: "publish",
         description:
           "Put your pages on the web for external users and let\nthem comment without signing into your workspace.",
         cloud: {
@@ -873,7 +875,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Exports",
+        i18nKey: "workspace_settings.settings.exports.title",
         description: "Export page content into PDFs or Word-compatible\ndocs.",
         cloud: {
           free: false,
@@ -884,7 +886,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Templates",
+        i18nKey: "templates.settings.title",
         description: "Use pages as templates for your project, team, or\nworkspace.",
         cloud: {
           free: false,
@@ -919,7 +921,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
         },
       },
       {
-        title: "Nested Pages",
+        i18nKey: "wiki.upgrade_flow.tabs.nested_pages",
         description: "Pages inside a page, organize your pages\nas you see fit for the progressive\ndisclosure.",
         comingSoon: true,
         cloud: {
@@ -962,7 +964,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   },
   {
     id: "integrations",
-    title: "Integrations",
+    i18nKey: "integrations.integrations",
     comingSoon: true,
     features: [
       {
@@ -1054,7 +1056,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   },
   {
     id: "security",
-    title: "Security",
+    i18nKey: "security",
     features: [
       {
         title: "SAML",
@@ -1203,7 +1205,7 @@ export const PLANS_COMPARISON_LIST: TPlansComparisonDetails[] = [
   },
   {
     id: "support",
-    title: "Support",
+    i18nKey: "support",
     features: [
       {
         title: "Channels",

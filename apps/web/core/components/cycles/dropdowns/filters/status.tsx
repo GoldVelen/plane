@@ -10,7 +10,7 @@ import { CYCLE_STATUS } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import type { TCycleGroups } from "@plane/types";
 // components
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 // types
 // constants
 
@@ -48,7 +48,7 @@ export const FilterStatus = observer(function FilterStatus(props: Props) {
               />
             ))
           ) : (
-            <p className="text-11 text-placeholder italic">No matches found</p>
+            <FilterNoMatches />
           )}
         </div>
       )}

@@ -8,8 +8,116 @@
 //   tsx packages/i18n/scripts/sync-check.ts          # Report only
 //   tsx packages/i18n/scripts/sync-check.ts --ci     # Exit 1 if issues found
 
+import fs from "node:fs";
+import path from "node:path";
+import ts from "typescript";
 import type { LocaleData } from "./lib/locale-io.js";
 import { LOCALES_DIR, listLocales, loadLocale } from "./lib/locale-io.js";
+
+const REPO_ROOT = path.resolve(import.meta.dirname, "../../..");
+
+const SOURCE_EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx"]);
+const SOURCE_DIRECTORY_EXCLUDES = new Set([".next", ".turbo", "dist", "node_modules"]);
+
+const AUDITED_UI_PATHS = [
+  "apps/web/core/components/project",
+  "apps/web/core/components/settings/project",
+  "apps/web/core/components/analytics",
+  "apps/web/core/components/archives",
+  "apps/web/core/components/api-token",
+  "apps/web/core/components/issues/issue-layouts/spreadsheet",
+  "apps/web/core/components/sidebar",
+  "apps/web/core/components/settings/profile/content/pages/general/form.tsx",
+];
+
+const UI_COPY_PROPS = new Set([
+  "aria-label",
+  "buttonTitle",
+  "description",
+  "emptyStateMessage",
+  "heading",
+  "label",
+  "message",
+  "placeholder",
+  "subHeading",
+  "text",
+  "title",
+  "tooltipContent",
+]);
+
+const NON_UI_COPY_VALUES = new Set(["&nbsp;", "text-11", "text-13", "text-14", "text-16", "text-11 font-medium"]);
+
+// Any high-confidence hardcoded UI copy across the Web app is a regression.
+const LEGACY_WEB_UI_COPY_BASELINE = 0;
+
+const ZH_CN_EQUAL_VALUE_ALLOWLIST = new Set([
+  "auth:auth.common.email.placeholder",
+  "auth:auth.common.unique_code.placeholder",
+  "auth:auth.sign_in.header.step.email.sub_header",
+  "auth:auth.sign_up.header.step.email.sub_header",
+  "auth:sso.domain_management.verified_domains.add_domain.form.domain_placeholder",
+  "auth:sso.providers.saml.setup_modal.mapping_table.table.idp",
+  "auth:sso.providers.saml.setup_modal.mapping_table.table.plane",
+  "automation:automations.trigger.schedule.am",
+  "automation:automations.trigger.schedule.cron_expression_placeholder",
+  "automation:automations.trigger.schedule.main_content_cron_summary",
+  "automation:automations.trigger.schedule.pm",
+  "automation:automations.trigger.schedule.schedule_mode_cron",
+  "common:common.url",
+  "common:exporter.csv.title",
+  "common:exporter.excel.title",
+  "common:exporter.json.title",
+  "common:exporter.xlsx.title",
+  "common:link.modal.url.text",
+  "inbox:inbox_issue.order_by.id",
+  "integration:bitbucket_dc_integration.name",
+  "integration:github_enterprise_integration.app_id_title",
+  "integration:github_enterprise_integration.app_name_title",
+  "integration:github_enterprise_integration.base_url_title",
+  "integration:github_enterprise_integration.client_id_title",
+  "integration:github_enterprise_integration.client_secret_title",
+  "integration:github_enterprise_integration.name",
+  "integration:github_enterprise_integration.webhook_secret_title",
+  "integration:github_integration.name",
+  "integration:gitlab_enterprise_integration.name",
+  "integration:gitlab_integration.name",
+  "integration:oauth_bridge_integration.name",
+  "integration:oauth_bridge_integration.provider_form.audience_placeholder",
+  "integration:oauth_bridge_integration.provider_form.issuer_placeholder",
+  "integration:oauth_bridge_integration.provider_form.jwks_url_label",
+  "integration:oauth_bridge_integration.provider_form.jwks_url_placeholder",
+  "integration:oauth_bridge_integration.provider_form.rate_limit_placeholder",
+  "integration:sentry_integration.name",
+  "integration:slack_integration.name",
+  "navigation:sidebar.plane_pro",
+  "settings:account_settings.profile.change_email_modal.form.code.placeholder",
+  "studio:studio.enums.content_channel.X",
+  "studio:studio.enums.feedback_source.APP_STORE",
+  "studio:studio.enums.github_kind.CI",
+  "studio:studio.enums.priority.P0",
+  "studio:studio.enums.priority.P1",
+  "studio:studio.enums.priority.P2",
+  "studio:studio.enums.priority.P3",
+  "studio:studio.forms.placeholder_version",
+  "studio:studio.metrics.key_placeholder",
+  "studio:studio.navigation.studio",
+  "template:templates.settings.form.publish.company_name.placeholder",
+  "template:templates.settings.form.publish.contact_email.placeholder",
+  "template:templates.settings.form.publish.privacy_policy_url.placeholder",
+  "template:templates.settings.form.publish.terms_of_service_url.placeholder",
+  "template:templates.settings.form.publish.website.placeholder",
+  "work-item:issue.display.properties.id",
+  "workspace-settings:workspace_settings.settings.applications.redirect_uris.placeholder",
+  "workspace-settings:workspace_settings.settings.applications.setup_url.placeholder",
+  "workspace-settings:workspace_settings.settings.applications.webhook_url.label",
+  "workspace-settings:workspace_settings.settings.applications.webhook_url.placeholder",
+  "workspace-settings:workspace_settings.settings.applications.webhook_url_title",
+  "workspace-settings:workspace_settings.settings.applications.website.placeholder",
+  "workspace-settings:workspace_settings.settings.members.modal.placeholder",
+  "workspace-settings:workspace_settings.settings.plane-intelligence.heading",
+  "workspace-settings:workspace_settings.settings.plane-intelligence.title",
+  "workspace-settings:workspace_settings.settings.runners.title",
+]);
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -18,6 +126,192 @@ import { LOCALES_DIR, listLocales, loadLocale } from "./lib/locale-io.js";
 /** Format a number with commas (e.g. 7712 -> "7,712"). */
 function fmt(n: number): string {
   return n.toLocaleString("en-US");
+}
+
+function listSourceFiles(relativePaths: string[]): string[] {
+  const files: string[] = [];
+
+  const visit = (targetPath: string) => {
+    const stat = fs.statSync(targetPath);
+    if (stat.isFile()) {
+      if (SOURCE_EXTENSIONS.has(path.extname(targetPath))) files.push(targetPath);
+      return;
+    }
+
+    for (const entry of fs.readdirSync(targetPath, { withFileTypes: true })) {
+      if (entry.isDirectory() && SOURCE_DIRECTORY_EXCLUDES.has(entry.name)) continue;
+      const entryPath = path.join(targetPath, entry.name);
+      if (entry.isDirectory()) visit(entryPath);
+      else if (SOURCE_EXTENSIONS.has(path.extname(entry.name))) files.push(entryPath);
+    }
+  };
+
+  for (const relativePath of relativePaths) visit(path.join(REPO_ROOT, relativePath));
+  return files;
+}
+
+function createSourceFile(filePath: string, source: string): ts.SourceFile {
+  const scriptKind = filePath.endsWith("x") ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
+  return ts.createSourceFile(filePath, source, ts.ScriptTarget.Latest, true, scriptKind);
+}
+
+interface SourceIssue {
+  file: string;
+  line: number;
+  value: string;
+}
+
+function sourceIssue(filePath: string, sourceFile: ts.SourceFile, node: ts.Node, value: string): SourceIssue {
+  const position = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
+  return {
+    file: path.relative(REPO_ROOT, filePath),
+    line: position.line + 1,
+    value,
+  };
+}
+
+function findStaticTranslationKeyIssues(validKeys: Set<string>): SourceIssue[] {
+  const issues: SourceIssue[] = [];
+  const files = listSourceFiles(["apps", "packages"]);
+
+  for (const filePath of files) {
+    const source = fs.readFileSync(filePath, "utf8");
+    if (!source.includes("useTranslation") && !source.includes("i18nInstance")) continue;
+    const sourceFile = createSourceFile(filePath, source);
+
+    const visit = (node: ts.Node) => {
+      if (ts.isCallExpression(node)) {
+        const expression = node.expression;
+        const isTranslationCall =
+          (ts.isIdentifier(expression) && expression.text === "t") ||
+          (ts.isPropertyAccessExpression(expression) && expression.name.text === "t");
+        const firstArgument = node.arguments[0];
+        if (isTranslationCall && firstArgument && ts.isStringLiteralLike(firstArgument)) {
+          const key = firstArgument.text;
+          if (key && !validKeys.has(key)) issues.push(sourceIssue(filePath, sourceFile, firstArgument, key));
+        }
+      }
+      ts.forEachChild(node, visit);
+    };
+
+    visit(sourceFile);
+  }
+
+  return issues.toSorted((a, b) => a.file.localeCompare(b.file) || a.line - b.line);
+}
+
+function flattenValues(
+  value: Record<string, unknown>,
+  prefix = "",
+  flattened: Map<string, unknown> = new Map()
+): Map<string, unknown> {
+  for (const [key, child] of Object.entries(value)) {
+    const childPath = prefix ? `${prefix}.${key}` : key;
+    if (child !== null && typeof child === "object" && !Array.isArray(child)) {
+      flattenValues(child as Record<string, unknown>, childPath, flattened);
+    } else {
+      flattened.set(childPath, child);
+    }
+  }
+  return flattened;
+}
+
+function getNamespaceValues(localeData: LocaleData): Map<string, unknown> {
+  const values = new Map<string, unknown>();
+  for (const namespace of localeData.namespaces) {
+    for (const [key, value] of flattenValues(namespace.data)) values.set(`${namespace.name}:${key}`, value);
+  }
+  return values;
+}
+
+interface LocaleValueIssue {
+  key: string;
+  value: string;
+}
+
+function findUntranslatedChineseValues(enData: LocaleData, zhData: LocaleData): LocaleValueIssue[] {
+  const enValues = getNamespaceValues(enData);
+  const zhValues = getNamespaceValues(zhData);
+  const issues: LocaleValueIssue[] = [];
+
+  for (const [key, enValue] of enValues) {
+    const zhValue = zhValues.get(key);
+    if (typeof enValue === "string" && enValue === zhValue && !ZH_CN_EQUAL_VALUE_ALLOWLIST.has(key)) {
+      issues.push({ key, value: enValue });
+    }
+  }
+
+  return issues.toSorted((a, b) => a.key.localeCompare(b.key));
+}
+
+function getEnglishValuesWithChineseTranslations(enData: LocaleData, zhData: LocaleData): Set<string> {
+  const enValues = getNamespaceValues(enData);
+  const zhValues = getNamespaceValues(zhData);
+  const translatedValues = new Set<string>();
+
+  for (const [key, enValue] of enValues) {
+    const zhValue = zhValues.get(key);
+    if (typeof enValue === "string" && typeof zhValue === "string" && enValue !== zhValue) {
+      translatedValues.add(enValue);
+    }
+  }
+
+  return translatedValues;
+}
+
+function normalizeUiCopy(value: string): string {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function findHardcodedUiCopy(relativePaths: string[], translatedEnglishValues?: Set<string>): SourceIssue[] {
+  const issues: SourceIssue[] = [];
+  const files = listSourceFiles(relativePaths).filter(
+    (filePath) =>
+      [".tsx", ".jsx"].includes(path.extname(filePath)) &&
+      !filePath.includes(".stories.") &&
+      !filePath.includes(".test.") &&
+      !filePath.includes(".spec.")
+  );
+
+  const addIssue = (filePath: string, sourceFile: ts.SourceFile, node: ts.Node, rawValue: string) => {
+    const value = normalizeUiCopy(rawValue);
+    if (!value || NON_UI_COPY_VALUES.has(value) || /^[.,:;!?()-]+$/.test(value)) return;
+    if (translatedEnglishValues ? !translatedEnglishValues.has(value) : !/[A-Za-z]{2}/.test(value)) return;
+    issues.push(sourceIssue(filePath, sourceFile, node, value));
+  };
+
+  for (const filePath of files) {
+    const source = fs.readFileSync(filePath, "utf8");
+    const sourceFile = createSourceFile(filePath, source);
+
+    const visit = (node: ts.Node) => {
+      if (ts.isJsxText(node)) addIssue(filePath, sourceFile, node, node.text);
+
+      if (
+        ts.isJsxAttribute(node) &&
+        UI_COPY_PROPS.has(node.name.text) &&
+        node.initializer &&
+        ts.isStringLiteral(node.initializer)
+      ) {
+        addIssue(filePath, sourceFile, node, node.initializer.text);
+      }
+
+      if (
+        ts.isPropertyAssignment(node) &&
+        (ts.isIdentifier(node.name) || ts.isStringLiteral(node.name)) &&
+        UI_COPY_PROPS.has(node.name.text) &&
+        ts.isStringLiteralLike(node.initializer)
+      ) {
+        addIssue(filePath, sourceFile, node, node.initializer.text);
+      }
+
+      ts.forEachChild(node, visit);
+    };
+
+    visit(sourceFile);
+  }
+
+  return issues.toSorted((a, b) => a.file.localeCompare(b.file) || a.line - b.line);
 }
 
 // ---------------------------------------------------------------------------
@@ -126,6 +420,7 @@ function compareToEnglish(enKeys: Set<string>, other: LocaleData): LocaleCompari
 
 function main() {
   const ciMode = process.argv.includes("--ci");
+  const reportHardcodedUi = process.argv.includes("--report-hardcoded");
 
   // Discover all locale directories
   const localeDirs = listLocales();
@@ -142,10 +437,20 @@ function main() {
   }
 
   const enData = localeDataMap.get("en")!;
+  const zhData = localeDataMap.get("zh-CN");
+  if (!zhData) {
+    console.error("ERROR: Simplified Chinese locale (zh-CN) not found in", LOCALES_DIR);
+    process.exit(1);
+  }
 
   // Run checks
   const collisions = findCollisions(enData);
   const pathConflicts = findPathConflicts(enData);
+  const staticTranslationKeyIssues = findStaticTranslationKeyIssues(enData.allKeys);
+  const untranslatedChineseValues = findUntranslatedChineseValues(enData, zhData);
+  const translatedEnglishValues = getEnglishValuesWithChineseTranslations(enData, zhData);
+  const auditedUiCopyIssues = findHardcodedUiCopy(AUDITED_UI_PATHS);
+  const webUiCopyIssues = findHardcodedUiCopy(["apps/web"], translatedEnglishValues);
 
   const comparisons: LocaleComparison[] = [];
   for (const locale of localeDirs) {
@@ -192,6 +497,51 @@ function main() {
     }
   }
 
+  if (staticTranslationKeyIssues.length > 0) {
+    hasFailure = true;
+    console.log("\nINVALID STATIC TRANSLATION KEYS:");
+    for (const issue of staticTranslationKeyIssues.slice(0, 50)) {
+      console.log(`  ✗ ${issue.file}:${issue.line} — ${JSON.stringify(issue.value)}`);
+    }
+    if (staticTranslationKeyIssues.length > 50) {
+      console.log(`  ... and ${fmt(staticTranslationKeyIssues.length - 50)} more`);
+    }
+  }
+
+  if (untranslatedChineseValues.length > 0) {
+    hasFailure = true;
+    console.log("\nUNTRANSLATED SIMPLIFIED CHINESE VALUES:");
+    for (const issue of untranslatedChineseValues) {
+      console.log(`  ✗ ${issue.key} = ${JSON.stringify(issue.value)}`);
+    }
+  }
+
+  if (auditedUiCopyIssues.length > 0) {
+    hasFailure = true;
+    console.log("\nHARDCODED UI COPY IN AUDITED CORE PATHS:");
+    for (const issue of auditedUiCopyIssues) {
+      console.log(`  ✗ ${issue.file}:${issue.line} — ${JSON.stringify(issue.value)}`);
+    }
+  }
+
+  if (webUiCopyIssues.length > LEGACY_WEB_UI_COPY_BASELINE) {
+    hasFailure = true;
+    console.log(
+      `\nHARDCODED WEB UI COPY REGRESSION: ${fmt(webUiCopyIssues.length)} matches exceeds the ${fmt(LEGACY_WEB_UI_COPY_BASELINE)}-match baseline.`
+    );
+  }
+
+  if (reportHardcodedUi && webUiCopyIssues.length > 0) {
+    console.log("\nHARDCODED WEB UI COPY INVENTORY:");
+    for (const issue of webUiCopyIssues) {
+      console.log(`  - ${issue.file}:${issue.line} — ${JSON.stringify(issue.value)}`);
+    }
+  }
+
+  console.log(
+    `\n  Web hardcoded UI inventory: ${fmt(webUiCopyIssues.length)} high-confidence matches across the full app (baseline ${fmt(LEGACY_WEB_UI_COPY_BASELINE)}).`
+  );
+
   // Missing keys detail
   const withMissing = comparisons.filter((c) => c.missingKeys.length > 0);
   if (withMissing.length > 0) {
@@ -228,12 +578,12 @@ function main() {
 
   // CI exit code
   if (ciMode && hasFailure) {
-    console.log("CI mode: exiting with code 1 due to missing keys, collisions, or path conflicts.");
+    console.log("CI mode: exiting with code 1 due to localization integrity failures.");
     process.exit(1);
   }
 
   if (!hasFailure) {
-    console.log("\nAll locales are in sync with English. No issues found.");
+    console.log("\nAll locale keys, static translation calls, Chinese values, and audited core UI paths passed.");
   }
 }
 

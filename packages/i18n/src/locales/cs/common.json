@@ -817,7 +817,8 @@
     "all_issues": "Všechny položky",
     "assigned": "Přiřazeno",
     "created": "Vytvořeno",
-    "subscribed": "Odebíráno"
+    "subscribed": "Odebíráno",
+    "unassigned": "Nepřiřazeno"
   },
   "description_versions": {
     "last_edited_by": "Naposledy upraveno uživatelem",
@@ -872,5 +873,17 @@
       "description": "Exportujte položky do JSON.",
       "short_description": "Exportovat jako JSON"
     }
-  }
+  },
+  "project_work_item_count": "{count, plural, one {There is # work item in this project} other {There are # work items in this project}}",
+  "archived_work_item_count": "{count, plural, one {# archived work item} other {# archived work items}}",
+  "count": {
+    "link": "{count, plural, one {# link} other {# links}}",
+    "attachment": "{count, plural, one {# attachment} other {# attachments}}",
+    "sub_work_item": "{count, plural, one {# sub-work item} other {# sub-work items}}"
+  },
+  "identifier": "Identifier",
+  "access": "Access",
+  "join": "Připojit se",
+  "enabled": "Povoleno",
+  "disabled": "Zakázáno"
 }

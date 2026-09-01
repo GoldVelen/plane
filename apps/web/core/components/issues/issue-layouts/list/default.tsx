@@ -90,7 +90,7 @@ export const List = observer(function List(props: IList) {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const groups = getGroupByColumns({
-    allItemsLabel: isEpic ? t("common.entity.all", { entity: t("common.epics") }) : t("default_global_view.all_issues"),
+    allItemsLabel: isEpic ? t("entity.all", { entity: t("common.epics") }) : t("default_global_view.all_issues"),
     groupBy: group_by as GroupByColumnTypes,
     includeNone: true,
     isWorkspaceLevel: isWorkspaceLevel(storeType),

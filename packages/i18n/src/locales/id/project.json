@@ -413,6 +413,9 @@
           "message": "Terjadi kesalahan."
         }
       }
+    },
+    "filters": {
+      "applied_summary": "{filtered} of {total} projects match the applied filters."
     }
   }
 }

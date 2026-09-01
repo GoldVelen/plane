@@ -144,7 +144,13 @@
   "your_work": "Your work",
   "drafts": "Drafts",
   "projects": "Projects",
+  "identifier": "Identifier",
+  "access": "Access",
+  "join": "Join",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
   "project_work_item_count": "{count, plural, one {There is # work item in this project} other {There are # work items in this project}}",
+  "archived_work_item_count": "{count, plural, one {# archived work item} other {# archived work items}}",
   "views": "Views",
   "archives": "Archives",
   "settings": "Settings",
@@ -762,6 +768,11 @@
       "success": "{entity} removed successfully",
       "failed": "Error removing {entity}"
     }
+  },
+  "count": {
+    "link": "{count, plural, one {# link} other {# links}}",
+    "attachment": "{count, plural, one {# attachment} other {# attachments}}",
+    "sub_work_item": "{count, plural, one {# sub-work item} other {# sub-work items}}"
   },
   "attachment": {
     "error": "File could not be attached. Try uploading again.",

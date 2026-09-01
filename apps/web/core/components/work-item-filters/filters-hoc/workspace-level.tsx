@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useCallback, useMemo, useState } from "react";
 import { isEqual, cloneDeep } from "lodash-es";
 import { observer } from "mobx-react";
@@ -33,6 +34,7 @@ type TWorkspaceLevelWorkItemFiltersHOCProps = TSharedWorkItemFiltersHOCProps & {
 export const WorkspaceLevelWorkItemFiltersHOC = observer(function WorkspaceLevelWorkItemFiltersHOC(
   props: TWorkspaceLevelWorkItemFiltersHOCProps
 ) {
+  const { t } = useTranslation();
   const { children, enableSaveView, enableUpdateView, entityId, initialWorkItemFilters, workspaceSlug } = props;
   // states
   const [isCreateViewModalOpen, setIsCreateViewModalOpen] = useState(false);
@@ -142,19 +144,19 @@ export const WorkspaceLevelWorkItemFiltersHOC = observer(function WorkspaceLevel
         .then(() => {
           setToast({
             type: TOAST_TYPE.SUCCESS,
-            title: "Success!",
+            title: t("toast.success"),
             message: "Your view has been updated successfully.",
           });
         })
         .catch(() => {
           setToast({
             type: TOAST_TYPE.ERROR,
-            title: "Error!",
+            title: t("toast.error"),
             message: "Your view could not be updated. Please try again.",
           });
         });
     },
-    [viewDetails, updateGlobalView, workspaceSlug, getViewFilterPayload]
+    [viewDetails, updateGlobalView, workspaceSlug, getViewFilterPayload, t]
   );
 
   const saveViewOptions = useMemo(

@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 // types
 // plane imports
@@ -30,6 +31,7 @@ export type TalkToSalesCardProps = {
 };
 
 export const TalkToSalesCard = observer(function TalkToSalesCard(props: TalkToSalesCardProps) {
+  const { t } = useTranslation();
   const {
     planVariant,
     href,
@@ -73,7 +75,7 @@ export const TalkToSalesCard = observer(function TalkToSalesCard(props: TalkToSa
       ) : (
         <div className="flex w-full flex-col items-center justify-center">
           <a href={href} target="_blank" className={cn(getButtonStyling("primary", "lg"), "w-56")} rel="noreferrer">
-            Talk to Sales
+            {t("common.upgrade_cta.talk_to_sales")}
           </a>
           {isTrialAllowed && !isSelfHosted && (
             <div className="mt-4 h-4">

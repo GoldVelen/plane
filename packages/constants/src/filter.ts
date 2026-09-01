@@ -45,19 +45,19 @@ export const DATE_BEFORE_FILTER_OPTIONS = [
 
 export const PROJECT_CREATED_AT_FILTER_OPTIONS = [
   {
-    name: "Today",
+    i18nKey: "common.today",
     value: "today;custom;custom",
   },
   {
-    name: "Yesterday",
+    i18nKey: "workspace_analytics.duration.yesterday",
     value: "yesterday;custom;custom",
   },
   {
-    name: "Last 7 days",
+    i18nKey: "workspace_analytics.duration.last_7_days",
     value: "last_7_days;custom;custom",
   },
   {
-    name: "Last 30 days",
+    i18nKey: "workspace_analytics.duration.last_30_days",
     value: "last_30_days;custom;custom",
   },
-];
+] as const;

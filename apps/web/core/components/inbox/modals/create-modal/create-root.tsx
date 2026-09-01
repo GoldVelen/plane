@@ -92,7 +92,7 @@ export const InboxIssueCreateRoot = observer(function InboxIssueCreateRoot(props
     } else {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
+        title: t("toast.error"),
         message: "Editor is still processing changes. Please wait before proceeding.",
       });
       event.preventDefault(); // Prevent default action if editor is not ready to discard
@@ -124,7 +124,7 @@ export const InboxIssueCreateRoot = observer(function InboxIssueCreateRoot(props
     if (!descriptionEditorRef.current?.isEditorReadyToDiscard()) {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
+        title: t("toast.error"),
         message: "Editor is still processing changes. Please wait before proceeding.",
       });
       return;
@@ -159,7 +159,7 @@ export const InboxIssueCreateRoot = observer(function InboxIssueCreateRoot(props
         }
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: `Success!`,
+          title: t("toast.success"),
           message: "Work item created successfully.",
         });
       })
@@ -167,8 +167,8 @@ export const InboxIssueCreateRoot = observer(function InboxIssueCreateRoot(props
         console.error(error);
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: `Error!`,
-          message: "Some error occurred. Please try again.",
+          title: t("toast.error"),
+          message: t("common.error.message"),
         });
       });
     setFormSubmitting(false);
@@ -226,7 +226,7 @@ export const InboxIssueCreateRoot = observer(function InboxIssueCreateRoot(props
                   } else {
                     setToast({
                       type: TOAST_TYPE.ERROR,
-                      title: "Error!",
+                      title: t("toast.error"),
                       message: "Editor is still processing changes. Please wait before proceeding.",
                     });
                   }

@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
@@ -40,6 +41,7 @@ interface IHeaderGroupByCard {
 }
 
 export const HeaderGroupByCard = observer(function HeaderGroupByCard(props: IHeaderGroupByCard) {
+  const { t } = useTranslation();
   const {
     groupID,
     icon,
@@ -76,13 +78,13 @@ export const HeaderGroupByCard = observer(function HeaderGroupByCard(props: IHea
 
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: "Success!",
+        title: t("toast.success"),
         message: "Work items added to the cycle successfully.",
       });
     } catch (_error) {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
+        title: t("toast.error"),
         message: "Selected work items could not be added to the cycle. Please try again.",
       });
     }
@@ -134,14 +136,16 @@ export const HeaderGroupByCard = observer(function HeaderGroupByCard(props: IHea
                   setIsOpen(true);
                 }}
               >
-                <span className="flex items-center justify-start gap-2">Create work item</span>
+                <span className="flex items-center justify-start gap-2">{t("create_work_item")}</span>
               </CustomMenu.MenuItem>
               <CustomMenu.MenuItem
                 onClick={() => {
                   setOpenExistingIssueListModal(true);
                 }}
               >
-                <span className="flex items-center justify-start gap-2">Add an existing work item</span>
+                <span className="flex items-center justify-start gap-2">
+                  {t("project_module.empty_state.no_issues.secondary_button.text")}
+                </span>
               </CustomMenu.MenuItem>
             </CustomMenu>
           ) : (

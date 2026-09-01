@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { concat, uniq } from "lodash-es";
 import { observer } from "mobx-react";
@@ -11,7 +12,7 @@ import { PAST_DURATION_FILTER_OPTIONS } from "@plane/constants";
 import type { TInboxIssueFilterDateKeys } from "@plane/types";
 // components
 import { DateFilterModal } from "@/components/core/filters/date-filter-modal";
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 // constants
 // hooks
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
@@ -28,6 +29,7 @@ const isDate = (date: string) => {
 };
 
 export const FilterDate = observer(function FilterDate(props: Props) {
+  const { t } = useTranslation();
   const { filterKey, label, searchQuery } = props;
   // hooks
   const { inboxFilters, handleInboxIssueFilters } = useProjectInbox();
@@ -64,7 +66,7 @@ export const FilterDate = observer(function FilterDate(props: Props) {
           handleClose={() => setIsDateFilterModalOpen(false)}
           isOpen={isDateFilterModalOpen}
           onSelect={(val) => handleInboxIssueFilters(filterKey, val)}
-          title="Created date"
+          title={t("workspace_projects.sort.created_at")}
         />
       )}
       <FilterHeader
@@ -88,12 +90,12 @@ export const FilterDate = observer(function FilterDate(props: Props) {
               <FilterOption
                 isChecked={isCustomDateSelected()}
                 onClick={handleCustomDate}
-                title="Custom"
+                title={t("notification.snooze.custom")}
                 multiple={false}
               />
             </>
           ) : (
-            <p className="text-11 text-placeholder italic">No matches found</p>
+            <FilterNoMatches />
           )}
         </div>
       )}

@@ -35,6 +35,11 @@
       "close_workspace_menu": "收起工作区菜单",
       "open_extended_sidebar": "打开扩展侧栏",
       "close_extended_sidebar": "收起扩展侧栏"
+    },
+    "resizable_sidebar": {
+      "main": "主侧边栏",
+      "resize": "调整侧边栏宽度",
+      "peek": "侧边栏预览"
     }
   }
 }

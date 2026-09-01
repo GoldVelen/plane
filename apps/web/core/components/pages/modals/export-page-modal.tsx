@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import type { PageProps } from "@react-pdf/renderer";
 import { pdf } from "@react-pdf/renderer";
@@ -53,7 +54,8 @@ const EXPORT_FORMATS: {
 
 const PAGE_FORMATS: {
   key: TPageFormats;
-  label: string;
+  label?: string;
+  i18nKey?: string;
 }[] = [
   {
     key: "A4",
@@ -69,29 +71,29 @@ const PAGE_FORMATS: {
   },
   {
     key: "LETTER",
-    label: "Letter",
+    i18nKey: "page_export.paper_sizes.letter",
   },
   {
     key: "LEGAL",
-    label: "Legal",
+    i18nKey: "page_export.paper_sizes.legal",
   },
   {
     key: "TABLOID",
-    label: "Tabloid",
+    i18nKey: "page_export.paper_sizes.tabloid",
   },
 ];
 
 const CONTENT_VARIETY: {
   key: TContentVariety;
-  label: string;
+  i18nKey: string;
 }[] = [
   {
     key: "everything",
-    label: "Everything",
+    i18nKey: "page_export.content.everything",
   },
   {
     key: "no-assets",
-    label: "No images",
+    i18nKey: "page_export.content.no_images",
   },
 ];
 
@@ -102,6 +104,7 @@ const defaultValues: TFormValues = {
 };
 
 export function ExportPageModal(props: Props) {
+  const { t } = useTranslation();
   const { editorRef, isOpen, onClose, pageTitle } = props;
   // states
   const [isExporting, setIsExporting] = useState(false);
@@ -111,6 +114,8 @@ export function ExportPageModal(props: Props) {
   const { control, reset, watch } = useForm<TFormValues>({
     defaultValues,
   });
+  const getPageFormatLabel = (format: (typeof PAGE_FORMATS)[number] | undefined) =>
+    format?.i18nKey ? t(format.i18nKey) : (format?.label ?? "");
   // parse editor content
   const { replaceCustomComponentsFromHTMLContent, replaceCustomComponentsFromMarkdownContent } = useParseEditorContent({
     projectId,
@@ -186,7 +191,7 @@ export function ExportPageModal(props: Props) {
       }
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: "Success!",
+        title: t("toast.success"),
         message: "Page exported successfully.",
       });
       handleClose();
@@ -194,7 +199,7 @@ export function ExportPageModal(props: Props) {
       console.error("Error in exporting page:", error);
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
+        title: t("toast.error"),
         message: "Page could not be exported. Please try again later.",
       });
     } finally {
@@ -238,7 +243,7 @@ export function ExportPageModal(props: Props) {
                 name="content_variety"
                 render={({ field: { onChange, value } }) => (
                   <CustomSelect
-                    label={CONTENT_VARIETY.find((variety) => variety.key === value)?.label}
+                    label={t(CONTENT_VARIETY.find((variety) => variety.key === value)?.i18nKey ?? "")}
                     buttonClassName="border-none"
                     value={value}
                     onChange={(val: TContentVariety) => onChange(val)}
@@ -247,7 +252,7 @@ export function ExportPageModal(props: Props) {
                   >
                     {CONTENT_VARIETY.map((variety) => (
                       <CustomSelect.Option key={variety.key} value={variety.key}>
-                        {variety.label}
+                        {t(variety.i18nKey)}
                       </CustomSelect.Option>
                     ))}
                   </CustomSelect>
@@ -262,7 +267,7 @@ export function ExportPageModal(props: Props) {
                   name="page_format"
                   render={({ field: { onChange, value } }) => (
                     <CustomSelect
-                      label={PAGE_FORMATS.find((format) => format.key === value)?.label}
+                      label={getPageFormatLabel(PAGE_FORMATS.find((format) => format.key === value))}
                       buttonClassName="border-none"
                       value={value}
                       onChange={(val: TPageFormats) => onChange(val)}
@@ -271,7 +276,7 @@ export function ExportPageModal(props: Props) {
                     >
                       {PAGE_FORMATS.map((format) => (
                         <CustomSelect.Option key={format.key.toString()} value={format.key}>
-                          {format.label}
+                          {getPageFormatLabel(format)}
                         </CustomSelect.Option>
                       ))}
                     </CustomSelect>
@@ -283,7 +288,7 @@ export function ExportPageModal(props: Props) {
         </div>
         <div className="flex items-center justify-end gap-2 border-t-[0.5px] border-subtle px-5 py-4">
           <Button variant="secondary" size="lg" onClick={handleClose}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button variant="primary" size="lg" loading={isExporting} onClick={handleExport}>
             {isExporting ? "Exporting" : "Export"}

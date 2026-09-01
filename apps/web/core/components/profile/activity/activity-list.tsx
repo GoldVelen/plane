@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -24,6 +25,7 @@ type Props = {
 };
 
 export const ActivityList = observer(function ActivityList(props: Props) {
+  const { t } = useTranslation();
   const { activity } = props;
   // params
   const { workspaceSlug } = useParams();
@@ -102,7 +104,8 @@ export const ActivityList = observer(function ActivityList(props: Props) {
               ) &&
               !activityItem.field ? (
                 <span>
-                  created <IssueLink activity={activityItem} />
+                  {t("studio.forms.action_created")}
+                  <IssueLink activity={activityItem} />
                 </span>
               ) : (
                 <ActivityMessage activity={activityItem} showIssue />
@@ -147,7 +150,9 @@ export const ActivityList = observer(function ActivityList(props: Props) {
                             {activityItem.field === "archived_at" && activityItem.new_value !== "restore" ? (
                               <span className="text-gray font-medium">Plane</span>
                             ) : activityItem.actor_detail.is_bot ? (
-                              <span className="text-gray font-medium">{activityItem.actor_detail.first_name} Bot</span>
+                              <span className="text-gray font-medium">
+                                {activityItem.actor_detail.first_name} {t("bot")}
+                              </span>
                             ) : (
                               <Link
                                 href={`/${activityItem.workspace_detail?.slug}/profile/${activityItem.actor_detail.id}`}

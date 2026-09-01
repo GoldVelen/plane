@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useEffect, useState, useCallback } from "react";
 import { Palette } from "lucide-react";
 // editor
@@ -30,6 +31,7 @@ type Props = {
 const toolbarItems = TOOLBAR_ITEMS.sticky;
 
 export function StickyEditorToolbar(props: Props) {
+  const { t } = useTranslation();
   const { executeCommand, editorRef, handleColorChange, handleDelete } = props;
 
   // State to manage active states of toolbar items
@@ -71,7 +73,7 @@ export function StickyEditorToolbar(props: Props) {
         <Tooltip
           tooltipContent={
             <p className="flex flex-col gap-1 text-center text-11">
-              <span className="font-medium">Background color</span>
+              <span className="font-medium">{t("background_color")}</span>
             </p>
           }
         >
@@ -121,7 +123,7 @@ export function StickyEditorToolbar(props: Props) {
       <Tooltip
         tooltipContent={
           <p className="flex flex-col gap-1 text-center text-11">
-            <span className="font-medium">Delete</span>
+            <span className="font-medium">{t("delete")}</span>
           </p>
         }
       >

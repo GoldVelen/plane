@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export const DeleteLabelModal = observer(function DeleteLabelModal(props: Props) {
+  const { t } = useTranslation();
   const { isOpen, onClose, data } = props;
   // router
   const { workspaceSlug, projectId } = useParams();
@@ -49,7 +51,7 @@ export const DeleteLabelModal = observer(function DeleteLabelModal(props: Props)
         const error = err?.error || "Label could not be deleted. Please try again.";
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message: error,
         });
       });
@@ -64,8 +66,9 @@ export const DeleteLabelModal = observer(function DeleteLabelModal(props: Props)
       title="Delete Label"
       content={
         <>
-          Are you sure you want to delete <span className="font-medium text-primary">{data?.name}</span>? This will
-          remove the label from all the work item and from any views where the label is being filtered upon.
+          {t("sso.domain_management.verified_domains.delete_domain.description.prefix")}
+          <span className="font-medium text-primary">{data?.name}</span>? This will remove the label from all the work
+          item and from any views where the label is being filtered upon.
         </>
       }
     />

@@ -20,7 +20,8 @@
   },
   "cycle": {
     "label": "{count, plural, one {chu kỳ} other {chu kỳ}}",
-    "no_cycle": "Không có chu kỳ"
+    "no_cycle": "Không có chu kỳ",
+    "select": "Select cycle"
   },
   "active_cycle_analytics": {
     "empty_state": {

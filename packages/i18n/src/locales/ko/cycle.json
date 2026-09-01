@@ -20,7 +20,8 @@
   },
   "cycle": {
     "label": "{count, plural, one {주기} other {주기}}",
-    "no_cycle": "주기 없음"
+    "no_cycle": "주기 없음",
+    "select": "Select cycle"
   },
   "active_cycle_analytics": {
     "empty_state": {

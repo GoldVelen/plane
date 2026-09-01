@@ -193,7 +193,8 @@
       "finish_before": "Фінішує Перед",
       "finish_after": "Фінішує Після",
       "implements": "Реалізує",
-      "implemented_by": "Реалізовано"
+      "implemented_by": "Реалізовано",
+      "add_related": "Add related work items"
     },
     "copy_link": "Скопіювати посилання на робочу одиницю",
     "delete": {
@@ -211,7 +212,8 @@
       "empty": "Не вибрано жодної робочої одиниці",
       "add_selected": "Додати вибрані робочі одиниці",
       "select_all": "Вибрати всі",
-      "deselect_all": "Скасувати вибір усіх"
+      "deselect_all": "Скасувати вибір усіх",
+      "current_project_only": "Only work items within the current project can be selected."
     },
     "open_in_full_screen": "Відкрити робочу одиницю на повний екран",
     "duplicate": {

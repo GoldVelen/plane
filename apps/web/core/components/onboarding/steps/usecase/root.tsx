@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
@@ -29,6 +30,7 @@ const defaultValues = {
 };
 
 export const UseCaseSetupStep = observer(function UseCaseSetupStep({ handleStepChange }: Props) {
+  const { t } = useTranslation();
   // store hooks
   const { data: profile, updateUserProfile } = useUserProfile();
   // form info
@@ -56,14 +58,14 @@ export const UseCaseSetupStep = observer(function UseCaseSetupStep({ handleStepC
       ]);
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: "Success",
-        message: "Profile setup completed!",
+        title: t("success"),
+        message: t("onboarding.role.toast.success"),
       });
     } catch {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error",
-        message: "Profile setup failed. Please try again!",
+        title: t("error"),
+        message: t("onboarding.role.toast.error"),
       });
     }
   };
@@ -151,10 +153,10 @@ export const UseCaseSetupStep = observer(function UseCaseSetupStep({ handleStepC
       {/* Action Buttons */}
       <div className="space-y-3">
         <Button variant="primary" type="submit" className="w-full" size="xl" disabled={isButtonDisabled}>
-          Continue
+          {t("common.continue")}
         </Button>
         <Button variant="ghost" onClick={handleSkip} className="w-full" size="xl">
-          Skip
+          {t("onboarding.role.skip")}
         </Button>
       </div>
     </form>

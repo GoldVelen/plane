@@ -10,6 +10,7 @@ import ICU from "i18next-icu";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { SUPPORTED_LANGUAGES, FALLBACK_LANGUAGE } from "../constants/language";
 import { NAMESPACES, DEFAULT_NAMESPACE } from "../constants/namespaces";
+import { setDateLocale } from "./date-locale";
 import { resolveRuntimeInitialLanguage } from "./resolve-initial-language";
 
 import type { i18n as I18nInstance } from "i18next";
@@ -49,4 +50,7 @@ export const initPromise = i18nInstance
   // Eagerly pre-load all namespaces for the initial language so they're cached
   // before any component renders. This prevents the re-render cascade that occurs
   // when react-i18next triggers concurrent async loads for unloaded namespaces.
-  .then(() => i18nInstance.loadNamespaces(NAMESPACES));
+  .then(async () => {
+    await setDateLocale(initialLng);
+    return i18nInstance.loadNamespaces(NAMESPACES);
+  });

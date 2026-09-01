@@ -817,7 +817,8 @@
     "all_issues": "すべての作業項目",
     "assigned": "割り当て済み",
     "created": "作成済み",
-    "subscribed": "購読中"
+    "subscribed": "購読中",
+    "unassigned": "未割り当て"
   },
   "description_versions": {
     "last_edited_by": "最終編集者",
@@ -872,5 +873,17 @@
       "description": "作業項目をJSONファイルにエクスポートします。",
       "short_description": "JSONとしてエクスポート"
     }
-  }
+  },
+  "project_work_item_count": "{count, plural, one {There is # work item in this project} other {There are # work items in this project}}",
+  "archived_work_item_count": "{count, plural, one {# archived work item} other {# archived work items}}",
+  "count": {
+    "link": "{count, plural, one {# link} other {# links}}",
+    "attachment": "{count, plural, one {# attachment} other {# attachments}}",
+    "sub_work_item": "{count, plural, one {# sub-work item} other {# sub-work items}}"
+  },
+  "identifier": "Identifier",
+  "access": "Access",
+  "join": "参加",
+  "enabled": "有効",
+  "disabled": "無効"
 }

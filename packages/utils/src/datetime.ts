@@ -4,21 +4,36 @@
  * See the LICENSE file for details.
  */
 
-import { differenceInDays, format, formatDistanceToNow, isAfter, isEqual, isValid, parseISO } from "date-fns";
+import {
+  differenceInDays,
+  format,
+  formatDistanceToNow,
+  getDefaultOptions,
+  isAfter,
+  isEqual,
+  isValid,
+  parseISO,
+} from "date-fns";
 import { isNumber } from "lodash-es";
+
+const DEFAULT_DATE_FORMAT = "MMM dd, yyyy";
+
+function getActiveDateLocale(): string {
+  return getDefaultOptions().locale?.code ?? "en-US";
+}
 
 // Format Date Helpers
 /**
- * @returns {string | null} formatted date in the desired format or platform default format (MMM dd, yyyy)
+ * @returns {string | null} formatted date in the desired format or active locale's default display format
  * @description Returns date in the formatted format
  * @param {Date | string} date
- * @param {string} formatToken (optional) // default MMM dd, yyyy
+ * @param {string} formatToken (optional) // localized default when omitted
  * @example renderFormattedDate("2024-01-01", "MM-DD-YYYY") // Jan 01, 2024
  * @example renderFormattedDate("2024-01-01") // Jan 01, 2024
  */
 export const renderFormattedDate = (
   date: string | Date | undefined | null,
-  formatToken: string = "MMM dd, yyyy"
+  formatToken: string = DEFAULT_DATE_FORMAT
 ): string | undefined => {
   // Parse the date to check if it is valid
   const parsedDate = getDate(date);
@@ -28,11 +43,16 @@ export const renderFormattedDate = (
   if (!isValid(parsedDate)) return; // Return null for invalid dates
   let formattedDate;
   try {
-    // Format the date in the format provided or default format (MMM dd, yyyy)
-    formattedDate = format(parsedDate, formatToken);
+    formattedDate =
+      formatToken === DEFAULT_DATE_FORMAT
+        ? new Intl.DateTimeFormat(getActiveDateLocale(), {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+          }).format(parsedDate)
+        : format(parsedDate, formatToken);
   } catch (_e) {
-    // Format the date in format (MMM dd, yyyy) in case of any error
-    formattedDate = format(parsedDate, "MMM dd, yyyy");
+    formattedDate = format(parsedDate, DEFAULT_DATE_FORMAT);
   }
   return formattedDate;
 };
@@ -50,9 +70,11 @@ export const renderFormattedDateWithoutYear = (date: string | Date): string => {
   if (!parsedDate) return "";
   // Check if the parsed date is valid before formatting
   if (!isValid(parsedDate)) return ""; // Return empty string for invalid dates
-  // Format the date in short format (MMM dd)
-  const formattedDate = format(parsedDate, "MMM dd");
-  return formattedDate;
+  try {
+    return new Intl.DateTimeFormat(getActiveDateLocale(), { month: "short", day: "2-digit" }).format(parsedDate);
+  } catch (_e) {
+    return format(parsedDate, "MMM dd");
+  }
 };
 
 /**

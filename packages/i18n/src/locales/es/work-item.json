@@ -193,7 +193,8 @@
       "finish_before": "Termina antes",
       "finish_after": "Termina después",
       "implements": "Implementa",
-      "implemented_by": "Implementado por"
+      "implemented_by": "Implementado por",
+      "add_related": "Add related work items"
     },
     "copy_link": "Copiar enlace del elemento de trabajo",
     "delete": {
@@ -211,7 +212,8 @@
       "empty": "No hay elementos de trabajo seleccionados",
       "add_selected": "Agregar elementos seleccionados",
       "select_all": "Seleccionar todo",
-      "deselect_all": "Deseleccionar todo"
+      "deselect_all": "Deseleccionar todo",
+      "current_project_only": "Only work items within the current project can be selected."
     },
     "open_in_full_screen": "Abrir elemento de trabajo en pantalla completa",
     "duplicate": {

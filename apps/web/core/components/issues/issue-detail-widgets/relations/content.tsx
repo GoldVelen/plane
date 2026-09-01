@@ -34,9 +34,9 @@ type TIssueCrudState = { toggle: boolean; issueId: string | undefined; issue: TI
 export type TRelationObject = {
   key: TIssueRelationTypes;
   i18n_label: string;
+  i18n_placeholder: string;
   className: string;
   icon: (size: number) => React.ReactElement;
-  placeholder: string;
 };
 
 export const RelationsCollapsibleContent = observer(function RelationsCollapsibleContent(props: Props) {

@@ -7,6 +7,7 @@
 import { useState } from "react";
 import { mutate } from "swr";
 // plane imports
+import { useTranslation } from "@plane/i18n";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import { APITokenService } from "@plane/services";
 import type { IApiToken } from "@plane/types";
@@ -31,6 +32,7 @@ export function CreateApiTokenModal(props: Props) {
   // states
   const [neverExpires, setNeverExpires] = useState<boolean>(false);
   const [generatedToken, setGeneratedToken] = useState<IApiToken | null | undefined>(null);
+  const { t } = useTranslation();
 
   const handleClose = () => {
     onClose();
@@ -43,10 +45,12 @@ export function CreateApiTokenModal(props: Props) {
 
   const downloadSecretKey = (data: IApiToken) => {
     const csvData = {
-      Title: data.label,
-      Description: data.description,
-      Expiry: data.expired_at ? (renderFormattedDate(data.expired_at)?.replace(",", " ") ?? "") : "Never expires",
-      "Secret key": data.token ?? "",
+      [t("workspace_settings.settings.api_tokens.csv.title")]: data.label,
+      [t("workspace_settings.settings.api_tokens.csv.description")]: data.description,
+      [t("workspace_settings.settings.api_tokens.csv.expiry")]: data.expired_at
+        ? (renderFormattedDate(data.expired_at)?.replace(",", " ") ?? "")
+        : t("workspace_settings.settings.api_tokens.never_expires"),
+      [t("workspace_settings.settings.api_tokens.csv.secret_key")]: data.token ?? "",
     };
 
     csvDownload(csvData, `secret-key-${Date.now()}`);
@@ -73,7 +77,7 @@ export function CreateApiTokenModal(props: Props) {
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
+          title: t("toast.error"),
           message: err.message || err.detail,
         });
 

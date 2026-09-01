@@ -119,7 +119,7 @@ export function PageForm(props: Props) {
               type="text"
               value={formData.name}
               onChange={(e) => handleFormData("name", e.target.value)}
-              placeholder="Title"
+              placeholder={t("title")}
               className="w-full resize-none text-14"
               tabIndex={getIndex("name")}
               required
@@ -145,7 +145,7 @@ export function PageForm(props: Props) {
         </div>
         <div className="flex items-center justify-end gap-2">
           <Button variant="secondary" size="lg" onClick={handleModalClose} tabIndex={getIndex("cancel")}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button
             variant="primary"

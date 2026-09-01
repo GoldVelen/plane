@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // constants
@@ -11,7 +12,7 @@ import { DATE_AFTER_FILTER_OPTIONS } from "@plane/constants";
 // components
 import { isInDateFormat } from "@plane/utils";
 import { DateFilterModal } from "@/components/core/filters/date-filter-modal";
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 
 // helpers
 
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export const FilterStartDate = observer(function FilterStartDate(props: Props) {
+  const { t } = useTranslation();
   const { appliedFilters, handleUpdate, searchQuery } = props;
   const [previewEnabled, setPreviewEnabled] = useState(true);
   const [isDateFilterModalOpen, setIsDateFilterModalOpen] = useState(false);
@@ -50,7 +52,7 @@ export const FilterStartDate = observer(function FilterStartDate(props: Props) {
           handleClose={() => setIsDateFilterModalOpen(false)}
           isOpen={isDateFilterModalOpen}
           onSelect={(val) => handleUpdate(val)}
-          title="Start date"
+          title={t("start_date")}
         />
       )}
       <FilterHeader
@@ -71,10 +73,15 @@ export const FilterStartDate = observer(function FilterStartDate(props: Props) {
                   multiple
                 />
               ))}
-              <FilterOption isChecked={isCustomDateSelected()} onClick={handleCustomDate} title="Custom" multiple />
+              <FilterOption
+                isChecked={isCustomDateSelected()}
+                onClick={handleCustomDate}
+                title={t("notification.snooze.custom")}
+                multiple
+              />
             </>
           ) : (
-            <p className="text-11 text-placeholder italic">No matches found</p>
+            <FilterNoMatches />
           )}
         </div>
       )}

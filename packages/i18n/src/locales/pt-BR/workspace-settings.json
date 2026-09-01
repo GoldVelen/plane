@@ -51,7 +51,8 @@
           "email_address": "Endereço de e-mail",
           "account_type": "Tipo de conta",
           "authentication": "Autenticação",
-          "joining_date": "Data de adesão"
+          "joining_date": "Data de adesão",
+          "project_access": "Project access"
         },
         "modal": {
           "title": "Convidar pessoas para colaborar",
@@ -63,6 +64,52 @@
             "required": "Precisamos de um endereço de e-mail para convidá-los.",
             "invalid": "E-mail inválido"
           }
+        },
+        "status": {
+          "suspended": "Suspended"
+        },
+        "toasts": {
+          "invitation_removed": "Invitation removed successfully.",
+          "role_update_failed": "The member role could not be updated. Please try again."
+        },
+        "project_access": {
+          "project_scope": "Project scope",
+          "project_role": "Função do projeto",
+          "projects": "Projetos",
+          "search_projects": "Search projects",
+          "select_projects": "Selecionar projetos",
+          "selected_projects": "{count} projects selected",
+          "scope": {
+            "all": "All current and future public projects",
+            "selected": "Projetos selecionados",
+            "none": "No projects yet"
+          },
+          "scope_descriptions": {
+            "all": "Adds this member to every current and future public project. Private projects remain isolated.",
+            "selected": "Only the projects selected here will be visible and assignable to this member.",
+            "none": "The member can join the workspace, but cannot see or be assigned project work until access is granted."
+          },
+          "roles": {
+            "admin": "Project admin",
+            "member": "Project member",
+            "guest": "Project guest"
+          },
+          "summary": {
+            "all": "All public projects",
+            "selected": "{count} projects",
+            "none": "No projects"
+          },
+          "errors": {
+            "select_project": "Select at least one project or choose no projects."
+          },
+          "edit_title": "Edit project access for {name}",
+          "edit_description": "Choose which projects this workspace member can access and their role in those projects.",
+          "updated_title": "Project access updated",
+          "updated_message": "The member's project access is now up to date.",
+          "update_failed_title": "Project access was not updated"
+        },
+        "authentication_methods": {
+          "magic_code": "Magic code"
         }
       },
       "billing_and_plans": {
@@ -71,7 +118,11 @@
         "title": "Faturamento e planos",
         "current_plan": "Plano atual",
         "free_plan": "Você está usando o plano gratuito atualmente",
-        "view_plans": "Ver planos"
+        "view_plans": "Ver planos",
+        "community": "Community edition",
+        "community_description": "Unlimited projects, work items, cycles, modules, pages, and storage",
+        "all_plans": "All plans",
+        "version": "Version: v{{version}}"
       },
       "exports": {
         "heading": "Exportações",
@@ -148,6 +199,14 @@
           "secret_key_not_copied": {
             "message": "Ocorreu um erro ao copiar a chave secreta."
           }
+        },
+        "events": {
+          "project": "Project created, updated, or deleted",
+          "cycle": "Cycle created, updated, or deleted",
+          "work_item": "Work item created, updated, deleted, added to a cycle or module",
+          "module": "Module created, updated, or deleted",
+          "work_item_comments": "Work item comments",
+          "comment": "Comment posted, updated, or deleted"
         }
       },
       "api_tokens": {
@@ -170,6 +229,37 @@
             "title": "Erro!",
             "message": "O token de API não pôde ser excluído"
           }
+        },
+        "expiration_required": "Please select an expiration date.",
+        "expiration_options": {
+          "one_week": "1 semana",
+          "one_month": "1 month",
+          "three_months": "3 months",
+          "one_year": "1 year",
+          "custom": "Personalizado"
+        },
+        "custom_date": "Custom date",
+        "set_expiration_date": "Set expiration date",
+        "set_date": "Set date",
+        "expires_at": "Expires {{date}} at {{time}}",
+        "expired_ago": "Expired {{time}}",
+        "status": {
+          "active": "Ativo",
+          "expired": "Expired"
+        },
+        "delete_token": "Delete token",
+        "copy_secret_key": "Copy secret key",
+        "csv": {
+          "title": "Título",
+          "description": "Descrição",
+          "expiry": "Expiry",
+          "secret_key": "Chave secreta"
+        },
+        "empty_state": {
+          "image_alt": "No API tokens",
+          "title": "No API tokens",
+          "description": "Create API tokens for safe and easy data sharing with external apps, maintaining control and security.",
+          "add": "Add token"
         }
       },
       "integrations": {

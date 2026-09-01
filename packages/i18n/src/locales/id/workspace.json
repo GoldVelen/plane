@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "Item kerja yang diselesaikan vs tertunda",
     "projects_by_status": "Proyek berdasarkan status",
     "active_users": "Pengguna aktif",
-    "intake_trends": "Tren Penerimaan"
+    "intake_trends": "Tren Penerimaan",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "Durasi",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "Tambahkan properti",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {Proyek} other {Proyek}}",
@@ -214,7 +230,8 @@
             "title": "Segalanya dimulai dengan proyek di Plane",
             "description": "Sebuah proyek bisa menjadi roadmap produk, kampanye pemasaran, atau meluncurkan mobil baru."
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "Tidak ada proyek yang cocok",
@@ -223,6 +240,11 @@
       "search": {
         "description": "Tidak ada proyek yang terdeteksi dengan kriteria yang cocok.\nBuat proyek baru sebagai gantinya"
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

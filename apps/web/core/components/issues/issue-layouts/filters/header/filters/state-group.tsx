@@ -10,7 +10,7 @@ import { observer } from "mobx-react";
 import { STATE_GROUPS } from "@plane/constants";
 import { StateGroupIcon } from "@plane/propel/icons";
 // components
-import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
+import { FilterHeader, FilterNoMatches, FilterOption } from "@/components/issues/issue-layouts/filters";
 
 type Props = {
   appliedFilters: string[] | null;
@@ -66,7 +66,7 @@ export const FilterStateGroup = observer(function FilterStateGroup(props: Props)
               )}
             </>
           ) : (
-            <p className="text-11 text-placeholder italic">No matches found</p>
+            <FilterNoMatches />
           )}
         </div>
       )}

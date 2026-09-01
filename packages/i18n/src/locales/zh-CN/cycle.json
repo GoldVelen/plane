@@ -20,7 +20,8 @@
   },
   "cycle": {
     "label": "{count, plural, one {周期} other {周期}}",
-    "no_cycle": "无周期"
+    "no_cycle": "无周期",
+    "select": "选择周期"
   },
   "active_cycle_analytics": {
     "empty_state": {

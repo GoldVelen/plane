@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
@@ -25,6 +26,7 @@ import type { Route } from "./+types/page";
 import { WebhookDetailsWorkspaceSettingsHeader } from "./header";
 
 function WebhookDetailsPage({ params }: Route.ComponentProps) {
+  const { t } = useTranslation();
   // states
   const [deleteWebhookModal, setDeleteWebhookModal] = useState(false);
   // router
@@ -64,14 +66,14 @@ function WebhookDetailsPage({ params }: Route.ComponentProps) {
       await updateWebhook(workspaceSlug, formData.id, payload);
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: "Success!",
+        title: t("toast.success"),
         message: "Webhook updated successfully.",
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
+        title: t("toast.error"),
         message: error?.error ?? "Something went wrong. Please try again.",
       });
     }

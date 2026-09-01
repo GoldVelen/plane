@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "Mục công việc đã giải quyết vs đang chờ",
     "projects_by_status": "Dự án theo trạng thái",
     "active_users": "Người dùng hoạt động",
-    "intake_trends": "Xu hướng tiếp nhận"
+    "intake_trends": "Xu hướng tiếp nhận",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "Thời lượng",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "Thêm thuộc tính",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {dự án} other {dự án}}",
@@ -214,7 +230,8 @@
             "title": "Trong Plane, mọi thứ đều bắt đầu với dự án",
             "description": "Dự án có thể là lộ trình sản phẩm, chiến dịch tiếp thị hoặc ra mắt xe mới."
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "Không có dự án phù hợp",
@@ -223,6 +240,11 @@
       "search": {
         "description": "Không phát hiện dự án nào phù hợp với điều kiện tìm kiếm.\nTạo dự án mới"
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

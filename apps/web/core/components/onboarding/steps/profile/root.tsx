@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
@@ -54,6 +55,7 @@ const defaultValues: Partial<TProfileSetupFormValues> = {
 };
 
 export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepChange }: Props) {
+  const { t } = useTranslation();
   // states
   const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
   // store hooks
@@ -99,7 +101,7 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
     } catch {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error",
+        title: t("error"),
         message: "User details update failed. Please try again!",
       });
     }
@@ -201,7 +203,7 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
             className="block text-13 font-medium text-tertiary after:ml-0.5 after:text-danger-primary after:content-['*']"
             htmlFor="first_name"
           >
-            Name
+            {t("name")}
           </label>
           <Controller
             control={control}
@@ -248,7 +250,7 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
       </div>
       {/* Continue Button */}
       <Button variant="primary" type="submit" className="w-full" size="xl" disabled={isButtonDisabled}>
-        Continue
+        {t("common.continue")}
       </Button>
 
       {/* Marketing Consent */}

@@ -20,7 +20,8 @@
   },
   "cycle": {
     "label": "{count, plural, one {サイクル} other {サイクル}}",
-    "no_cycle": "サイクルなし"
+    "no_cycle": "サイクルなし",
+    "select": "Select cycle"
   },
   "active_cycle_analytics": {
     "empty_state": {

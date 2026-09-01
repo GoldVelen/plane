@@ -6,4 +6,5 @@
 
 export * from "./dropdown";
 export * from "./filter-header";
+export * from "./filter-no-matches";
 export * from "./filter-option";

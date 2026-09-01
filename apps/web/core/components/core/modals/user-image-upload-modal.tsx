@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useDropzone } from "react-dropzone";
@@ -28,6 +29,7 @@ type Props = {
 };
 
 export const UserImageUploadModal = observer(function UserImageUploadModal(props: Props) {
+  const { t } = useTranslation();
   const { handleRemove, isOpen, onClose, onSuccess, value } = props;
   // states
   const [image, setImage] = useState<File | null>(null);
@@ -66,7 +68,7 @@ export const UserImageUploadModal = observer(function UserImageUploadModal(props
     } catch (error) {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error!",
+        title: t("toast.error"),
         message: error?.toString() ?? "Something went wrong. Please try again.",
       });
       throw new Error("Error in uploading file.");
@@ -113,7 +115,7 @@ export const UserImageUploadModal = observer(function UserImageUploadModal(props
                     type="button"
                     className="absolute top-0 right-0 z-40 translate-x-1/2 -translate-y-1/2 rounded-sm bg-surface-2 px-2 py-0.5 text-11 font-medium text-secondary"
                   >
-                    Edit
+                    {t("edit")}
                   </button>
                   <img
                     src={image ? URL.createObjectURL(image) : value ? getFileURL(value) : ""}
@@ -148,7 +150,7 @@ export const UserImageUploadModal = observer(function UserImageUploadModal(props
           </Button>
           <div className="flex items-center gap-2">
             <Button variant="secondary" size="lg" onClick={handleClose}>
-              Cancel
+              {t("cancel")}
             </Button>
             <Button variant="primary" size="lg" onClick={handleSubmit} disabled={!image} loading={isImageUploading}>
               {isImageUploading ? "Uploading" : "Upload & Save"}

@@ -79,7 +79,10 @@ export const iconsMap: ActivityIconMap = {
   intake_view: IntakeIcon,
 };
 
-export const messages = (activity: TProjectActivity): { message: string | ReactNode; customUserName?: string } => {
+export const messages = (
+  activity: TProjectActivity,
+  t: (key: string, params?: Record<string, unknown>) => string
+): { message: string | ReactNode; customUserName?: string } => {
   const activityType = activity.field;
   const newValue = activity.new_value;
   const oldValue = activity.old_value;
@@ -283,7 +286,11 @@ export const messages = (activity: TProjectActivity): { message: string | ReactN
       };
     case "is_issue_type_enabled":
       return {
-        message: <>{getBooleanActionText(newValue)} work item types</>,
+        message: (
+          <>
+            {getBooleanActionText(newValue)} {t("work_item_types.label")}
+          </>
+        ),
       };
     default:
       return {

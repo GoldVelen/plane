@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
@@ -22,6 +23,7 @@ type TStateDeleteModal = {
 };
 
 export const StateDeleteModal = observer(function StateDeleteModal(props: TStateDeleteModal) {
+  const { t } = useTranslation();
   const { isOpen, onClose, data } = props;
   // states
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
@@ -47,14 +49,14 @@ export const StateDeleteModal = observer(function StateDeleteModal(props: TState
         if (err.status === 400)
           setToast({
             type: TOAST_TYPE.ERROR,
-            title: "Error!",
+            title: t("toast.error"),
             message:
               "This state contains some work items within it, please move them to some other state to delete this state.",
           });
         else
           setToast({
             type: TOAST_TYPE.ERROR,
-            title: "Error!",
+            title: t("toast.error"),
             message: "State could not be deleted. Please try again.",
           });
       })

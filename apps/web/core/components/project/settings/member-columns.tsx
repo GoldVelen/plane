@@ -11,6 +11,7 @@ import { CircleMinus } from "lucide-react";
 import { Disclosure } from "@headlessui/react";
 // plane imports
 import { ROLE, EUserPermissions, MEMBER_TRACKER_ELEMENTS } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { EUserProjectRoles, IUser, IWorkspaceMember, TProjectMembership } from "@plane/types";
 import { CustomMenu, CustomSelect } from "@plane/ui";
@@ -95,6 +96,7 @@ export function NameColumn(props: NameProps) {
 }
 
 export const AccountTypeColumn = observer(function AccountTypeColumn(props: AccountTypeProps) {
+  const { t } = useTranslation();
   const { rowData, projectId, workspaceSlug } = props;
   // store hooks
   const {
@@ -148,7 +150,7 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
         <Controller
           name="role"
           control={control}
-          rules={{ required: "Role is required." }}
+          rules={{ required: t("project_settings.members.errors.role_required") }}
           render={() => (
             <CustomSelect
               value={rowData.original_role}
@@ -162,8 +164,8 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
 
                     setToast({
                       type: TOAST_TYPE.ERROR,
-                      title: "You can’t change this role yet.",
-                      message: errorString ?? "An error occurred while updating member role. Please try again.",
+                      title: t("project_settings.members.errors.role_failed_title"),
+                      message: errorString ?? t("project_settings.members.errors.role_failed_message"),
                     });
                   }
                 );

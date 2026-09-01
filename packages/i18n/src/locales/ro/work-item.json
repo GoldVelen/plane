@@ -193,7 +193,8 @@
       "finish_before": "Termină înainte",
       "finish_after": "Termină după",
       "implements": "Implementează",
-      "implemented_by": "Implementat de"
+      "implemented_by": "Implementat de",
+      "add_related": "Add related work items"
     },
     "copy_link": "Copiază link-ul activității",
     "delete": {
@@ -211,7 +212,8 @@
       "empty": "Nicio activitate selectată",
       "add_selected": "Adaugă activitățile selectate",
       "select_all": "Selectează tot",
-      "deselect_all": "Deselează tot"
+      "deselect_all": "Deselează tot",
+      "current_project_only": "Only work items within the current project can be selected."
     },
     "open_in_full_screen": "Deschide activitatea pe tot ecranul",
     "duplicate": {

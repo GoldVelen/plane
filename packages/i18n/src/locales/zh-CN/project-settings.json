@@ -1,17 +1,36 @@
 {
   "project_settings": {
+    "title": "项目设置",
     "general": {
       "enter_project_id": "输入项目 ID",
       "please_select_a_timezone": "请选择时区",
+      "project_name_max_char": "项目名称不能超过 255 个字符",
       "archive_project": {
         "title": "归档项目",
         "description": "归档项目将从您的侧边导航中取消列出您的项目，但您仍然可以从项目页面访问它。您可以随时恢复或删除项目。",
-        "button": "归档项目"
+        "button": "归档项目",
+        "modal_title": "归档“{project}”",
+        "confirmation": "该项目及其中的工作项、周期、模块和页面都将被归档，其工作项不会出现在搜索结果中。只有项目管理员可以恢复该项目。",
+        "archiving": "归档中",
+        "success_title": "归档成功",
+        "success_message": "项目“{project}”已归档。",
+        "error_message": "无法归档项目，请重试。"
+      },
+      "restore_project": {
+        "modal_title": "恢复“{project}”",
+        "confirmation": "恢复项目后将重新启用该项目，并对所有项目成员可见。确定要继续吗？",
+        "restoring": "恢复中",
+        "success_title": "恢复成功",
+        "success_message": "现在可以在项目列表中找到“{project}”。",
+        "error_message": "无法恢复项目，请重试。"
       },
       "delete_project": {
         "title": "删除项目",
         "description": "删除项目时，该项目内的所有数据和资源将被永久删除且无法恢复。",
-        "button": "删除我的项目"
+        "button": "删除我的项目",
+        "confirmation_description": "确定要删除项目“{project}”吗？与该项目相关的所有数据都将被永久删除，此操作无法撤销。",
+        "enter_project_name": "请输入项目名称以继续：",
+        "enter_confirmation": "请输入“{confirmation}”以确认："
       },
       "toast": {
         "success": "项目更新成功",
@@ -20,6 +39,19 @@
     },
     "members": {
       "label": "成员",
+      "errors": {
+        "leave_failed_title": "暂时无法离开此项目。",
+        "remove_failed_title": "暂时无法从此项目移除该成员。",
+        "role_required": "角色为必填项。",
+        "role_failed_title": "暂时无法更改此角色。",
+        "role_failed_message": "更新成员角色时发生错误，请重试。"
+      },
+      "remove_confirmation": {
+        "leave_title": "离开项目？",
+        "remove_title": "移除{name}？",
+        "leave_description": "确定要离开“{project}”吗？如果再次受邀或该项目为公开项目，您仍可重新加入。",
+        "remove_description": "确定要移除{name}吗？该成员将无法再访问此项目。此操作无法撤销。"
+      },
       "project_lead": "项目负责人",
       "project_lead_description": "请选择该项目的项目负责人。",
       "default_assignee": "默认负责人",
@@ -33,8 +65,41 @@
       "invite_members": {
         "title": "邀请成员",
         "sub_heading": "邀请成员参与您的项目。",
-        "select_co_worker": "选择同事"
+        "select_co_worker": "选择同事",
+        "member_required": "请选择成员",
+        "role_required": "请选择角色",
+        "select_role": "选择角色",
+        "success": "成员添加成功。"
+      },
+      "join_confirmation": {
+        "title": "加入项目？",
+        "description": "确定要加入“{project}”吗？请选择下方的“加入项目”继续。",
+        "joining": "加入中",
+        "button": "加入项目"
+      },
+      "leave_confirmation": {
+        "title": "离开项目",
+        "description": "确定要离开“{project}”吗？您将无法再访问该项目中分配给您的工作项。",
+        "enter_project_name": "请输入项目名称“{project}”以继续：",
+        "confirmation_phrase": "离开项目",
+        "enter_confirmation": "请输入“{confirmation}”以确认：",
+        "project_name_placeholder": "请输入项目名称",
+        "confirmation_placeholder": "请输入确认短语",
+        "errors": {
+          "generic": "出现错误，请稍后重试。",
+          "confirmation": "请准确输入上方显示的确认短语。",
+          "project_name": "请准确输入上方显示的项目名称。",
+          "required": "请填写所有字段。"
+        }
       }
+    },
+    "integrations": {
+      "github_description": "选择 GitHub 仓库以启用同步。",
+      "slack_description": "定期获取更新，并选择要接收的通知。",
+      "logo_alt": "{integration} 标志",
+      "select_repository": "选择仓库",
+      "repository_sync_success": "仓库 {repository} 已与项目同步。",
+      "repository_sync_error": "无法将仓库与项目同步，请重试。"
     },
     "states": {
       "heading": "状态",
@@ -323,6 +388,12 @@
       "description": "创建和自定义具有独特属性的不同类型工作项"
     },
     "features": {
+      "pro_feature": "专业版功能",
+      "toast": {
+        "loading": "正在更新项目功能",
+        "success": "项目功能已更新。",
+        "error": "更新项目功能时出错，请重试。"
+      },
       "cycles": {
         "title": "周期",
         "short_title": "周期",
@@ -429,6 +500,23 @@
         "success": "项目功能更新成功。",
         "error": "更新项目功能时出现错误。请重试。"
       }
+    },
+    "publish": {
+      "title": "发布项目",
+      "settings_updated": "发布设置已更新。",
+      "unpublish_error": "取消发布项目时出错。",
+      "layout_required": "请至少选择一种视图布局后再发布项目。",
+      "link_copied": "发布页面的链接已复制。",
+      "unpublishing": "取消发布中",
+      "unpublish": "取消发布",
+      "live_on_web": "该项目现已在网页上公开",
+      "views": "视图",
+      "allow_comments": "允许评论",
+      "allow_reactions": "允许回应",
+      "allow_voting": "允许投票",
+      "link_access": "任何获得链接的人都可以访问",
+      "update_settings": "更新设置",
+      "publishing": "发布中"
     },
     "project_updates": {
       "heading": "项目更新",

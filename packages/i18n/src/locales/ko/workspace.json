@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "해결된 vs 대기 중인 작업 항목",
     "projects_by_status": "상태별 프로젝트",
     "active_users": "활성 사용자",
-    "intake_trends": "수용 추세"
+    "intake_trends": "수용 추세",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "기간",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "속성 추가",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {프로젝트} other {프로젝트}}",
@@ -214,7 +230,8 @@
             "title": "Plane에서 모든 것은 프로젝트로 시작됩니다",
             "description": "프로젝트는 제품 로드맵, 마케팅 캠페인 또는 새로운 자동차 출시일 수 있습니다."
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "일치하는 프로젝트 없음",
@@ -223,6 +240,11 @@
       "search": {
         "description": "일치하는 프로젝트가 없습니다. 대신 새 프로젝트를 생성하세요"
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

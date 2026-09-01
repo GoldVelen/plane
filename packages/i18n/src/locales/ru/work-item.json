@@ -193,7 +193,8 @@
       "finish_before": "Заканчивается до",
       "finish_after": "Заканчивается после",
       "implements": "Реализует",
-      "implemented_by": "Реализовано"
+      "implemented_by": "Реализовано",
+      "add_related": "Add related work items"
     },
     "copy_link": "Копировать ссылку на рабочий элемент",
     "delete": {
@@ -211,7 +212,8 @@
       "empty": "Рабочие элементы не выбраны",
       "add_selected": "Добавить выбранные рабочие элементы",
       "select_all": "Выбрать все",
-      "deselect_all": "Снять выделение со всех"
+      "deselect_all": "Снять выделение со всех",
+      "current_project_only": "Only work items within the current project can be selected."
     },
     "open_in_full_screen": "Открыть рабочий элемент в полном экране",
     "duplicate": {

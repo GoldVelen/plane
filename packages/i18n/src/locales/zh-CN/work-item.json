@@ -184,6 +184,7 @@
       }
     },
     "relation": {
+      "add_related": "添加相关工作项",
       "relates_to": "关联到",
       "duplicate": "重复于",
       "blocked_by": "被阻止于",
@@ -208,6 +209,7 @@
     },
     "select": {
       "error": "请至少选择一个工作项",
+      "current_project_only": "只能选择当前项目中的工作项。",
       "empty": "未选择工作项",
       "add_selected": "添加所选工作项",
       "select_all": "全选",

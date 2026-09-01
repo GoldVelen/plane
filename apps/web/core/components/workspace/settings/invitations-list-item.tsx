@@ -69,14 +69,14 @@ export const WorkspaceInvitationsListItem = observer(function WorkspaceInvitatio
       await deleteMemberInvitation(workspaceSlug.toString(), invitationDetails.id);
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: t("common.toast.success"),
+        title: t("toast.success"),
         message: t("workspace_settings.settings.members.toasts.invitation_removed"),
       });
     } catch (err: unknown) {
       const error = err as { error?: string };
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: t("common.toast.error"),
+        title: t("toast.error"),
         message: error?.error || t("something_went_wrong_please_try_again"),
       });
     }
@@ -182,7 +182,7 @@ export const WorkspaceInvitationsListItem = observer(function WorkspaceInvitatio
                 const error = err as { error?: string };
                 setToast({
                   type: TOAST_TYPE.ERROR,
-                  title: t("common.toast.error"),
+                  title: t("toast.error"),
                   message: error?.error || t("workspace_settings.settings.members.toasts.role_update_failed"),
                 });
               });

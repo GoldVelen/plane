@@ -103,7 +103,7 @@ export function NameColumn(props: NameProps) {
                     data-ph-element={MEMBER_TRACKER_ELEMENTS.WORKSPACE_MEMBER_TABLE_CONTEXT_MENU}
                   >
                     <TrashIcon className="size-3.5 align-middle" />
-                    {id === currentUser?.id ? t("common.leave") : t("common.remove")}
+                    {id === currentUser?.id ? t("leave") : t("common.remove")}
                   </button>
                 )}
               />
@@ -169,7 +169,7 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
 
                   setToast({
                     type: TOAST_TYPE.ERROR,
-                    title: t("common.toast.error"),
+                    title: t("toast.error"),
                     message: errorString ?? t("workspace_settings.settings.members.toasts.role_update_failed"),
                   });
                 }

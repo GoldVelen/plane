@@ -413,6 +413,9 @@
           "message": "Щось пішло не так."
         }
       }
+    },
+    "filters": {
+      "applied_summary": "{filtered} of {total} projects match the applied filters."
     }
   }
 }

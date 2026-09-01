@@ -148,7 +148,23 @@
     "workitem_resolved_vs_pending": "Rozwiązane vs oczekujące elementy pracy",
     "projects_by_status": "Projekty według statusu",
     "active_users": "Aktywni użytkownicy",
-    "intake_trends": "Trendy przyjęć"
+    "intake_trends": "Trendy przyjęć",
+    "project_count_above": "{count}+ projects",
+    "duration": {
+      "label": "Czas trwania",
+      "yesterday": "Yesterday",
+      "last_7_days": "Last 7 days",
+      "last_30_days": "Last 30 days",
+      "last_3_months": "Last 3 months"
+    },
+    "controls": {
+      "add_property": "Dodaj właściwość",
+      "no_value": "No value",
+      "add_metric": "Add metric",
+      "count": "Count"
+    },
+    "modal_title": "Analytics for {title}",
+    "in_context": "in {name}"
   },
   "workspace_projects": {
     "label": "{count, plural, one {Projekt} few {Projekty} other {Projektów}}",
@@ -214,7 +230,8 @@
             "title": "Wszystko zaczyna się od projektu w Plane",
             "description": "Projekt może dotyczyć planu produktu, kampanii marketingowej lub uruchomienia nowego samochodu."
           }
-        }
+        },
+        "learn_more": "Learn more about projects"
       },
       "filter": {
         "title": "Brak pasujących projektów",
@@ -223,6 +240,11 @@
       "search": {
         "description": "Nie znaleziono projektów spełniających kryteria.\nUtwórz nowy."
       }
+    },
+    "card": {
+      "created_on": "Created on {date}",
+      "no_member": "No members yet",
+      "joined": "Joined"
     }
   },
   "workspace_views": {

@@ -413,6 +413,9 @@
           "message": "Etwas ist schief gelaufen."
         }
       }
+    },
+    "filters": {
+      "applied_summary": "{filtered} of {total} projects match the applied filters."
     }
   }
 }

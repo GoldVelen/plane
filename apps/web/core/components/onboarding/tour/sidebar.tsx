@@ -5,6 +5,7 @@
  */
 
 // plane imports
+import { useTranslation } from "@plane/i18n";
 import { CycleIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@plane/propel/icons";
 import type { ISvgIcons } from "@plane/propel/icons";
 // types
@@ -12,32 +13,32 @@ import type { TTourSteps } from "./root";
 
 const sidebarOptions: {
   key: TTourSteps;
-  label: string;
+  i18nKey: string;
   Icon: React.FC<ISvgIcons>;
 }[] = [
   {
     key: "work-items",
-    label: "Work items",
+    i18nKey: "work_items",
     Icon: WorkItemsIcon,
   },
   {
     key: "cycles",
-    label: "Cycles",
+    i18nKey: "cycles",
     Icon: CycleIcon,
   },
   {
     key: "modules",
-    label: "Modules",
+    i18nKey: "modules",
     Icon: ModuleIcon,
   },
   {
     key: "views",
-    label: "Views",
+    i18nKey: "views",
     Icon: ViewsIcon,
   },
   {
     key: "pages",
-    label: "Pages",
+    i18nKey: "pages",
     Icon: PageIcon,
   },
 ];
@@ -48,12 +49,13 @@ type Props = {
 };
 
 export function TourSidebar({ step, setStep }: Props) {
+  const { t } = useTranslation();
   return (
     <div className="col-span-3 hidden bg-surface-2 p-8 lg:block">
       <h3 className="text-16 font-medium">
-        Let{"'"}s get started!
+        {t("product_tour.onboarding.sidebar.title")}
         <br />
-        Get more out of Plane.
+        {t("product_tour.onboarding.sidebar.description")}
       </h3>
       <div className="mt-8 space-y-5">
         {sidebarOptions.map((option) => (
@@ -68,7 +70,7 @@ export function TourSidebar({ step, setStep }: Props) {
             role="button"
           >
             <option.Icon className="h-4 w-4" aria-hidden="true" />
-            {option.label}
+            {t(option.i18nKey)}
           </h5>
         ))}
       </div>

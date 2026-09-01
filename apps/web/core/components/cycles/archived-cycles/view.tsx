@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 import { observer } from "mobx-react";
 // assets
 import AllFiltersImage from "@/app/assets/empty-state/cycle/all-filters.svg?url";
@@ -22,6 +23,7 @@ export interface IArchivedCyclesView {
 }
 
 export const ArchivedCyclesView = observer(function ArchivedCyclesView(props: IArchivedCyclesView) {
+  const { t } = useTranslation();
   const { workspaceSlug, projectId } = props;
   // store hooks
   const { getFilteredArchivedCycleIds, loader } = useCycle();
@@ -40,7 +42,7 @@ export const ArchivedCyclesView = observer(function ArchivedCyclesView(props: IA
             className="mx-auto h-36 w-36 sm:h-48 sm:w-48"
             alt="No matching cycles"
           />
-          <h5 className="mt-7 mb-1 text-18 font-medium">No matching cycles</h5>
+          <h5 className="mt-7 mb-1 text-18 font-medium">{t("project_cycles.no_matching_cycles")}</h5>
           <p className="text-14 text-placeholder">
             {archivedCyclesSearchQuery.trim() === ""
               ? "Remove the filters to see all cycles"

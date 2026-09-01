@@ -817,7 +817,8 @@
     "all_issues": "所有工作事項",
     "assigned": "已指派",
     "created": "已建立",
-    "subscribed": "已訂閱"
+    "subscribed": "已訂閱",
+    "unassigned": "未指派"
   },
   "description_versions": {
     "last_edited_by": "最後編輯者",
@@ -872,5 +873,17 @@
       "description": "將工作事項匯出為 JSON 檔案。",
       "short_description": "匯出為 JSON"
     }
-  }
+  },
+  "project_work_item_count": "{count, plural, one {There is # work item in this project} other {There are # work items in this project}}",
+  "archived_work_item_count": "{count, plural, one {# archived work item} other {# archived work items}}",
+  "count": {
+    "link": "{count, plural, one {# link} other {# links}}",
+    "attachment": "{count, plural, one {# attachment} other {# attachments}}",
+    "sub_work_item": "{count, plural, one {# sub-work item} other {# sub-work items}}"
+  },
+  "identifier": "Identifier",
+  "access": "Access",
+  "join": "加入",
+  "enabled": "已啟用",
+  "disabled": "已停用"
 }
